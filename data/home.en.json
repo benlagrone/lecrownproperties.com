@@ -1,0 +1,180 @@
+{
+  "hero": {
+    "eyebrow": "Houston commercial property management",
+    "title": "Commercial property management with clear follow-through.",
+    "summary": "LeCrown supports warehouse, office, and corporate properties with tenant communication, vendor coordination, maintenance oversight, and regular owner updates.",
+    "primaryCta": { "label": "Request management review", "to": "/contact" },
+    "secondaryCta": { "label": "Explore services", "to": "/services" },
+    "visual": {
+      "src": "/assets/houston-skyline.jpg",
+      "alt": "Downtown Houston skyline viewed across Buffalo Bayou.",
+      "kicker": "Houston skyline",
+      "title": "Houston assets need steady follow-through.",
+      "text": "From warehouse sites to office and corporate buildings, the day-to-day work runs better when communication and coordination stay organized."
+    },
+    "brief": {
+      "eyebrow": "What we handle",
+      "title": "The daily work ownership should not be chasing.",
+      "text": "We step into the communication and coordination work that keeps commercial properties stable and easier to operate.",
+      "points": [
+        "Tenant requests and day-to-day communication",
+        "Vendor scheduling and maintenance follow-through",
+        "Owner reporting in English and Mandarin"
+      ]
+    },
+    "metrics": [
+      { "value": "Houston", "label": "Primary market" },
+      { "value": "EN / 中文", "label": "Bilingual communication" },
+      { "value": "Commercial", "label": "Warehouse, office, and corporate assets" }
+    ]
+  },
+  "stats": [
+    { "value": "Tenant communication", "label": "Clear responses and fewer dropped details" },
+    { "value": "Maintenance oversight", "label": "Issues tracked through completion" },
+    { "value": "Owner updates", "label": "Direct reporting without extra noise" }
+  ],
+  "propertyTypesSection": {
+    "eyebrow": "Property focus",
+    "title": "Support matched to the building.",
+    "text": "A warehouse, office building, and corporate campus do not run the same way. We adjust communication, coordination, and oversight to the asset."
+  },
+  "propertyTypes": [
+    {
+      "category": "Warehouse",
+      "focus": "Operational continuity",
+      "title": "Distribution and storage facilities",
+      "summary": "Industrial properties that need reliable communication, organized vendor work, and steady follow-through.",
+      "image": {
+        "src": "/assets/warehouse.jpg",
+        "alt": "Exterior view of an industrial warehouse building."
+      },
+      "details": [
+        "Tenant and vendor coordination",
+        "Issue tracking and escalation",
+        "Support for active operating sites"
+      ]
+    },
+    {
+      "category": "Office",
+      "focus": "Tenant confidence",
+      "title": "Professional office buildings",
+      "summary": "Buildings where response time, upkeep, and communication quality shape the tenant experience.",
+      "image": {
+        "src": "/assets/office-building.jpg",
+        "alt": "Office tower exterior in a downtown setting."
+      },
+      "details": [
+        "Tenant requests and follow-up",
+        "Vendor scheduling and upkeep visibility",
+        "Clear updates for ownership"
+      ]
+    },
+    {
+      "category": "Corporate",
+      "focus": "Stakeholder clarity",
+      "title": "Corporate buildings and campuses",
+      "summary": "Properties that require stronger coordination across leadership, facilities, occupants, and outside vendors.",
+      "image": {
+        "src": "/assets/corporate-office.jpg",
+        "alt": "Corporate headquarters office building exterior."
+      },
+      "details": [
+        "Multi-party communication",
+        "Structured escalation paths",
+        "Bilingual support when needed"
+      ]
+    }
+  ],
+  "servicesSection": {
+    "eyebrow": "Services",
+    "title": "Core management services owners usually need in place.",
+    "text": "The goal is simple: keep the building responsive, keep issues moving, and keep ownership informed."
+  },
+  "whySection": {
+    "eyebrow": "Why LeCrown",
+    "title": "Good management is obvious in the daily details.",
+    "text": "Owners notice response time, follow-through, and whether communication feels organized or chaotic."
+  },
+  "reasons": [
+    {
+      "title": "Faster issue handling",
+      "text": "Problems should be acknowledged quickly, assigned clearly, and carried through without ownership chasing updates."
+    },
+    {
+      "title": "Clear points of contact",
+      "text": "Tenants, vendors, and owners need to know who is handling what and where the next step sits."
+    },
+    {
+      "title": "Bilingual coordination",
+      "text": "English and Mandarin communication helps owners and partners stay aligned when language could otherwise slow decisions."
+    }
+  ],
+  "workflowSection": {
+    "eyebrow": "How we start",
+    "title": "Review the asset. Identify the gaps. Set the support plan.",
+    "text": "We start by understanding the building, where management is breaking down, and what reporting and coordination structure the property needs."
+  },
+  "workflow": [
+    {
+      "title": "Review the property",
+      "text": "We look at the asset type, occupancy situation, active issues, and the current management pattern."
+    },
+    {
+      "title": "Map communication",
+      "text": "We identify who needs updates, who handles vendors, and how issues should be escalated."
+    },
+    {
+      "title": "Define scope",
+      "text": "We set the level of support, reporting cadence, and day-to-day responsibilities."
+    }
+  ],
+  "clientsSection": {
+    "eyebrow": "Who we work with",
+    "title": "A fit for owners who want fewer dropped details.",
+    "text": "LeCrown works best with owners and stakeholders who want direct communication, cleaner reporting, and steadier execution at the property."
+  },
+  "caseStudiesSection": {
+    "eyebrow": "Common scenarios",
+    "title": "Typical operating problems we help stabilize.",
+    "text": "These examples reflect the communication and coordination gaps that create the most friction for owners."
+  },
+  "ctaBanner": {
+    "eyebrow": "Need support for a property?",
+    "title": "Tell us what building you need help with.",
+    "text": "A short intake is enough to start a conversation about scope, reporting, and day-to-day support.",
+    "primaryLabel": "Start the conversation",
+    "secondaryLabel": "Email Benjamin"
+  },
+  "photoCreditsLabel": "Photo credits",
+  "photoCreditsNote": "Images sourced from Wikimedia Commons and resized for web display.",
+  "photoCredits": [
+    {
+      "label": "Houston skyline",
+      "sourceLabel": "Jonathan Cutrer / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Houston,_Texas_Skyline_(32614523857).jpg",
+      "licenseLabel": "CC BY 2.0",
+      "licenseHref": "https://creativecommons.org/licenses/by/2.0/"
+    },
+    {
+      "label": "Industrial warehouse",
+      "sourceLabel": "Castle Hills AS / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Industrial_warehouse.jpg",
+      "licenseLabel": "CC BY-SA 4.0",
+      "licenseHref": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "label": "Office building",
+      "sourceLabel": "Alanthebox / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Side_of_office_building.jpg",
+      "licenseLabel": "CC0 1.0",
+      "licenseHref": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "label": "Corporate office",
+      "sourceLabel": "Tony Webster / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Pentair_Building_-_US_Corporate_Headquarters_Office_Building_(34514586172).jpg",
+      "licenseLabel": "CC BY 2.0",
+      "licenseHref": "https://creativecommons.org/licenses/by/2.0/"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+services:
+  lecrown-properties-site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lecrown-properties-site:latest
+    container_name: lecrown-properties-site
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:18033:8080"

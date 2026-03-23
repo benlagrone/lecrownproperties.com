@@ -1,0 +1,35 @@
+[
+  {
+    "badge": "Warehouse",
+    "title": "Warehouse management",
+    "summary": "Support for warehouse, logistics, and industrial properties that need reliable communication and day-to-day coordination.",
+    "bullets": [
+      "Tenant communication and operating issue handling",
+      "Vendor scheduling and maintenance follow-through",
+      "Owner updates that stay direct and useful"
+    ],
+    "fit": "Best for active industrial properties that need consistent management support."
+  },
+  {
+    "badge": "Office",
+    "title": "Office property management",
+    "summary": "Management support for office environments where tenant response, building upkeep, and professionalism matter.",
+    "bullets": [
+      "Tenant requests and day-to-day communication",
+      "Routine maintenance coordination",
+      "Owner reporting that is clear and actionable"
+    ],
+    "fit": "Best for office buildings where service quality shapes tenant confidence."
+  },
+  {
+    "badge": "Corporate",
+    "title": "Corporate building support",
+    "summary": "Structured support for buildings that need stronger coordination across leadership, facilities, occupants, and vendors.",
+    "bullets": [
+      "Executive-facing operating updates",
+      "Escalation support for building issues",
+      "Cross-functional relationship management"
+    ],
+    "fit": "Best for corporate buildings and multi-stakeholder commercial assets."
+  }
+]

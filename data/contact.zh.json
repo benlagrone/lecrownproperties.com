@@ -1,0 +1,107 @@
+{
+  "hero": {
+    "eyebrow": "联系",
+    "title": "从物业本身、合作关系和当前不顺的地方开始沟通。",
+    "summary": "最有价值的第一次交流通常很简单：这是什么物业、谁需要更新、现在到底是哪一段沟通或协调出了问题。",
+    "primaryCta": { "label": "提交需求", "to": "/contact#intake" },
+    "secondaryCta": { "label": "查看服务", "to": "/services" },
+    "brief": {
+      "eyebrow": "主要联系人",
+      "title": "Benjamin 和 Jessica 应该出现在呈现里。",
+      "text": "你提供的品牌图让人物成为品牌一部分，因此新的联系体验也把这种人际层面保留下来。",
+      "points": [
+        "Benjamin LaGrone 负责业主沟通与方案",
+        "Jessica Huang 提供双语关系支持",
+        "静态网站采用邮件式 intake，简单可靠"
+      ]
+    },
+    "metrics": [
+      { "value": "832-722-8581", "label": "Benjamin LaGrone" },
+      { "value": "832-798-3991", "label": "Jessica Huang" },
+      { "value": "休斯敦", "label": "主要市场" }
+    ]
+  },
+  "channelsHeading": {
+    "eyebrow": "直接联系",
+    "title": "联系具体的人，而不是泛泛的邮箱。",
+    "text": "品牌卡片已经把联系人放到前台，所以网站也应该如此，这样会更直接、更可信。"
+  },
+  "channels": [
+    {
+      "badge": "主要联系人",
+      "title": "Benjamin LaGrone",
+      "text": "负责业主沟通、管理方案和主要物业 intake。",
+      "value": "benjamin@lecrowndevelopment.com",
+      "href": "mailto:benjamin@lecrowndevelopment.com"
+    },
+    {
+      "badge": "双语支持",
+      "title": "Jessica Huang",
+      "text": "在合作讨论中提供关系支持与中英双语沟通。",
+      "value": "jessica@lecrowndevelopment.com",
+      "href": "mailto:jessica@lecrowndevelopment.com"
+    },
+    {
+      "badge": "电话",
+      "title": "直线电话",
+      "text": "当邮件沟通太慢时，可以先电话建立上下文。",
+      "value": "Benjamin: 832-722-8581 · Jessica: 832-798-3991"
+    }
+  ],
+  "form": {
+    "heading": {
+      "eyebrow": "需求表",
+      "title": "请描述物业和当前运营压力。",
+      "text": "表单会直接生成邮件草稿，这样整站就可以保持完全静态。对于速度、安全和低维护来说，这是更合理的取舍。"
+    },
+    "fields": {
+      "name": "您的姓名",
+      "company": "公司 / 业主方",
+      "email": "邮箱",
+      "phone": "电话",
+      "service": "主要需求",
+      "notes": "物业情况与当前痛点"
+    },
+    "serviceOptions": [
+      "仓库管理",
+      "办公楼物业管理",
+      "企业大楼运营支持",
+      "双语业主 / 租户协调",
+      "一般物业咨询"
+    ],
+    "submitLabel": "生成邮件草稿",
+    "helper": "提交后会打开本地邮件客户端，并自动填入内容。",
+    "mailSubjectPrefix": "LeCrown 咨询",
+    "mailLabels": {
+      "name": "姓名",
+      "company": "公司",
+      "email": "邮箱",
+      "phone": "电话",
+      "service": "主要需求",
+      "notes": "备注"
+    }
+  },
+  "hoursHeading": {
+    "eyebrow": "联系时间",
+    "title": "通常何时会回复"
+  },
+  "faqHeading": {
+    "eyebrow": "常见问题",
+    "title": "业主通常最先会问什么",
+    "text": "这些回答让联系页保持务实，而不是只做装饰。"
+  },
+  "faq": [
+    {
+      "question": "后续可以接入真实房源或物业吗？",
+      "answer": "可以。前端已经由 JSON 驱动，代表性画像未来可以直接替换成真实资产，而不需要重做模板。"
+    },
+    {
+      "question": "为什么不继续用 WordPress？",
+      "answer": "静态方案更快、更安全，也更适合在 VPS 上低成本维护。"
+    },
+    {
+      "question": "中文业主使用是否方便？",
+      "answer": "可以。网站从一开始就具备中英文两套内容，Jessica Huang 也作为双语联系人被明确展示出来。"
+    }
+  ]
+}

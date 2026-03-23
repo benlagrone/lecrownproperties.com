@@ -1,0 +1,71 @@
+name: CI/CD
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lecrownproperties-production
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify Site Container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate deploy contract
+        run: bash scripts/verify-deploy-contract.sh
+
+      - name: Render compose config
+        run: docker compose -p lecrownproperties -f compose.yaml config >/tmp/lecrownproperties-compose.yaml
+
+      - name: Smoke test container
+        run: bash scripts/smoke-test-container.sh
+
+  deploy:
+    name: Deploy To Contabo
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://lecrownproperties.com
+    env:
+      CONTABO_HOST: ${{ secrets.CONTABO_HOST }}
+      CONTABO_PORT: ${{ secrets.CONTABO_PORT }}
+      CONTABO_REMOTE_DIR: ${{ secrets.CONTABO_REMOTE_DIR }}
+      CONTABO_SSH_KEY: ${{ secrets.CONTABO_SSH_KEY }}
+      CONTABO_USER: ${{ secrets.CONTABO_USER }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate deployment secrets
+        run: |
+          test -n "$CONTABO_HOST"
+          test -n "$CONTABO_USER"
+          test -n "$CONTABO_SSH_KEY"
+
+      - name: Configure SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$CONTABO_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p "${CONTABO_PORT:-22}" -H "$CONTABO_HOST" >> ~/.ssh/known_hosts
+
+      - name: Deploy
+        env:
+          REMOTE_DIR: ${{ env.CONTABO_REMOTE_DIR }}
+          SSH_PORT: ${{ env.CONTABO_PORT }}
+        run: bash deploy-contabo.sh "${CONTABO_USER}@${CONTABO_HOST}"

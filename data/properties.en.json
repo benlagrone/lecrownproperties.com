@@ -1,0 +1,46 @@
+[
+  {
+    "category": "Industrial",
+    "focus": "Reliable operations",
+    "title": "Distribution warehouses",
+    "summary": "Assets where dock activity, tenant coordination, and vendor follow-through affect the daily operating picture.",
+    "details": [
+      "Escalation support for active tenant operations",
+      "Vendor scheduling and maintenance follow-through",
+      "Owner updates tied to operating priorities"
+    ]
+  },
+  {
+    "category": "Flex",
+    "focus": "Mixed-use coordination",
+    "title": "Flex industrial campuses",
+    "summary": "Properties that sit between office and industrial use and need adaptable communication and coordination standards.",
+    "details": [
+      "Multi-tenant coordination",
+      "Shared-area upkeep visibility",
+      "Flexible support for changing occupancy needs"
+    ]
+  },
+  {
+    "category": "Office",
+    "focus": "Tenant confidence",
+    "title": "Professional office buildings",
+    "summary": "Buildings where response time, presentation, and orderly upkeep shape how management is judged.",
+    "details": [
+      "Tenant-facing service expectations",
+      "Consistent upkeep and reporting",
+      "A professional front-of-house presence"
+    ]
+  },
+  {
+    "category": "Corporate",
+    "focus": "Stakeholder reporting",
+    "title": "Corporate headquarters and support buildings",
+    "summary": "Facilities that need steady coordination, clearer updates, and a management presence that reflects well on ownership.",
+    "details": [
+      "Stakeholder communication across functions",
+      "Clear escalation paths",
+      "Bilingual support when ownership requires it"
+    ]
+  }
+]

@@ -1,0 +1,45 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="waves" width="60" height="60" patternUnits="userSpaceOnUse">
+      <rect width="60" height="60" fill="#F0B207"/>
+      <g fill="none" stroke="#D79600" stroke-width="4" opacity="0.86">
+        <path d="M0 30C6 16 16 8 30 8C44 8 54 16 60 30"/>
+        <path d="M10 30C15 21 22 16 30 16C38 16 45 21 50 30"/>
+        <path d="M18 30C21 24 25 21 30 21C35 21 39 24 42 30"/>
+        <path d="M-30 60C-24 46 -14 38 0 38C14 38 24 46 30 60"/>
+        <path d="M0 60C6 46 16 38 30 38C44 38 54 46 60 60"/>
+        <path d="M30 60C36 46 46 38 60 38C74 38 84 46 90 60"/>
+        <path d="M10 60C15 51 22 46 30 46C38 46 45 51 50 60"/>
+        <path d="M18 60C21 54 25 51 30 51C35 51 39 54 42 60"/>
+      </g>
+    </pattern>
+    <clipPath id="crown-right">
+      <rect x="100" y="0" width="100" height="200"/>
+    </clipPath>
+  </defs>
+
+  <rect width="200" height="200" fill="url(#waves)"/>
+
+  <path
+    d="M6 108L100 28L142 62V40H170V86L194 108H180V190H26V108H6Z"
+    fill="#050505"
+  />
+
+  <g>
+    <path
+      d="M56 156L48 111C45 95 40 83 34 74C44 80 54 91 63 104C70 114 78 117 84 112C79 100 73 88 68 79C79 86 89 98 97 120C98 123 102 123 103 120C111 98 121 86 132 79C127 88 121 100 116 112C122 117 130 114 137 104C146 91 156 80 166 74C160 83 155 95 152 111L144 156H56Z"
+      fill="#F3A419"
+    />
+    <path
+      d="M56 156L48 111C45 95 40 83 34 74C44 80 54 91 63 104C70 114 78 117 84 112C79 100 73 88 68 79C79 86 89 98 97 120C98 123 102 123 103 120C111 98 121 86 132 79C127 88 121 100 116 112C122 117 130 114 137 104C146 91 156 80 166 74C160 83 155 95 152 111L144 156H56Z"
+      fill="#F5C467"
+      clip-path="url(#crown-right)"
+    />
+    <rect x="99" y="120" width="2" height="36" fill="#EFB24D" opacity="0.92"/>
+    <circle cx="36" cy="74" r="8" fill="#F1A723"/>
+    <circle cx="68" cy="79" r="6.5" fill="#F3A419"/>
+    <circle cx="100" cy="58" r="8" fill="#F3A419"/>
+    <circle cx="132" cy="79" r="6.5" fill="#F5C467"/>
+    <circle cx="164" cy="74" r="8" fill="#F5C467"/>
+  </g>
+</svg>

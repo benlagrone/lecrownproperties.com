@@ -1,0 +1,28 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="coin-fill" x1="40" y1="20" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE189"/>
+      <stop offset="0.48" stop-color="#F2BD35"/>
+      <stop offset="1" stop-color="#C77F00"/>
+    </linearGradient>
+    <linearGradient id="coin-rim" x1="26" y1="16" x2="170" y2="186" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF2B9"/>
+      <stop offset="0.46" stop-color="#E8AD1B"/>
+      <stop offset="1" stop-color="#8C5400"/>
+    </linearGradient>
+  </defs>
+  <circle cx="100" cy="100" r="92" fill="url(#coin-fill)" stroke="url(#coin-rim)" stroke-width="8"/>
+  <circle cx="100" cy="100" r="70" stroke="#FBE7A3" stroke-width="8" stroke-opacity="0.68"/>
+  <path d="M72 72H128V128H72V72Z" fill="#050505"/>
+  <path d="M58 32H84V48H72V62H58V32Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M116 32H142V62H128V48H116V32Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M138 58H152V84H138V72H124V58H138Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M138 116H152V142H124V128H138V116Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M58 138H84V152H58V138H72V124H84V138Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M32 116H46V128H62V142H32V116Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M32 58H62V72H46V84H32V58Z" fill="#8C5400" fill-opacity="0.75"/>
+  <path d="M90 26H110" stroke="#FFF2B9" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75"/>
+  <path d="M26 90H46" stroke="#FFF2B9" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75"/>
+  <path d="M154 90H174" stroke="#FFF2B9" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75"/>
+  <path d="M90 174H110" stroke="#FFF2B9" stroke-width="5" stroke-linecap="round" stroke-opacity="0.75"/>
+</svg>

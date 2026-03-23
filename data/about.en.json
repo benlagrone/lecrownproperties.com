@@ -1,0 +1,94 @@
+{
+  "hero": {
+    "eyebrow": "About LeCrown",
+    "title": "A management team focused on response, coordination, and reporting.",
+    "summary": "LeCrown Properties serves owners and stakeholders who want clear communication, organized execution, and a professional presence across warehouse, office, and corporate properties.",
+    "primaryCta": { "label": "Contact the team", "to": "/contact" },
+    "secondaryCta": { "label": "Review services", "to": "/services" },
+    "brief": {
+      "eyebrow": "What clients can expect",
+      "title": "Direct communication and reliable follow-through.",
+      "text": "We focus on the day-to-day work that keeps properties organized, tenants informed, and ownership aware of what matters.",
+      "points": [
+        "Clear communication with owners and tenants",
+        "Organized vendor and maintenance coordination",
+        "Bilingual support in English and Mandarin"
+      ]
+    },
+    "metrics": [
+      { "value": "Houston", "label": "Primary market" },
+      { "value": "Commercial", "label": "Warehouse, office, and corporate focus" },
+      { "value": "Bilingual", "label": "English and Mandarin support" }
+    ]
+  },
+  "storyHeading": {
+    "eyebrow": "Our approach",
+    "title": "Built for the work owners should not be chasing.",
+    "text": "LeCrown centers on practical oversight, dependable communication, and keeping open issues from stalling."
+  },
+  "story": [
+    "LeCrown Properties supports commercial property owners who want a more reliable management presence across warehouse, office, and corporate buildings.",
+    "The work is straightforward: stay on top of tenant needs, keep vendors and maintenance moving, and give owners updates they can act on.",
+    "We also provide bilingual support in English and Mandarin so communication stays clear when ownership, tenants, or partners operate across languages."
+  ],
+  "marketHeading": {
+    "eyebrow": "Who we serve",
+    "title": "Where LeCrown fits best"
+  },
+  "markets": [
+    "Warehouse and industrial owners",
+    "Office building owners and investors",
+    "Corporate property stakeholders",
+    "Houston-area commercial properties",
+    "Owners and partners who need bilingual communication"
+  ],
+  "valuesHeading": {
+    "eyebrow": "Working values",
+    "title": "How we approach service",
+    "text": "Good property management should feel responsive, organized, and professional to everyone involved."
+  },
+  "values": [
+    {
+      "title": "Responsiveness",
+      "text": "Issues should be acknowledged quickly and moved forward with clear next steps."
+    },
+    {
+      "title": "Clear reporting",
+      "text": "Owners need updates that are direct, useful, and easy to act on."
+    },
+    {
+      "title": "Accountability",
+      "text": "Open items should have an owner, a status, and a visible next step."
+    },
+    {
+      "title": "Professional communication",
+      "text": "Tenants, vendors, and owners all benefit from a calm, consistent management presence."
+    }
+  ],
+  "advantagesHeading": {
+    "eyebrow": "What sets us apart",
+    "title": "The strengths owners tend to notice quickly",
+    "text": "The difference usually shows up in communication quality, cleaner execution, and better visibility."
+  },
+  "advantages": [
+    {
+      "title": "Bilingual communication",
+      "text": "English and Mandarin support helps owners and partners stay aligned without losing context."
+    },
+    {
+      "title": "Organized coordination",
+      "text": "Tenant issues, vendor work, and maintenance follow-up stay easier to manage when one team is tracking them closely."
+    },
+    {
+      "title": "Practical oversight",
+      "text": "Ownership should know what matters, what is being handled, and what still needs attention."
+    }
+  ],
+  "ctaBanner": {
+    "eyebrow": "Want to talk about a property?",
+    "title": "Tell us what building you own and what needs attention.",
+    "text": "We can review the current operating picture and discuss the right level of management support.",
+    "primaryLabel": "Discuss next steps",
+    "secondaryLabel": "Email Benjamin"
+  }
+}

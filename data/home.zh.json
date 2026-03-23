@@ -1,0 +1,180 @@
+{
+  "hero": {
+    "eyebrow": "仓库、办公楼与企业大楼物业管理",
+    "title": "给不想让物业失控的业主，一个更平稳的运营体验。",
+    "summary": "LeCrown Properties 将黑金品牌形象、双语沟通能力、务实的物业执行与易维护的静态网站架构结合在一起，既能呈现高级感，也便于长期运营。",
+    "primaryCta": { "label": "申请管理方案", "to": "/contact" },
+    "secondaryCta": { "label": "查看服务范围", "to": "/services" },
+    "visual": {
+      "src": "/assets/houston-skyline.jpg",
+      "alt": "从 Buffalo Bayou 望向休斯敦市中心天际线。",
+      "kicker": "Houston skyline",
+      "title": "休斯敦的商业物业，需要稳定的跟进执行。",
+      "text": "从仓库到办公楼，再到企业楼宇，真正让运营顺起来的，始终是清楚的沟通与可靠的协调。"
+    },
+    "brief": {
+      "eyebrow": "品牌方向",
+      "title": "高级呈现，落到执行。",
+      "text": "本站视觉直接参考你提供的品牌图：大面积黑色、明亮金色、房屋加皇冠图形，以及明确的双语定位。",
+      "points": [
+        "面向业主、投资方与跨境利益相关方的呈现方式",
+        "内容用 JSON 管理，后续修改成本低",
+        "彻底替代原先缺乏内容架构的 WordPress 页面"
+      ]
+    },
+    "metrics": [
+      { "value": "EN / 中文", "label": "双语业主沟通" },
+      { "value": "3", "label": "核心资产类别" },
+      { "value": "静态", "label": "更快更安全的架构" }
+    ]
+  },
+  "stats": [
+    { "value": "黑 / 金", "label": "品牌驱动的视觉系统" },
+    { "value": "休斯敦", "label": "本地市场场景" },
+    { "value": "JSON 驱动", "label": "无需 CMS 的内容更新" }
+  ],
+  "propertyTypesSection": {
+    "eyebrow": "物业聚焦",
+    "title": "LeCrown 先讲擅长服务什么资产，而不是空泛介绍。",
+    "text": "首页首先展示物业类型，因为真正的价值主张来自运营能力。业主首先要知道团队适合处理哪些资产和哪些日常压力。"
+  },
+  "propertyTypes": [
+    {
+      "category": "仓库",
+      "focus": "运营流畅",
+      "title": "仓储与物流设施",
+      "summary": "适用于需要稳定沟通、维修协调和更清楚升级路径的工业类物业。",
+      "image": {
+        "src": "/assets/warehouse.jpg",
+        "alt": "工业仓库建筑外观。"
+      },
+      "details": [
+        "租户与供应商协调",
+        "问题跟踪与跟进",
+        "支持物流型运营场景"
+      ]
+    },
+    {
+      "category": "办公",
+      "focus": "租户体验",
+      "title": "专业办公环境",
+      "summary": "在这类物业里，响应速度、前台专业度与日常维护直接影响租户观感。",
+      "image": {
+        "src": "/assets/office-building.jpg",
+        "alt": "城市办公楼外立面。"
+      },
+      "details": [
+        "租户关系与服务请求",
+        "供应商安排与维护可视化",
+        "稳定的业主汇报"
+      ]
+    },
+    {
+      "category": "企业",
+      "focus": "管理层清晰度",
+      "title": "企业大楼与办公园区",
+      "summary": "适用于需要在管理层、设施人员与外部合作方之间保持稳定协调的资产。",
+      "image": {
+        "src": "/assets/corporate-office.jpg",
+        "alt": "企业总部办公楼外观。"
+      },
+      "details": [
+        "多方沟通协调",
+        "更结构化的监督与升级处理",
+        "需要时提供双语支持"
+      ]
+    }
+  ],
+  "servicesSection": {
+    "eyebrow": "服务层级",
+    "title": "管理模式可轻可重，根据物业调整。",
+    "text": "前端内容直接读取服务 JSON，这意味着业务可以持续优化服务范围，而不需要重新进入 CMS 调整模板。"
+  },
+  "whySection": {
+    "eyebrow": "为什么选择 LeCrown",
+    "title": "真正的差异，不只是风格，而是信息如何流动。",
+    "text": "一个高端物业品牌，只有在实际客户体验也足够清楚、及时、并能跨文化沟通时，才成立。"
+  },
+  "reasons": [
+    {
+      "title": "双语沟通",
+      "text": "中英文沟通能力帮助 LeCrown 服务需要跨语言沟通的业主、合作方与租户。"
+    },
+    {
+      "title": "更快的运营清晰度",
+      "text": "重点是减少模糊：发生了什么、下一步由谁负责、业主何时收到更新。"
+    },
+    {
+      "title": "低维护网站架构",
+      "text": "这次重建去掉了 WordPress 风险，改为静态文件与 JSON 内容，后续维护更稳。"
+    }
+  ],
+  "workflowSection": {
+    "eyebrow": "合作如何开始",
+    "title": "沟通简单，范围清楚，决策更快。",
+    "text": "网站引导业主直接进入务实对话，而不是继续堆砌空泛公司介绍。"
+  },
+  "workflow": [
+    {
+      "title": "先了解资产",
+      "text": "确认物业类型、当前运营压力点以及已有相关参与方。"
+    },
+    {
+      "title": "梳理沟通路径",
+      "text": "尽早明确业主、租户、供应商与汇报之间的关系。"
+    },
+    {
+      "title": "确定管理范围",
+      "text": "根据哪些部分需要高参与度、哪些部分可保持轻量，来配置服务。"
+    }
+  ],
+  "clientsSection": {
+    "eyebrow": "适合谁",
+    "title": "当物业运营与关系管理重叠时，LeCrown 的价值最明显。",
+    "text": "客户画像围绕真实需求来写，而不是堆空泛企业名。"
+  },
+  "caseStudiesSection": {
+    "eyebrow": "代表性案例",
+    "title": "先展示方法论，等真实案例数据补齐。",
+    "text": "新的结构更诚实：先展示 LeCrown 如何思考与执行，后续再替换成真实物业案例。"
+  },
+  "ctaBanner": {
+    "eyebrow": "想让网站和服务故事都更可信？",
+    "title": "先明确物业本身、利益相关方和沟通标准。",
+    "text": "LeCrown 可以长期沿用这套 JSON 架构，同时逐步把内容从代表性展示升级为真实物业资料。",
+    "primaryLabel": "开始沟通",
+    "secondaryLabel": "邮件联系 Benjamin"
+  },
+  "photoCreditsLabel": "图片来源",
+  "photoCreditsNote": "图片来自 Wikimedia Commons，并已为网页显示做尺寸优化。",
+  "photoCredits": [
+    {
+      "label": "Houston skyline",
+      "sourceLabel": "Jonathan Cutrer / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Houston,_Texas_Skyline_(32614523857).jpg",
+      "licenseLabel": "CC BY 2.0",
+      "licenseHref": "https://creativecommons.org/licenses/by/2.0/"
+    },
+    {
+      "label": "Industrial warehouse",
+      "sourceLabel": "Castle Hills AS / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Industrial_warehouse.jpg",
+      "licenseLabel": "CC BY-SA 4.0",
+      "licenseHref": "https://creativecommons.org/licenses/by-sa/4.0/"
+    },
+    {
+      "label": "Office building",
+      "sourceLabel": "Alanthebox / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Side_of_office_building.jpg",
+      "licenseLabel": "CC0 1.0",
+      "licenseHref": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "label": "Corporate office",
+      "sourceLabel": "Tony Webster / Wikimedia Commons",
+      "sourceHref": "https://commons.wikimedia.org/wiki/File:Pentair_Building_-_US_Corporate_Headquarters_Office_Building_(34514586172).jpg",
+      "licenseLabel": "CC BY 2.0",
+      "licenseHref": "https://creativecommons.org/licenses/by/2.0/"
+    }
+  ]
+}

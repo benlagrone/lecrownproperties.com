@@ -1,0 +1,107 @@
+{
+  "hero": {
+    "eyebrow": "Contact",
+    "title": "Talk with us about the property.",
+    "summary": "Share the asset type, location, and the main management issues. We will review it and follow up.",
+    "primaryCta": { "label": "Send intake", "to": "/contact#intake" },
+    "secondaryCta": { "label": "Review services", "to": "/services" },
+    "brief": {
+      "eyebrow": "Lead contacts",
+      "title": "Reach Benjamin or Jessica directly.",
+      "text": "Benjamin handles proposals and owner conversations. Jessica supports bilingual communication and relationship coordination.",
+      "points": [
+        "Benjamin LaGrone for management proposals",
+        "Jessica Huang for bilingual communication support",
+        "Named contacts from the start"
+      ]
+    },
+    "metrics": [
+      { "value": "832-722-8581", "label": "Benjamin LaGrone" },
+      { "value": "832-798-3991", "label": "Jessica Huang" },
+      { "value": "Houston", "label": "Primary market" }
+    ]
+  },
+  "channelsHeading": {
+    "eyebrow": "Direct contact",
+    "title": "Call or email the team.",
+    "text": "For proposals, management questions, or bilingual communication, contact us directly."
+  },
+  "channels": [
+    {
+      "badge": "Management proposals",
+      "title": "Benjamin LaGrone",
+      "text": "For owner conversations, service proposals, and property management discussions.",
+      "value": "benjamin@lecrowndevelopment.com",
+      "href": "mailto:benjamin@lecrowndevelopment.com"
+    },
+    {
+      "badge": "Bilingual support",
+      "title": "Jessica Huang",
+      "text": "For bilingual communication and relationship support during active discussions.",
+      "value": "jessica@lecrowndevelopment.com",
+      "href": "mailto:jessica@lecrowndevelopment.com"
+    },
+    {
+      "badge": "Phone",
+      "title": "Direct lines",
+      "text": "Call if you want to explain the building, the issue, or the current management gap directly.",
+      "value": "Benjamin: 832-722-8581 · Jessica: 832-798-3991"
+    }
+  ],
+  "form": {
+    "heading": {
+      "eyebrow": "Intake",
+      "title": "Request management support.",
+      "text": "Outline the building, the location, and the problems you want handled. We will review it and respond."
+    },
+    "fields": {
+      "name": "Your name",
+      "company": "Company / ownership group",
+      "email": "Email",
+      "phone": "Phone",
+      "service": "Primary need",
+      "notes": "Property details and current issues"
+    },
+    "serviceOptions": [
+      "Warehouse management",
+      "Office property management",
+      "Corporate building support",
+      "Bilingual owner / tenant coordination",
+      "General property inquiry"
+    ],
+    "submitLabel": "Prepare email",
+    "helper": "Submitting prepares an email draft with the information above.",
+    "mailSubjectPrefix": "LeCrown inquiry",
+    "mailLabels": {
+      "name": "Name",
+      "company": "Company",
+      "email": "Email",
+      "phone": "Phone",
+      "service": "Primary need",
+      "notes": "Notes"
+    }
+  },
+  "hoursHeading": {
+    "eyebrow": "Availability",
+    "title": "Business hours"
+  },
+  "faqHeading": {
+    "eyebrow": "Common questions",
+    "title": "What owners usually ask first",
+    "text": "If your situation is specific, the fastest answer is still a direct conversation."
+  },
+  "faq": [
+    {
+      "question": "What property types do you support?",
+      "answer": "LeCrown focuses on warehouse, office, and corporate properties that need stronger communication, cleaner coordination, and dependable day-to-day oversight."
+    },
+    {
+      "question": "Can you work with Mandarin-speaking owners or tenants?",
+      "answer": "Yes. LeCrown offers bilingual communication in English and Mandarin for owners, tenants, and partners who need it."
+    },
+    {
+      "question": "What should I include in the first message?",
+      "answer": "Include the property type, the location, the main operating issues, and what kind of support you are looking for."
+    }
+  ]
+}

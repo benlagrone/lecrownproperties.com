@@ -1,0 +1,270 @@
+{
+  "brand": {
+    "name": "LeCrown Properties",
+    "kicker": "双语物业管理"
+  },
+  "seo": {
+    "defaultTitle": "LeCrown Properties",
+    "titleSuffix": " | LeCrown Properties"
+  },
+  "navigation": [
+    { "label": "首页", "to": "/" },
+    { "label": "服务", "to": "/services" },
+    { "label": "物业类型", "to": "/properties" },
+    { "label": "客户", "to": "/clients" },
+    { "label": "案例", "to": "/case-studies" },
+    { "label": "观点", "to": "/insights" },
+    { "label": "关于我们", "to": "/about" },
+    { "label": "联系", "to": "/contact" }
+  ],
+  "languages": [
+    { "code": "en", "label": "EN" },
+    { "code": "zh", "label": "中文" }
+  ],
+  "languageToggleLabel": "语言切换",
+  "labels": {
+    "menu": "打开导航"
+  },
+  "contact": {
+    "email": "benjamin@lecrowndevelopment.com",
+    "location": "美国德州大休斯敦地区",
+    "wechat": "合作沟通期间可提供微信与中英双语支持。",
+    "hours": [
+      { "label": "周一至周五", "value": "上午 9:00 - 下午 6:00" },
+      { "label": "周六", "value": "预约制" },
+      { "label": "周日", "value": "休息" }
+    ]
+  },
+  "footer": {
+    "eyebrow": "LeCrown Properties",
+    "title": "黑金品牌呈现，落到执行层面的物业服务。",
+    "text": "LeCrown 围绕仓库、办公楼与企业大楼提供物业运营支持，以双语沟通、明确跟进和更稳的执行体验服务业主与合作方。",
+    "navigationTitle": "导航",
+    "contactTitle": "联系信息",
+    "supportNote": "Benjamin LaGrone 与 Jessica Huang 可直接沟通物业需求与业主咨询。",
+    "bottomLine": "本站采用静态 JSON 架构，便于在 Contabo 上低维护部署。",
+    "copyright": "© 2026 LeCrown Properties"
+  },
+  "pages": {
+    "services": {
+      "hero": {
+        "eyebrow": "服务",
+        "title": "服务范围围绕物业本身，而不是套用模板。",
+        "summary": "无论是仓库、办公楼还是企业大楼，LeCrown 都会根据物业类型、业主目标与汇报节奏定制支持方式。",
+        "primaryCta": { "label": "申请方案", "to": "/contact" },
+        "secondaryCta": { "label": "查看物业类型", "to": "/properties" },
+        "brief": {
+          "eyebrow": "执行方式",
+          "title": "务实、清晰、双语。",
+          "text": "服务模型围绕明确预期、快速升级处理和适用于中英文利益相关方的沟通方式建立。",
+          "points": [
+            "面向业主的汇报简洁清楚",
+            "租户沟通更及时",
+            "供应商协调更稳定"
+          ]
+        },
+        "metrics": [
+          { "value": "仓库", "label": "工业与物流物业" },
+          { "value": "办公", "label": "专业办公环境" },
+          { "value": "企业", "label": "总部与园区" }
+        ]
+      },
+      "scopeHeading": {
+        "eyebrow": "服务范围",
+        "title": "核心支持内容",
+        "text": "每一条服务线都可根据业主目标、租约结构和物业所需管理强度进行组合或调整。"
+      },
+      "deliveryHeading": {
+        "eyebrow": "交付体验",
+        "title": "呈现要高级，执行也必须到位。",
+        "text": "品牌的黑金视觉意味着更高的专业感，后台服务也应同样清楚、及时、可信。"
+      },
+      "brief": {
+        "eyebrow": "业主可交出的工作",
+        "title": "减少日常摩擦。",
+        "text": "LeCrown 可以处于业主、租户与供应商之间，帮助问题带着上下文被处理，而不是继续堆进业主收件箱。",
+        "points": [
+          "日常运营协调",
+          "维修与租户问题升级处理",
+          "规律且简洁的状态更新"
+        ]
+      },
+      "ctaBanner": {
+        "eyebrow": "想让运营节奏更清楚？",
+        "title": "先从物业、汇报需求和当前痛点开始。",
+        "text": "只需要一个简短 intake，就可以梳理服务范围、决策人和 LeCrown 可以接手的部分。",
+        "primaryLabel": "开始沟通",
+        "secondaryLabel": "邮件联系 Benjamin"
+      }
+    },
+    "properties": {
+      "hero": {
+        "eyebrow": "物业类型",
+        "title": "用代表性物业画像说明 LeCrown 适合服务什么样的资产。",
+        "summary": "新站不再放空洞的假列表，而是直接展示 LeCrown 擅长处理的物业类型、运营特点与管理重点。",
+        "primaryCta": { "label": "沟通物业", "to": "/contact" },
+        "secondaryCta": { "label": "查看服务", "to": "/services" },
+        "brief": {
+          "eyebrow": "资产视角",
+          "title": "先看运营是否匹配。",
+          "text": "很多业主真正需要确认的是：这栋楼更需要租赁支持、租户协调、维修管理，还是三者都要。",
+          "points": [
+            "灵活型工业与仓储需求",
+            "租户要求较高的办公物业",
+            "需要稳定汇报机制的企业大楼"
+          ]
+        },
+        "metrics": [
+          { "value": "休斯敦", "label": "本地运营环境" },
+          { "value": "EN / 中文", "label": "双语沟通" },
+          { "value": "静态架构", "label": "易于维护更新" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "物业聚焦",
+        "title": "代表性资产类型",
+        "text": "现在展示的是可随时替换的代表性画像，未来只需更新 JSON 即可换成真实项目。"
+      },
+      "handoffHeading": {
+        "eyebrow": "哪些事可以交出去",
+        "title": "业主常见的委托内容",
+        "text": "前台网站保持简洁，后台服务则围绕真实的物业运营事务展开。"
+      },
+      "note": {
+        "eyebrow": "不做虚假库存",
+        "title": "代表性展示，比误导更重要。",
+        "text": "当前版本不虚构地址和在租房源，而是明确展示 LeCrown 服务的资产类型，后续可直接替换为真实物业数据。"
+      },
+      "ctaBanner": {
+        "eyebrow": "准备加入真实物业资料？",
+        "title": "无需改前端，只替换 JSON 即可。",
+        "text": "每一张物业卡片都由 JSON 驱动，后续从代表性展示切换到真实资产会非常直接。",
+        "primaryLabel": "加入我的物业",
+        "secondaryLabel": "邮件联系 Benjamin"
+      }
+    },
+    "clients": {
+      "hero": {
+        "eyebrow": "客户",
+        "title": "LeCrown 更适合服务哪些业主与运营方。",
+        "summary": "客户页不放空泛 logo，而是用清楚的客户画像说明最适合合作的关系类型与服务场景。",
+        "primaryCta": { "label": "了解团队方式", "to": "/about" },
+        "secondaryCta": { "label": "开始沟通", "to": "/contact" },
+        "brief": {
+          "eyebrow": "合作匹配",
+          "title": "最适合需要明确沟通的关系。",
+          "text": "当业主重视及时反馈、清楚升级路径和跨文化沟通时，LeCrown 的价值会更明显。",
+          "points": [
+            "需要中英文双语支持的业主或租户",
+            "沟通密度较高的物业",
+            "希望减少执行摩擦的团队"
+          ]
+        },
+        "metrics": [
+          { "value": "业主", "label": "直接汇报关系" },
+          { "value": "运营方", "label": "资产执行协调" },
+          { "value": "租户", "label": "响应式沟通" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "客户画像",
+        "title": "常见合作对象",
+        "text": "这些画像对应的是现有品牌和旧站内容中暗示的方向：商业业主、跨境利益相关方和本地决策人。"
+      },
+      "principlesHeading": {
+        "eyebrow": "合作原则",
+        "title": "专业感必须体现在细节里。",
+        "text": "黑金视觉语言传达的是秩序感、专业度和执行稳定性。"
+      },
+      "relationshipNote": {
+        "eyebrow": "好的合作关系需要什么",
+        "title": "稳定、上下文、快速翻译。",
+        "text": "业主要的不是一堆更新，而是用对语言、对层级、带着上下文的更新，帮助其快速决策。",
+        "points": [
+          "及时的状态汇报",
+          "稳定的联系人",
+          "不混乱的升级路径"
+        ]
+      },
+      "ctaBanner": {
+        "eyebrow": "想优化业主体验？",
+        "title": "先定义谁在什么时候，以什么语言收到什么信息。",
+        "text": "改善客户体验最快的方法，通常是先把沟通标准与决策节奏定下来。",
+        "primaryLabel": "联系 LeCrown",
+        "secondaryLabel": "邮件联系 Benjamin"
+      }
+    },
+    "caseStudies": {
+      "hero": {
+        "eyebrow": "案例",
+        "title": "用清楚标注的代表性场景代替模糊宣传。",
+        "summary": "旧站没有成熟的案例结构，因此新版先用明确标注的 representative scenarios，后续再替换成真实案例。",
+        "primaryCta": { "label": "查看服务", "to": "/services" },
+        "secondaryCta": { "label": "联系 LeCrown", "to": "/contact" },
+        "brief": {
+          "eyebrow": "这样做的原因",
+          "title": "可信，比堆词更重要。",
+          "text": "一个高级静态网站不应该写自己无法证明的内容。代表性场景可以展示思路，同时避免虚假陈述。",
+          "points": [
+            "以问题为起点的叙事",
+            "清楚说明 LeCrown 的处理方式",
+            "结果描述不过度夸大"
+          ]
+        },
+        "metrics": [
+          { "value": "3", "label": "代表性场景" },
+          { "value": "JSON", "label": "后续易替换" },
+          { "value": "清楚", "label": "不再空泛" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "代表性场景",
+        "title": "LeCrown 如何应对常见物业压力",
+        "text": "有真实项目、日期和结果后，这里可直接替换成正式案例。"
+      },
+      "ctaBanner": {
+        "eyebrow": "已经有真实项目可展示？",
+        "title": "现在的结构已经为正式案例准备好了。",
+        "text": "只需要编辑一个 JSON 文件，就能把代表性场景换成真实项目。",
+        "primaryLabel": "更新案例",
+        "secondaryLabel": "邮件联系 Benjamin"
+      }
+    },
+    "insights": {
+      "hero": {
+        "eyebrow": "观点",
+        "title": "把资源、社区与新闻合并成一个更清楚的内容入口。",
+        "summary": "新信息架构将原来分散、空泛的页面压缩为一个 Insights 区域，用来承载运营观点、市场思路与双语服务内容。",
+        "primaryCta": { "label": "联系团队", "to": "/contact" },
+        "secondaryCta": { "label": "了解 LeCrown", "to": "/about" },
+        "brief": {
+          "eyebrow": "内容方向",
+          "title": "短、实用、相关。",
+          "text": "Insights 应该帮助业主和合作方理解 LeCrown 如何看待沟通、运营和品牌呈现。",
+          "points": [
+            "物业运营视角",
+            "双语沟通建议",
+            "品牌导向的市场呈现"
+          ]
+        },
+        "metrics": [
+          { "value": "运营", "label": "核心主题" },
+          { "value": "双语", "label": "受众匹配" },
+          { "value": "静态", "label": "发布简单" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "内容流",
+        "title": "当前可发布的主题方向",
+        "text": "每张 insight 卡片既可以保持简洁，也可以在未来扩展成独立文章页面。"
+      },
+      "ctaBanner": {
+        "eyebrow": "准备发布真实更新？",
+        "title": "无需 CMS，直接用 JSON 加文章。",
+        "text": "新闻、运营简报和双语说明都可以在这个区块统一管理。",
+        "primaryLabel": "规划文章",
+        "secondaryLabel": "邮件联系 Benjamin"
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "segment": "Independent owners",
+    "title": "Houston-area commercial property owners",
+    "summary": "Owners who want responsive oversight, clearer communication, and fewer loose ends at the property.",
+    "needs": [
+      "Fast issue escalation",
+      "Organized tenant and vendor communication",
+      "Updates that are easy to act on"
+    ],
+    "outcome": "Better visibility without ownership carrying the day-to-day burden."
+  },
+  {
+    "segment": "Investor groups",
+    "title": "Stakeholders who need cleaner reporting",
+    "summary": "Owners and investors who want a management partner that keeps communication direct and operationally useful.",
+    "needs": [
+      "Clear owner updates",
+      "Reliable follow-through on property issues",
+      "A stronger management presence on the asset"
+    ],
+    "outcome": "More confidence in what is happening at the property and what needs a decision."
+  },
+  {
+    "segment": "Cross-border ownership",
+    "title": "English and Mandarin-speaking owners or partners",
+    "summary": "Relationships where bilingual communication keeps decisions moving and reduces misunderstanding.",
+    "needs": [
+      "English and Mandarin communication support",
+      "Operational context that translates clearly",
+      "More confidence in reporting and follow-up"
+    ],
+    "outcome": "Better alignment between ownership expectations and property operations."
+  },
+  {
+    "segment": "Tenant-sensitive assets",
+    "title": "Properties where daily professionalism matters",
+    "summary": "Owners who care about tenant experience, communication quality, and how the property is represented every day.",
+    "needs": [
+      "Professional tenant communication",
+      "Steady coordination and escalation",
+      "A management style that reflects well on ownership"
+    ],
+    "outcome": "A stronger operating experience for both owners and occupants."
+  }
+]

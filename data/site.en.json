@@ -1,0 +1,270 @@
+{
+  "brand": {
+    "name": "LeCrown Properties",
+    "kicker": "Houston commercial property management"
+  },
+  "seo": {
+    "defaultTitle": "LeCrown Properties",
+    "titleSuffix": " | LeCrown Properties"
+  },
+  "navigation": [
+    { "label": "Home", "to": "/" },
+    { "label": "Services", "to": "/services" },
+    { "label": "Properties", "to": "/properties" },
+    { "label": "Clients", "to": "/clients" },
+    { "label": "Case Studies", "to": "/case-studies" },
+    { "label": "Insights", "to": "/insights" },
+    { "label": "About", "to": "/about" },
+    { "label": "Contact", "to": "/contact" }
+  ],
+  "languages": [
+    { "code": "en", "label": "EN" },
+    { "code": "zh", "label": "中文" }
+  ],
+  "languageToggleLabel": "Language switcher",
+  "labels": {
+    "menu": "Open navigation"
+  },
+  "contact": {
+    "email": "benjamin@lecrowndevelopment.com",
+    "location": "Houston, Texas",
+    "wechat": "English and Mandarin communication available for owners, tenants, and partners.",
+    "hours": [
+      { "label": "Monday - Friday", "value": "9:00 AM - 6:00 PM" },
+      { "label": "Saturday", "value": "By appointment" },
+      { "label": "Sunday", "value": "Closed" }
+    ]
+  },
+  "footer": {
+    "eyebrow": "LeCrown Properties",
+    "title": "Commercial property management for active assets.",
+    "text": "LeCrown supports warehouse, office, and corporate properties with clear communication, organized coordination, and dependable follow-through.",
+    "navigationTitle": "Explore",
+    "contactTitle": "Reach us",
+    "supportNote": "Benjamin LaGrone and Jessica Huang are available for owner, tenant, and management inquiries.",
+    "bottomLine": "Serving Houston-area owners, tenants, and commercial partners.",
+    "copyright": "© 2026 LeCrown Properties"
+  },
+  "pages": {
+    "services": {
+      "hero": {
+        "eyebrow": "Services",
+        "title": "Management support for warehouse, office, and corporate properties.",
+        "summary": "LeCrown handles tenant communication, vendor coordination, maintenance follow-through, and owner updates for commercial assets that need steady day-to-day oversight.",
+        "primaryCta": { "label": "Request a proposal", "to": "/contact" },
+        "secondaryCta": { "label": "View property types", "to": "/properties" },
+        "brief": {
+          "eyebrow": "What we handle",
+          "title": "The daily work we take on.",
+          "text": "Our work centers on communication, coordination, and keeping open issues from stalling.",
+          "points": [
+            "Tenant and vendor communication",
+            "Issue tracking and follow-through",
+            "Owner updates that support decisions"
+          ]
+        },
+        "metrics": [
+          { "value": "Warehouse", "label": "Industrial and logistics properties" },
+          { "value": "Office", "label": "Professional work environments" },
+          { "value": "Corporate", "label": "Multi-stakeholder buildings" }
+        ]
+      },
+      "scopeHeading": {
+        "eyebrow": "Service scope",
+        "title": "Core service areas",
+        "text": "Support is scoped around the building, the tenants, and the reporting needs of ownership."
+      },
+      "deliveryHeading": {
+        "eyebrow": "How we work",
+        "title": "Direct communication. Reliable follow-through.",
+        "text": "Good property management is not just maintenance. It is clear ownership of issues, fast updates, and consistent execution."
+      },
+      "brief": {
+        "eyebrow": "Typical owner needs",
+        "title": "Why owners usually call.",
+        "text": "LeCrown is often brought in when communication is inconsistent, open items sit too long, or the owner wants a stronger management presence.",
+        "points": [
+          "Tenant and vendor coordination",
+          "Maintenance follow-up and escalation",
+          "Clear reporting in English or Mandarin"
+        ]
+      },
+      "ctaBanner": {
+        "eyebrow": "Need support for a property?",
+        "title": "Tell us what is not getting handled.",
+        "text": "A short conversation is enough to review the asset, the operating issues, and the right management scope.",
+        "primaryLabel": "Start intake",
+        "secondaryLabel": "Email Benjamin"
+      }
+    },
+    "properties": {
+      "hero": {
+        "eyebrow": "Properties",
+        "title": "Asset types we support.",
+        "summary": "LeCrown focuses on commercial properties that need better communication, stronger coordination, and dependable day-to-day oversight.",
+        "primaryCta": { "label": "Discuss a property", "to": "/contact" },
+        "secondaryCta": { "label": "Review services", "to": "/services" },
+        "brief": {
+          "eyebrow": "Property focus",
+          "title": "Commercial buildings with active operating needs.",
+          "text": "These are the asset classes where LeCrown is set up to support ownership through communication, coordination, and reporting.",
+          "points": [
+            "Warehouse and logistics properties",
+            "Office and professional environments",
+            "Corporate buildings with multiple stakeholders"
+          ]
+        },
+        "metrics": [
+          { "value": "Houston", "label": "Primary market" },
+          { "value": "EN / 中文", "label": "Bilingual communication" },
+          { "value": "Commercial", "label": "Operational support" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "Property categories",
+        "title": "Management pressure looks different by asset type.",
+        "text": "Different buildings create different expectations. We match communication, coordination, and oversight to the asset."
+      },
+      "handoffHeading": {
+        "eyebrow": "What can move off your desk",
+        "title": "Tasks ownership often wants handed off.",
+        "text": "The common thread is day-to-day coordination that needs a consistent point of contact and cleaner follow-through."
+      },
+      "note": {
+        "eyebrow": "Current focus",
+        "title": "Representative asset types.",
+        "text": "These cards show the kinds of buildings LeCrown supports today. Specific portfolio pages can be added later."
+      },
+      "ctaBanner": {
+        "eyebrow": "Need help with a property?",
+        "title": "Tell us what building you need help managing.",
+        "text": "We can review the asset, the current issues, and the level of support required.",
+        "primaryLabel": "Discuss my property",
+        "secondaryLabel": "Email Benjamin"
+      }
+    },
+    "clients": {
+      "hero": {
+        "eyebrow": "Clients",
+        "title": "A strong fit for owners who want clean communication.",
+        "summary": "LeCrown works best with owners, investors, and stakeholders who want direct updates, practical follow-through, and a management team that represents the property well.",
+        "primaryCta": { "label": "See how we work", "to": "/about" },
+        "secondaryCta": { "label": "Start a conversation", "to": "/contact" },
+        "brief": {
+          "eyebrow": "Best fit",
+          "title": "Where LeCrown adds the most value.",
+          "text": "We are a good fit when the property needs a reliable management presence and the owner wants fewer surprises.",
+          "points": [
+            "Owners who want more consistent updates",
+            "Properties with active tenant communication needs",
+            "Stakeholders who value bilingual support"
+          ]
+        },
+        "metrics": [
+          { "value": "Owners", "label": "Direct reporting relationships" },
+          { "value": "Investors", "label": "Clear oversight and updates" },
+          { "value": "Tenants", "label": "Responsive communication" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "Client profiles",
+        "title": "Who we typically support",
+        "text": "These relationship types reflect the owners and stakeholders who benefit most from LeCrown's management style."
+      },
+      "principlesHeading": {
+        "eyebrow": "Working principles",
+        "title": "What owners usually want from management.",
+        "text": "Fast acknowledgment, fewer dropped issues, and updates they can actually use."
+      },
+      "relationshipNote": {
+        "eyebrow": "What strong relationships need",
+        "title": "Clear points of contact and consistent follow-through.",
+        "text": "Properties run better when owners, tenants, and vendors know who owns the next step.",
+        "points": [
+          "Clear reporting",
+          "Reliable contacts",
+          "Fast escalation when issues matter"
+        ]
+      },
+      "ctaBanner": {
+        "eyebrow": "Looking for a better management relationship?",
+        "title": "Tell us how the property is being managed today.",
+        "text": "A short intake helps us understand the current setup and where stronger support would make the biggest difference.",
+        "primaryLabel": "Talk with LeCrown",
+        "secondaryLabel": "Email Benjamin"
+      }
+    },
+    "caseStudies": {
+      "hero": {
+        "eyebrow": "Case studies",
+        "title": "Examples of the operating issues we help organize.",
+        "summary": "These scenarios reflect common property-management problems where owners need stronger communication, better coordination, and steadier oversight.",
+        "primaryCta": { "label": "Review services", "to": "/services" },
+        "secondaryCta": { "label": "Contact LeCrown", "to": "/contact" },
+        "brief": {
+          "eyebrow": "Focus",
+          "title": "Typical pressure points.",
+          "text": "The examples below show the kinds of management problems we are built to address.",
+          "points": [
+            "Tenant communication issues",
+            "Maintenance and vendor coordination gaps",
+            "Owner reporting that needs to be cleaner and faster"
+          ]
+        },
+        "metrics": [
+          { "value": "3", "label": "Common scenarios" },
+          { "value": "Owners", "label": "Decision-makers supported" },
+          { "value": "Tenants", "label": "Experience improved" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "Typical engagements",
+        "title": "Three common situations",
+        "text": "The goal is simple: restore order, improve communication, and keep the property moving."
+      },
+      "ctaBanner": {
+        "eyebrow": "Need help with a similar issue?",
+        "title": "Talk with us about the building and the pressure points.",
+        "text": "We can review how communication, maintenance, and coordination should be structured for your property.",
+        "primaryLabel": "Discuss my situation",
+        "secondaryLabel": "Email Benjamin"
+      }
+    },
+    "insights": {
+      "hero": {
+        "eyebrow": "Insights",
+        "title": "Short notes on property operations and owner communication.",
+        "summary": "This section covers practical topics for owners, investors, and commercial property stakeholders.",
+        "primaryCta": { "label": "Contact the team", "to": "/contact" },
+        "secondaryCta": { "label": "Learn about LeCrown", "to": "/about" },
+        "brief": {
+          "eyebrow": "Topics",
+          "title": "Practical topics for active properties.",
+          "text": "The goal is to share useful perspective on reporting, tenant communication, and day-to-day operations.",
+          "points": [
+            "Owner reporting",
+            "Tenant communication",
+            "Commercial property operations"
+          ]
+        },
+        "metrics": [
+          { "value": "Operations", "label": "Core topic" },
+          { "value": "Service", "label": "Owner and tenant experience" },
+          { "value": "Bilingual", "label": "English and Mandarin context" }
+        ]
+      },
+      "gridHeading": {
+        "eyebrow": "Latest topics",
+        "title": "Useful reads for owners and partners",
+        "text": "These short pieces answer common questions and show how LeCrown approaches service."
+      },
+      "ctaBanner": {
+        "eyebrow": "Have a question about your property?",
+        "title": "Need an answer specific to your building?",
+        "text": "A direct conversation is usually more useful than a generic article when the situation is time-sensitive.",
+        "primaryLabel": "Get in touch",
+        "secondaryLabel": "Email Benjamin"
+      }
+    }
+  }
+}

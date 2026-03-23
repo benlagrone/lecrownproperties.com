@@ -1,0 +1,38 @@
+[
+  {
+    "label": "Common scenario",
+    "title": "Stabilizing warehouse communication",
+    "challenge": "Ownership was hearing from too many directions while tenant issues stayed open longer than they should have.",
+    "approachLabel": "LeCrown approach",
+    "approach": [
+      "Set a clear communication path for owners, tenants, and vendors",
+      "Track open issues and define who owns the next step",
+      "Provide updates that focus on what actually needs attention"
+    ],
+    "impact": "A steadier operating rhythm and better owner visibility."
+  },
+  {
+    "label": "Common scenario",
+    "title": "Improving office tenant response",
+    "challenge": "Tenant requests, maintenance follow-up, and building communication felt inconsistent across the property.",
+    "approachLabel": "LeCrown approach",
+    "approach": [
+      "Create a more reliable pattern for tenant communication",
+      "Improve coordination with maintenance and vendors",
+      "Keep owners updated on the issues that affect tenant confidence"
+    ],
+    "impact": "A more organized tenant experience and a building that feels better managed."
+  },
+  {
+    "label": "Common scenario",
+    "title": "Supporting bilingual owner relationships",
+    "challenge": "Owners and partners needed updates in the right language and with enough context to make decisions quickly.",
+    "approachLabel": "LeCrown approach",
+    "approach": [
+      "Use bilingual communication where it matters most",
+      "Translate operating issues into decision-ready updates",
+      "Keep reporting direct, useful, and consistent"
+    ],
+    "impact": "Less confusion across stakeholders and stronger alignment around the property."
+  }
+]
