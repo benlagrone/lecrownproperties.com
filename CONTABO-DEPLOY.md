@@ -118,14 +118,14 @@ The script is only a convenience wrapper around the documented sync and `docker 
 
 ## GitHub Actions deployment
 
-This repository also includes a GitHub Actions workflow that deploys on pushes to `main`.
+The primary automated path now publishes a container image from this repo and dispatches a deployment workflow in `fortress-phronesis`.
 
-Before enabling that path, add these repository or environment secrets in GitHub:
+This source repo needs only one secret for that handoff:
 
-- `CONTABO_HOST`: VPS hostname or IP
-- `CONTABO_USER`: SSH user with access to `REMOTE_DIR`
-- `CONTABO_SSH_KEY`: private SSH key for that user
-- `CONTABO_PORT`: optional SSH port override, defaults to `22`
-- `CONTABO_REMOTE_DIR`: optional deploy path override, defaults to `~/workspace/lecrownproperties`
+- `FORTRESS_WORKFLOW_TOKEN`: token allowed to dispatch `deploy-lecrownproperties.yml` in `benlagrone/fortress-phronesis`
 
-The workflow verifies the deploy contract, builds the container, smoke tests it locally on the runner, then calls `deploy-contabo.sh` for the actual sync and `docker compose up -d --build` step.
+The `fortress-phronesis` repo remains responsible for Contabo SSH access, GHCR read access, and the production rollout itself.
+
+## Manual fallback
+
+`deploy-contabo.sh` remains a manual fallback if the fortress path is unavailable. It still syncs source and rebuilds on the VPS using the documented Contabo contract in this file.

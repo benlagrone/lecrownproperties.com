@@ -52,16 +52,15 @@ For full server steps, see [CONTABO-DEPLOY.md](./CONTABO-DEPLOY.md).
 
 The repository includes a GitHub Actions workflow at `.github/workflows/deploy.yml`.
 
-- Pull requests and pushes to `main` run deploy-contract validation, render the Compose config, and smoke test the container image.
-- Pushes to `main` then deploy to Contabo over SSH by running `deploy-contabo.sh`.
+- Pull requests run deploy-contract validation, render the Compose config, and smoke test the container image.
+- Pushes to `main` also publish `ghcr.io/benlagrone/lecrownproperties-site:sha-<commit>` and refresh `:latest`.
+- Successful `main` publishes then dispatch the deployment workflow in `fortress-phronesis`, which performs the actual Contabo rollout.
 
-Configure these GitHub secrets before relying on the deploy job:
+Configure this GitHub secret in `lecrownproperties.com` before relying on the deploy-dispatch job:
 
-- `CONTABO_HOST`: VPS hostname or IP
-- `CONTABO_USER`: SSH user on the VPS
-- `CONTABO_SSH_KEY`: private key for that user
-- `CONTABO_PORT`: optional SSH port override
-- `CONTABO_REMOTE_DIR`: optional deploy path override
+- `FORTRESS_WORKFLOW_TOKEN`: GitHub token with permission to dispatch workflows in `benlagrone/fortress-phronesis`
+
+The Contabo SSH and GHCR read secrets stay in `fortress-phronesis`, not in this source repo.
 
 ## Planning docs
 
