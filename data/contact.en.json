@@ -16,8 +16,8 @@
       ]
     },
     "metrics": [
-      { "value": "832-722-8581", "label": "Benjamin LaGrone" },
-      { "value": "832-798-3991", "label": "Jessica Huang" },
+      { "value": "(910) 236-9853", "label": "Main line" },
+      { "value": "832-798-3991", "label": "Broker Jessica Huang" },
       { "value": "Houston", "label": "Primary market" }
     ]
   },
@@ -45,7 +45,7 @@
       "badge": "Phone",
       "title": "Direct lines",
       "text": "Call if you want to explain the building, the issue, or the current management gap directly.",
-      "value": "Benjamin: 832-722-8581 · Jessica: 832-798-3991"
+      "value": "Main: (910) 236-9853 · Broker Jessica: 832-798-3991"
     }
   ],
   "form": {

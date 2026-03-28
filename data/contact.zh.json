@@ -16,8 +16,8 @@
       ]
     },
     "metrics": [
-      { "value": "832-722-8581", "label": "Benjamin LaGrone" },
-      { "value": "832-798-3991", "label": "Jessica Huang" },
+      { "value": "(910) 236-9853", "label": "主号码" },
+      { "value": "832-798-3991", "label": "经纪人 Jessica Huang" },
       { "value": "休斯敦", "label": "主要市场" }
     ]
   },
@@ -45,7 +45,7 @@
       "badge": "电话",
       "title": "直线电话",
       "text": "当邮件沟通太慢时，可以先电话建立上下文。",
-      "value": "Benjamin: 832-722-8581 · Jessica: 832-798-3991"
+      "value": "主号码: (910) 236-9853 · 经纪人 Jessica: 832-798-3991"
     }
   ],
   "form": {
