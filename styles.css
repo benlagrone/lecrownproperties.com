@@ -775,6 +775,139 @@ img {
   gap: 1.2rem;
 }
 
+.evaluation-panel {
+  align-content: start;
+  gap: 1rem;
+}
+
+.evaluation-form {
+  border-style: solid;
+}
+
+.evaluation-checkbox {
+  align-content: end;
+  gap: 0.75rem;
+}
+
+.evaluation-checkbox input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+}
+
+.evaluation-checkbox span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.evaluation-runtime-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.evaluation-badge.is-live,
+.evaluation-note.is-live {
+  color: #16361f;
+  background: linear-gradient(135deg, #7cd17d, #c7f2be);
+}
+
+.evaluation-badge.is-demo,
+.evaluation-note.is-demo {
+  color: #291d0c;
+  background: linear-gradient(135deg, #dca42a, #f4d784);
+}
+
+.evaluation-badge.is-error,
+.evaluation-note.is-error {
+  color: #3a120f;
+  background: linear-gradient(135deg, #e78557, #f7c6ae);
+}
+
+.evaluation-badge.is-checking,
+.evaluation-note.is-checking {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.evaluation-note {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  line-height: 1.6;
+  border: 1px solid var(--line);
+}
+
+.evaluation-json-block {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.evaluation-json {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid var(--line);
+  background: rgba(6, 6, 6, 0.94);
+  color: #f7de8e;
+  font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.evaluation-pill-cloud {
+  min-height: 2rem;
+}
+
+.evaluation-highlight-grid {
+  margin-top: 0.2rem;
+}
+
+.evaluation-highlight-card {
+  min-height: 7rem;
+}
+
+.evaluation-mode-grid {
+  margin-top: 1rem;
+}
+
+.evaluation-mode-card {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+}
+
+.evaluation-mode-card h3 {
+  margin: 0;
+}
+
+.evaluation-list-block {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.evaluation-list-block h4 {
+  margin: 0;
+  color: var(--gold);
+  font-size: 0.86rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.evaluation-detail-list {
+  margin: 0;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -991,7 +1124,8 @@ img {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .hero-metrics {
+  .hero-metrics,
+  .evaluation-highlight-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
@@ -1022,7 +1156,8 @@ img {
   .metrics-grid,
   .mini-grid,
   .form-grid,
-  .hero-metrics {
+  .hero-metrics,
+  .evaluation-highlight-grid {
     grid-template-columns: 1fr;
   }
 
