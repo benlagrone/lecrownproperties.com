@@ -1,25 +1,44 @@
-# LeCrown Properties Static Site
+# LeCrown Properties Site
 
-Static JSON-driven marketing site for `LeCrown Properties`.
+JSON-driven marketing site for `LeCrown Properties` with a same-origin server-side proxy for the GridScope property evaluation API.
 
 ## Structure
 
 - `index.html`: app shell
 - `app.js`: client-side router and JSON loader
 - `styles.css`: brand system and responsive layout
+- `server.py`: SPA server plus `POST /api/gridscope/evaluate`
 - `components/`: reusable render helpers
 - `data/`: English and Chinese content files
 - `assets/`: logo and pattern assets
 
 ## Local Preview
 
-Because the site loads JSON with `fetch`, serve it over HTTP:
+Serve the app over HTTP with SPA fallback:
 
 ```bash
-python3 scripts/dev_server.py 4173
+python3 server.py 4173
 ```
 
 Then open `http://localhost:4173`.
+
+If `.env.gridscope.local` is present, the GridScope proxy is also available at `POST /api/gridscope/evaluate`.
+
+Example request:
+
+```bash
+curl -X POST http://127.0.0.1:4173/api/gridscope/evaluate \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "parcel": {
+      "locator": { "parcel_id": "123-ABC" },
+      "market": "tx-statewide"
+    },
+    "modes": ["data_center"],
+    "include_report": true,
+    "include_ai_summary": false
+  }'
+```
 
 ## Content Editing
 
@@ -37,14 +56,14 @@ Update any page by editing the matching JSON files:
 
 ## Containerized deployment
 
-This project is ready to run as a containerized static site on Contabo.
+This project is ready to run as a containerized site and proxy on Contabo.
 
-- `Dockerfile`: Nginx-based image for the static SPA
-- `compose.yaml`: container runtime on `127.0.0.1:18033`
-- `nginx.container.conf`: SPA fallback and cache behavior inside the container
+- `Dockerfile`: Python-based image for the SPA server and GridScope proxy
+- `compose.yaml`: container runtime on `127.0.0.1:18033` with optional GridScope env injection
 - `nginx.conf`: host Nginx reverse proxy example
 - `deploy-contabo.sh`: sync and deploy helper for the VPS
 - `scripts/verify-deploy-contract.sh`: simple guard to confirm port and proxy expectations
+- `scripts/smoke-test-gridscope-proxy.sh`: mock-backed proxy smoke test
 
 For full server steps, see [CONTABO-DEPLOY.md](./CONTABO-DEPLOY.md).
 
@@ -52,7 +71,7 @@ For full server steps, see [CONTABO-DEPLOY.md](./CONTABO-DEPLOY.md).
 
 The repository includes a GitHub Actions workflow at `.github/workflows/deploy.yml`.
 
-- Pull requests run deploy-contract validation, render the Compose config, and smoke test the container image.
+- Pull requests run deploy-contract validation, render the Compose config, smoke test the GridScope proxy, and smoke test the container image.
 - Pushes to `main` also publish `ghcr.io/benlagrone/lecrownproperties-site:sha-<commit>` and refresh `:latest`.
 - Successful `main` publishes then dispatch the deployment workflow in `fortress-phronesis`, which performs the actual Contabo rollout.
 

@@ -47,6 +47,6 @@ rsync -az --delete \
   ./ "$REMOTE_HOST:$REMOTE_DIR/"
 
 echo "Verifying deploy contract and starting container"
-"${SSH_CMD[@]}" "$REMOTE_HOST" "cd $REMOTE_DIR && bash scripts/verify-deploy-contract.sh && docker compose -p lecrownproperties -f compose.yaml up -d --build && docker compose -p lecrownproperties -f compose.yaml ps"
+"${SSH_CMD[@]}" "$REMOTE_HOST" "cd $REMOTE_DIR && bash scripts/verify-deploy-contract.sh && if [ -f .env.gridscope.local ]; then docker compose --env-file .env.gridscope.local -p lecrownproperties -f compose.yaml up -d --build && docker compose --env-file .env.gridscope.local -p lecrownproperties -f compose.yaml ps; else docker compose -p lecrownproperties -f compose.yaml up -d --build && docker compose -p lecrownproperties -f compose.yaml ps; fi"
 
 echo "Deployment complete"

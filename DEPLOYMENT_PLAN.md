@@ -13,7 +13,7 @@ Move `lecrownproperties.com` to the same predictable deployment model used for t
 
 The repo already has a working direct-to-Contabo deploy path:
 
-- static site served by a single Nginx container
+- SPA and same-origin GridScope proxy served by a single application container
 - current compose contract in `compose.yaml`
 - fixed localhost bind `127.0.0.1:18033:8080`
 - host Nginx proxies `lecrownproperties.com` to `127.0.0.1:18033`
@@ -98,7 +98,7 @@ Notes:
 
 - do not change the host port
 - keep the service name stable
-- keep the container-side Nginx behavior from this repo
+- keep the container-side SPA server and proxy behavior from this repo
 - the source repo remains the place where the Dockerfile and app files live
 
 ## Phase Plan
@@ -159,7 +159,12 @@ Post-deploy smoke:
 - `FORTRESS_WORKFLOW_TOKEN`
   - used only to dispatch fortress workflow
 
-No app runtime secrets are required for the static site image itself.
+Runtime GridScope settings can stay outside the image and be injected at deploy time:
+
+- `GRIDSCOPE_EXTERNAL_API_URL`
+- `GRIDSCOPE_EXTERNAL_API_KEY`
+- `GRIDSCOPE_EXTERNAL_API_AUTH_MODE`
+- `GRIDSCOPE_EXTERNAL_API_HEADER_NAME`
 
 #### In `fortress-phronesis` environment `prod`
 

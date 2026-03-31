@@ -1,6 +1,6 @@
 # Contabo Deploy
 
-This site is packaged as a single Nginx container that serves the static SPA on internal port `8080`.
+This site is packaged as a single container that serves the SPA and the GridScope proxy on internal port `8080`.
 
 The deployment model intentionally follows the same broad pattern used in `fortress-phronesis`:
 
@@ -14,14 +14,15 @@ The deployment model intentionally follows the same broad pattern used in `fortr
 - Host Nginx handles TLS and public traffic.
 - Docker Compose runs the site container on `127.0.0.1:18033`.
 - Host Nginx proxies `lecrownproperties.com` to `127.0.0.1:18033`.
+- The container loads GridScope settings from environment variables when they are present.
 
 ## Files
 
-- `Dockerfile`: static container image
+- `Dockerfile`: Python container image for the SPA server and API proxy
 - `compose.yaml`: runtime container definition
-- `nginx.container.conf`: container-side SPA config
 - `nginx.conf`: host Nginx reverse proxy example for Contabo
 - `scripts/verify-deploy-contract.sh`: confirms the expected port and proxy mapping
+- `scripts/smoke-test-gridscope-proxy.sh`: mock-backed proxy validation
 - `deploy-contabo.sh`: sync and deploy helper
 
 ## Server prerequisites
@@ -55,9 +56,15 @@ Then sync the files and start the container:
 ```bash
 cd ~/workspace/lecrownproperties
 bash scripts/verify-deploy-contract.sh
-docker compose -p lecrownproperties -f compose.yaml config >/tmp/lecrownproperties-compose.yaml
-docker compose -p lecrownproperties -f compose.yaml up -d --build
-docker compose -p lecrownproperties -f compose.yaml ps
+if [[ -f .env.gridscope.local ]]; then
+  docker compose --env-file .env.gridscope.local -p lecrownproperties -f compose.yaml config >/tmp/lecrownproperties-compose.yaml
+  docker compose --env-file .env.gridscope.local -p lecrownproperties -f compose.yaml up -d --build
+  docker compose --env-file .env.gridscope.local -p lecrownproperties -f compose.yaml ps
+else
+  docker compose -p lecrownproperties -f compose.yaml config >/tmp/lecrownproperties-compose.yaml
+  docker compose -p lecrownproperties -f compose.yaml up -d --build
+  docker compose -p lecrownproperties -f compose.yaml ps
+fi
 ```
 
 The site will be available internally at `http://127.0.0.1:18033`.
@@ -82,6 +89,7 @@ cd ~/workspace/lecrownproperties
 docker compose -p lecrownproperties -f compose.yaml ps
 curl -I http://127.0.0.1:18033/
 curl -I http://127.0.0.1:18033/contact?lang=zh
+curl http://127.0.0.1:18033/health
 sudo nginx -t
 ```
 
@@ -129,3 +137,14 @@ The `fortress-phronesis` repo remains responsible for Contabo SSH access, GHCR r
 ## Manual fallback
 
 `deploy-contabo.sh` remains a manual fallback if the fortress path is unavailable. It still syncs source and rebuilds on the VPS using the documented Contabo contract in this file.
+
+## GridScope runtime settings
+
+The server reads these values from environment variables:
+
+- `GRIDSCOPE_EXTERNAL_API_URL`
+- `GRIDSCOPE_EXTERNAL_API_KEY`
+- `GRIDSCOPE_EXTERNAL_API_AUTH_MODE`
+- `GRIDSCOPE_EXTERNAL_API_HEADER_NAME`
+
+The current handoff file keeps the LeCrown-side values in `.env.gridscope.local`. When that file exists on the server, the documented `docker compose --env-file .env.gridscope.local ...` flow injects those values into the container without baking them into the image.

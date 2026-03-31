@@ -34,6 +34,9 @@ jobs:
       - name: Render compose config
         run: docker compose -p lecrownproperties -f compose.yaml config >/tmp/lecrownproperties-compose.yaml
 
+      - name: Smoke test GridScope proxy
+        run: bash scripts/smoke-test-gridscope-proxy.sh
+
       - name: Smoke test container
         run: bash scripts/smoke-test-container.sh
 

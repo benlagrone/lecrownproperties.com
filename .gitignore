@@ -4,6 +4,9 @@
 .vscode/
 __pycache__/
 output/
+.env
+.env.local
+.env.*.local
 *.py[cod]
 *.swp
 *.swo
