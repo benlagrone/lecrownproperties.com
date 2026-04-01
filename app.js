@@ -41,15 +41,16 @@ const ROUTES = new Set([
 ])
 
 const PROPERTY_EVALUATION_ROUTE = "/property-evaluation-preview"
+const PROPERTY_EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 const PROPERTY_EVALUATION_PREVIEW = {
   hero: {
-    eyebrow: "GridScope Preview",
-    title: "Property evaluation preview",
+    eyebrow: "GridScope Screen",
+    title: "Screen a parcel, then upgrade into paid diligence",
     summary:
-      "Preview the parcel-screening surface LeCrown can use for data-center site review. The page renders a polished demo immediately and switches to live GridScope results whenever the backend runtime is configured.",
+      "Run a fast land-use suitability screen on a parcel. If the site looks viable, request a paid evaluation and move it into LeCrown's analyst workflow.",
     primaryCta: {
       to: `${PROPERTY_EVALUATION_ROUTE}#preview-intake`,
-      label: "Run the preview",
+      label: "Run the screen",
     },
     secondaryCta: {
       to: "/properties",
@@ -58,65 +59,150 @@ const PROPERTY_EVALUATION_PREVIEW = {
     visual: {
       src: "/assets/warehouse.jpg",
       alt: "Industrial corridor with utility infrastructure",
-      kicker: "Data center mode",
-      title: "Utility-aware parcel screening",
-      text: "Normalize parcel inputs, check shared site facts, and turn the result into an operator-facing decision surface without exposing GridScope credentials in the browser.",
+      kicker: "Public screen -> paid report",
+      title: "Site suitability without exposing GridScope",
+      text: "The public screen returns a coarse fit band. Paid work adds scorecards, blockers, evidence, and operator-ready next steps.",
     },
     brief: {
-      eyebrow: "Current contract",
-      title: "Same-origin secure flow",
+      eyebrow: "Commercial flow",
+      title: "Use the public screen to qualify demand",
       text:
-        "The preview page talks only to LeCrown's backend. When the backend is configured, it forwards the request to GridScope and filters the response before it reaches the browser.",
+        "The browser only talks to LeCrown. Strong parcels can be upgraded into a paid evaluation request with the parcel, top mode, and fit summary already attached.",
       points: [
-        "LeCrown browser -> /api/gridscope/evaluate",
-        "LeCrown server -> GridScope /v1/evaluate",
-        "Browser receives filtered parcel facts only",
+        "Public screen identifies parcel and top mode",
+        "Paid request routes into LeCrown's review queue",
+        "Same-origin proxy keeps GridScope credentials server-side",
       ],
     },
     metrics: [
-      { value: "1", label: "Preview route" },
-      { value: "/health", label: "Runtime availability check" },
-      { value: "Demo + Live", label: "Fallback behavior" },
+      { value: "Free", label: "Public screen" },
+      { value: "Paid", label: "Upgrade path" },
+      { value: "Houston", label: "Initial market focus" },
     ],
   },
   intakeHeading: {
-    eyebrow: "Preview intake",
-    title: "Shape the request before it hits the backend",
+    eyebrow: "Run the screen",
+    title: "Start with parcel, market, and mode",
     text:
-      "Use the form below to test the parcel input shape. If the live GridScope runtime is unavailable, the page still renders a realistic demo response so the preview stays reviewable.",
+      "Use the public screen to qualify whether a parcel deserves deeper work. The page falls back to realistic demo data when the live runtime is unavailable.",
   },
   runtimeHeading: {
-    eyebrow: "Runtime contract",
-    title: "Live path and fallback path in one surface",
+    eyebrow: "Screen status",
+    title: "Live runtime when available, demo fallback when not",
     text:
-      "Production can expose the same preview safely. The backend advertises availability through /health and the page adapts between live evaluation and demo fallback automatically.",
+      "The same customer-facing surface can run in production safely. The backend advertises runtime availability and the page adapts automatically.",
   },
   resultHeading: {
-    eyebrow: "Evaluation surface",
-    title: "Operator-friendly parcel output",
+    eyebrow: "Public result",
+    title: "Show enough to qualify, not enough to give away the whole product",
     text:
-      "The preview emphasizes the parcel facts, mode recommendation, and next-step framing that matter most when triaging a new site candidate.",
+      "Visitors get parcel context, a top-mode recommendation, and coarse fit reasons. Paid evaluation requests unlock the deeper scorecard for this session and route the parcel into follow-up.",
   },
-  requestHeading: "Request preview",
-  responseHeading: "Filtered response preview",
+  upgradeHeading: {
+    eyebrow: "Paid packages",
+    title: "Turn a promising parcel into paid work",
+    text:
+      "The public screen is the top of funnel. The money is in paid evaluation reports and analyst-backed diligence.",
+  },
+  lockedHeading: {
+    eyebrow: "Premium detail",
+    title: "Detailed scorecards stay behind contact capture",
+    text:
+      "Use the free screen to qualify the parcel. Use the paid request to unlock per-mode numeric scoring, blockers, and diligence actions.",
+  },
+  requestSummaryHeading: "Current screen",
   demoStatus:
-    "Demo data loaded. Live evaluation will take over automatically when GridScope is configured.",
+    "Demo parcel screen loaded. Live GridScope results will take over automatically when the backend is configured.",
   demoFallbackStatus:
-    "GridScope is not configured on this environment, so the preview is showing demo results based on your input.",
+    "Live GridScope is not configured here, so the public screen is showing demo results. Paid requests still route into LeCrown's queue.",
   liveReadyStatus:
-    "GridScope is configured. Submitting the form will call the live evaluation endpoint.",
-  liveLoadingStatus: "Running live property evaluation through the LeCrown backend...",
+    "GridScope is configured. Running the screen will call the live evaluation endpoint.",
+  liveLoadingStatus: "Running parcel screen through the LeCrown backend...",
   liveSuccessStatus:
-    "Live GridScope response loaded through /api/gridscope/evaluate.",
+    "Live parcel screen loaded through the LeCrown backend.",
   liveErrorStatus:
-    "The live request failed, so the preview fell back to demo data for layout review.",
+    "The live request failed, so the page fell back to demo data.",
   checkingStatus: "Checking backend availability at /health...",
-  apiFacts: [
-    "POST /api/gridscope/evaluate",
-    "Server-only auth header or bearer token",
-    "Response shape: normalized_parcel, shared_facts, mode_evaluations",
-    "In-memory response caching on identical requests",
+  publicFacts: [
+    "Parcel identification and market context",
+    "Top mode and coarse fit band",
+    "2-4 reasons that explain why the parcel surfaced",
+    "CTA into a paid evaluation request",
   ],
+  premiumFacts: [
+    "Per-mode numeric scoring and blockers",
+    "Evidence-backed next diligence actions",
+    "Evaluation and report identifiers",
+    "Analyst review and advisory upgrade path",
+  ],
+  packages: [
+    {
+      slug: "light_screen",
+      name: "Light screen",
+      price: "Free",
+      delivery: "Instant parcel qualification",
+      points: [
+        "Public parcel screen with top mode and fit band",
+        "Useful for triage, not for diligence or underwriting",
+      ],
+    },
+    {
+      slug: "pro_evaluation",
+      name: "Pro evaluation",
+      price: "Paid report",
+      delivery: "Scorecard, blockers, and next actions",
+      recommended: true,
+      points: [
+        "Per-mode scorecard and parcel brief",
+        "Clear blockers, confidence, and next diligence actions",
+      ],
+    },
+    {
+      slug: "advisory_sprint",
+      name: "Advisory sprint",
+      price: "Analyst-led",
+      delivery: "Deeper diligence and follow-up",
+      points: [
+        "Human review on top of the GridScope screen",
+        "Power, entitlement, and diligence follow-up planning",
+      ],
+    },
+  ],
+  requestForm: {
+    heading: {
+      eyebrow: "Request paid evaluation",
+      title: "Raise your hand on the parcel that deserves follow-up",
+      text:
+        "LeCrown receives the parcel, top mode, fit summary, and your package choice. The public screen stays instant; the paid work becomes a real delivery workflow.",
+    },
+    fields: {
+      name: "Name",
+      company: "Company",
+      email: "Work email",
+      phone: "Phone",
+      role: "Role",
+      timeline: "Timeline",
+      package: "Paid package",
+      notes: "What would make this parcel worth paying to evaluate?",
+    },
+    roleOptions: [
+      "Developer",
+      "Broker",
+      "Investor",
+      "Site selector",
+      "Other",
+    ],
+    timelineOptions: ["Immediate", "30 days", "60 days", "Exploring"],
+    submitLabel: "Request paid evaluation",
+    helper:
+      "No payment step yet. This captures the parcel and package choice so LeCrown can scope and close the work.",
+  },
+  requestSuccess: {
+    title: "Parcel moved into the paid pipeline",
+    text:
+      "LeCrown now has your parcel screen, contact details, and package intent. The next step is scoping the paid evaluation around this specific site.",
+    resetLabel: "Request another parcel",
+  },
   marketOptions: ["tx-statewide", "houston-metro", "dfw-metro"],
   modeOptions: ["data_center", "industrial_flex", "battery_storage"],
   demoRequest: {
@@ -136,9 +222,12 @@ const propertyEvaluationPreviewState = {
   liveConfigured: null,
   statusMessage: PROPERTY_EVALUATION_PREVIEW.checkingStatus,
   statusTone: "checking",
-  sourceLabel: "Demo response",
+  sourceLabel: "Demo parcel screen",
   request: null,
   response: null,
+  inquiryError: "",
+  inquiryResult: null,
+  detailUnlocked: false,
 }
 
 const cache = new Map()
@@ -368,65 +457,80 @@ function renderClientsPage() {
 
 function renderPropertyEvaluationPreviewPage() {
   ensurePropertyEvaluationPreviewState()
-  const request = propertyEvaluationPreviewState.request
-  const response = propertyEvaluationPreviewState.response
+  const { request, response } = propertyEvaluationPreviewState
 
   return `
-    ${renderHero(PROPERTY_EVALUATION_PREVIEW.hero, { hrefFor })}
-
-    <section class="section-block split-grid" data-reveal>
-      <div class="panel panel-rich evaluation-panel">
-        ${renderSectionHeading(PROPERTY_EVALUATION_PREVIEW.intakeHeading, "left")}
-        ${renderPropertyEvaluationPreviewForm(request)}
-        <div class="evaluation-json-block">
-          <div class="card-topline">
-            <strong>${PROPERTY_EVALUATION_PREVIEW.requestHeading}</strong>
-            <span class="card-highlight">POST /api/gridscope/evaluate</span>
+    <section class="section-block evaluation-preview-shell" data-reveal>
+      <div class="panel panel-rich evaluation-preview-stage">
+        <div class="evaluation-preview-header">
+          <div class="evaluation-preview-heading">
+            <span class="eyebrow">Property evaluation preview</span>
+            <h1>Parcel fit screen</h1>
+            <p>
+              Enter a parcel, choose a market and use case, and review the current fit signal.
+            </p>
           </div>
-          <pre class="evaluation-json" data-preview-request>${escapeHtml(prettyJson(request))}</pre>
+          <div class="evaluation-runtime-head">
+            <span class="badge evaluation-badge" data-preview-health-badge>Checking backend</span>
+            <span class="card-highlight" data-preview-source-badge>${escapeHtml(propertyEvaluationPreviewState.sourceLabel)}</span>
+          </div>
         </div>
-      </div>
 
-      <div class="panel panel-brief evaluation-panel">
-        ${renderSectionHeading(PROPERTY_EVALUATION_PREVIEW.runtimeHeading, "left")}
-        <div class="evaluation-runtime-head">
-          <span class="badge evaluation-badge" data-preview-health-badge>Checking backend</span>
-          <span class="card-highlight" data-preview-source-badge>${escapeHtml(propertyEvaluationPreviewState.sourceLabel)}</span>
+        <div class="split-grid evaluation-preview-main">
+          <div class="evaluation-panel">
+            ${renderPropertyEvaluationPreviewForm(request)}
+            <div class="evaluation-request-summary" data-preview-request-summary>
+              ${renderPropertyEvaluationRequestSummary(request)}
+            </div>
+          </div>
+
+          <div class="panel panel-brief evaluation-panel evaluation-lead-card" data-preview-lead-panel>
+            ${renderPropertyEvaluationLeadPanel(response)}
+          </div>
         </div>
-        <p class="evaluation-note" data-preview-status>
-          ${escapeHtml(propertyEvaluationPreviewState.statusMessage)}
-        </p>
-        <div class="pill-cloud evaluation-pill-cloud" data-preview-meta>
-          ${renderPropertyEvaluationMeta(response)}
-        </div>
-        <ul class="detail-list evaluation-detail-list">
-          ${PROPERTY_EVALUATION_PREVIEW.apiFacts
-            .map((fact) => `<li>${escapeHtml(fact)}</li>`)
-            .join("")}
-        </ul>
       </div>
     </section>
 
-    <section class="section-block split-grid" data-reveal>
+    <section class="section-block" data-reveal>
+      <div class="metrics-grid evaluation-highlight-grid" data-preview-highlights>
+        ${renderPropertyEvaluationHighlights(response)}
+      </div>
+    </section>
+
+    <section class="section-block split-grid evaluation-preview-details" data-reveal>
       <div class="panel panel-rich evaluation-panel">
-        ${renderSectionHeading(PROPERTY_EVALUATION_PREVIEW.resultHeading, "left")}
-        <div class="metrics-grid evaluation-highlight-grid" data-preview-highlights>
-          ${renderPropertyEvaluationHighlights(response)}
-        </div>
-        <div class="card-grid cols-3 evaluation-mode-grid" data-preview-modes>
-          ${renderPropertyEvaluationModeCards(response)}
+        <div class="card-grid cols-2 evaluation-reason-grid" data-preview-public-reasons>
+          ${renderPropertyEvaluationPublicReasons(response)}
         </div>
       </div>
 
-      <div class="panel panel-brief evaluation-panel">
-        <span class="eyebrow">Filtered payload</span>
-        <h2>${PROPERTY_EVALUATION_PREVIEW.responseHeading}</h2>
-        <p class="evaluation-note">
-          The preview page keeps the raw payload visible so LeCrown can review the browser-side contract before the full portal is built.
-        </p>
-        <pre class="evaluation-json" data-preview-response>${escapeHtml(prettyJson(response))}</pre>
+      <div class="panel panel-brief evaluation-panel" data-preview-premium-surface>
+        ${renderPropertyEvaluationPremiumSurface(response)}
       </div>
     </section>
+  `
+}
+
+function renderPropertyEvaluationLeadPanel(response) {
+  const evaluation = getLeadModeEvaluation(response)
+
+  return `
+    <div class="card-topline">
+      <span class="badge">${escapeHtml(evaluation ? formatPreviewOptionLabel(evaluation.mode) : "Awaiting screen")}</span>
+      <span class="card-highlight">${escapeHtml(evaluation ? formatPreviewScore(evaluation.score) : "No score yet")}</span>
+    </div>
+    <h2>${escapeHtml(evaluation?.verdict || "Run a parcel screen")}</h2>
+    <p class="evaluation-summary-copy">
+      ${escapeHtml(
+        evaluation?.summary || "Choose a parcel and run the screen to load a fit signal.",
+      )}
+    </p>
+    <p class="evaluation-note" data-preview-status>
+      ${escapeHtml(propertyEvaluationPreviewState.statusMessage)}
+    </p>
+    <div class="pill-cloud evaluation-pill-cloud" data-preview-meta>
+      ${renderPropertyEvaluationMeta(response)}
+    </div>
   `
 }
 
@@ -664,10 +768,6 @@ function renderPropertyEvaluationPreviewForm(request) {
   const mode =
     request?.modes?.[0] ||
     PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]
-  const includeReport =
-    request?.include_report ?? PROPERTY_EVALUATION_PREVIEW.demoRequest.include_report
-  const includeAiSummary =
-    request?.include_ai_summary ?? PROPERTY_EVALUATION_PREVIEW.demoRequest.include_ai_summary
 
   return `
     <form class="intake-form evaluation-form" data-property-evaluation-form id="preview-intake">
@@ -698,25 +798,258 @@ function renderPropertyEvaluationPreviewForm(request) {
               .join("")}
           </select>
         </label>
-        <label class="evaluation-checkbox">
-          <input name="include_report" type="checkbox"${includeReport ? " checked" : ""} />
-          <span>Include report id in the response</span>
-        </label>
-        <label class="evaluation-checkbox">
-          <input name="include_ai_summary" type="checkbox"${includeAiSummary ? " checked" : ""} />
-          <span>Request AI summary when live runtime is enabled</span>
-        </label>
       </div>
       <div class="form-actions">
-        <button class="button button-primary" type="submit">Run property preview</button>
+        <button class="button button-primary" type="submit">Run site screen</button>
         <button class="button button-secondary" type="button" data-preview-demo>
           Reset demo
         </button>
-        <p>
-          This preview route works without a live GridScope runtime and upgrades automatically when the backend is configured.
-        </p>
+        <p>Live results load automatically when GridScope is configured. Otherwise the page stays on demo data.</p>
       </div>
     </form>
+  `
+}
+
+function renderPropertyEvaluationRequestSummary(request) {
+  const parcelId =
+    request?.parcel?.locator?.parcel_id ||
+    PROPERTY_EVALUATION_PREVIEW.demoRequest.parcel.locator.parcel_id
+  const market =
+    request?.parcel?.market ||
+    PROPERTY_EVALUATION_PREVIEW.demoRequest.parcel.market
+  const mode =
+    request?.modes?.[0] ||
+    PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]
+
+  return `
+    <div class="card-topline">
+      <strong>${PROPERTY_EVALUATION_PREVIEW.requestSummaryHeading}</strong>
+    </div>
+    <div class="pill-cloud evaluation-pill-cloud">
+      <span class="pill">${escapeHtml(parcelId)}</span>
+      <span class="pill">${escapeHtml(formatPreviewOptionLabel(market))}</span>
+      <span class="pill">${escapeHtml(formatPreviewOptionLabel(mode))}</span>
+    </div>
+  `
+}
+
+function renderPropertyEvaluationPublicReasons(response) {
+  const evaluation = getLeadModeEvaluation(response)
+  if (!evaluation) {
+    return `
+      <article class="card evaluation-reason-card">
+        <div class="card-topline">
+          <span class="badge">Waiting on screen</span>
+        </div>
+        <p>Run the parcel screen to see the first public reasons.</p>
+      </article>
+    `
+  }
+
+  const reasons = []
+
+  if (evaluation.summary) {
+    reasons.push({
+      label: "Readout",
+      text: evaluation.summary,
+    })
+  }
+
+  if (Array.isArray(evaluation.strengths) && evaluation.strengths[0]) {
+    reasons.push({
+      label: "Signal",
+      text: evaluation.strengths[0],
+    })
+  }
+
+  if (Array.isArray(evaluation.constraints) && evaluation.constraints[0]) {
+    reasons.push({
+      label: "Risk",
+      text: evaluation.constraints[0],
+    })
+  }
+
+  if (Array.isArray(evaluation.next_steps) && evaluation.next_steps[0]) {
+    reasons.push({
+      label: "Next step",
+      text: evaluation.next_steps[0],
+    })
+  }
+
+  return reasons.slice(0, 4).map(renderPropertyEvaluationReasonCard).join("")
+}
+
+function renderPropertyEvaluationReasonCard(reason) {
+  return `
+    <article class="card evaluation-reason-card">
+      <div class="card-topline">
+        <span class="badge">${escapeHtml(reason.label)}</span>
+      </div>
+      <p>${escapeHtml(reason.text)}</p>
+    </article>
+  `
+}
+
+function renderPropertyEvaluationPremiumSurface(response) {
+  const parcel = response?.normalized_parcel || {}
+  const sharedFacts = response?.shared_facts || {}
+  const facts = [
+    ["Power", sharedFacts.power_readiness],
+    ["Highway", sharedFacts.highway_access],
+    ["Fiber", sharedFacts.fiber_access],
+    ["Floodplain", sharedFacts.floodplain],
+    ["Entitlement", sharedFacts.entitlement_path],
+  ].filter(([, value]) => value)
+
+  return `
+    <div class="evaluation-unlocked-surface">
+      <article class="card evaluation-facts-card">
+        <div class="card-topline">
+          <span class="badge">Site facts</span>
+          ${
+            parcel.frontage_ft == null
+              ? ""
+              : `<span class="card-highlight">${escapeHtml(`${parcel.frontage_ft} ft frontage`)}</span>`
+          }
+        </div>
+        <ul class="detail-list evaluation-detail-list evaluation-fact-list">
+          ${facts
+            .map(
+              ([label, value]) =>
+                `<li><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</li>`,
+            )
+            .join("")}
+        </ul>
+      </article>
+      <div class="card-grid cols-1 evaluation-mode-grid">
+        ${renderPropertyEvaluationModeCards(response)}
+      </div>
+    </div>
+  `
+}
+
+function renderPropertyEvaluationPackageCards() {
+  return PROPERTY_EVALUATION_PREVIEW.packages
+    .map(
+      (item) => `
+        <article class="card evaluation-package-card${item.recommended ? " is-recommended" : ""}">
+          <div class="card-topline">
+            <span class="badge">${escapeHtml(item.price)}</span>
+            ${item.recommended ? '<span class="card-highlight">Recommended</span>' : ""}
+          </div>
+          <h3>${escapeHtml(item.name)}</h3>
+          <p>${escapeHtml(item.delivery)}</p>
+          <ul class="detail-list evaluation-detail-list">
+            ${item.points.map((point) => `<li>${escapeHtml(point)}</li>`).join("")}
+          </ul>
+        </article>
+      `,
+    )
+    .join("")
+}
+
+function renderPropertyEvaluationRequestPanel() {
+  if (propertyEvaluationPreviewState.inquiryResult) {
+    return renderPropertyEvaluationRequestSuccess()
+  }
+
+  return renderPropertyEvaluationRequestForm()
+}
+
+function renderPropertyEvaluationRequestForm() {
+  const form = PROPERTY_EVALUATION_PREVIEW.requestForm
+  const paidPackages = PROPERTY_EVALUATION_PREVIEW.packages.filter(
+    (item) => item.slug !== "light_screen",
+  )
+
+  return `
+    ${renderSectionHeading(form.heading, "left")}
+    <form class="intake-form evaluation-request-form" data-property-evaluation-request-form>
+      <div class="form-grid">
+        <label>
+          <span>${form.fields.name}</span>
+          <input name="name" type="text" required />
+        </label>
+        <label>
+          <span>${form.fields.company}</span>
+          <input name="company" type="text" />
+        </label>
+        <label>
+          <span>${form.fields.email}</span>
+          <input name="email" type="email" required />
+        </label>
+        <label>
+          <span>${form.fields.phone}</span>
+          <input name="phone" type="tel" />
+        </label>
+        <label>
+          <span>${form.fields.role}</span>
+          <select name="role">
+            ${form.roleOptions
+              .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+              .join("")}
+          </select>
+        </label>
+        <label>
+          <span>${form.fields.timeline}</span>
+          <select name="timeline">
+            ${form.timelineOptions
+              .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+              .join("")}
+          </select>
+        </label>
+        <label class="span-2">
+          <span>${form.fields.package}</span>
+          <select name="package">
+            ${paidPackages
+              .map(
+                (item) =>
+                  `<option value="${escapeHtml(item.slug)}"${item.recommended ? " selected" : ""}>${escapeHtml(item.name)} · ${escapeHtml(item.price)}</option>`,
+              )
+              .join("")}
+          </select>
+        </label>
+        <label class="span-2">
+          <span>${form.fields.notes}</span>
+          <textarea name="notes" rows="5" required></textarea>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button class="button button-primary" type="submit">${form.submitLabel}</button>
+        <p>${form.helper}</p>
+      </div>
+      <p class="evaluation-form-error" data-preview-request-error>
+        ${escapeHtml(propertyEvaluationPreviewState.inquiryError)}
+      </p>
+    </form>
+  `
+}
+
+function renderPropertyEvaluationRequestSuccess() {
+  const result = propertyEvaluationPreviewState.inquiryResult || {}
+  const summary = result.screening || {}
+  const offer = result.offer || {}
+
+  return `
+    <article class="card evaluation-success-card">
+      <div class="card-topline">
+        <span class="badge">Request received</span>
+        ${result.request_id ? `<span class="card-highlight">${escapeHtml(result.request_id)}</span>` : ""}
+      </div>
+      <h3>${PROPERTY_EVALUATION_PREVIEW.requestSuccess.title}</h3>
+      <p>${PROPERTY_EVALUATION_PREVIEW.requestSuccess.text}</p>
+      <ul class="detail-list evaluation-detail-list">
+        ${summary.parcel_id ? `<li>Parcel: ${escapeHtml(summary.parcel_id)}</li>` : ""}
+        ${summary.lead_mode ? `<li>Lead mode: ${escapeHtml(summary.lead_mode)}</li>` : ""}
+        ${offer.label ? `<li>Requested package: ${escapeHtml(offer.label)}</li>` : ""}
+        ${result.next_step ? `<li>Next step: ${escapeHtml(result.next_step)}</li>` : ""}
+      </ul>
+      <div class="form-actions">
+        <button class="button button-secondary" type="button" data-preview-request-reset>
+          ${PROPERTY_EVALUATION_PREVIEW.requestSuccess.resetLabel}
+        </button>
+      </div>
+    </article>
   `
 }
 
@@ -747,6 +1080,13 @@ function handleClick(event) {
     return
   }
 
+  const resetRequestButton = event.target.closest("[data-preview-request-reset]")
+  if (resetRequestButton) {
+    resetPropertyEvaluationInquiry({ preserveUnlock: true })
+    syncPropertyEvaluationPreviewDom()
+    return
+  }
+
   const link = event.target.closest("a[data-link]")
   if (!link) {
     return
@@ -768,6 +1108,13 @@ async function handleSubmit(event) {
   if (previewForm) {
     event.preventDefault()
     await runPropertyEvaluationPreview(previewForm)
+    return
+  }
+
+  const requestForm = event.target.closest("[data-property-evaluation-request-form]")
+  if (requestForm) {
+    event.preventDefault()
+    await submitPropertyEvaluationRequest(requestForm)
     return
   }
 
@@ -828,7 +1175,7 @@ function normalizePath(pathname) {
 
 function buildTitle(path) {
   if (path === PROPERTY_EVALUATION_ROUTE) {
-    return `Property Evaluation Preview${state.data.site.seo.titleSuffix}`
+    return `Site Suitability Screen${state.data.site.seo.titleSuffix}`
   }
 
   const page = state.data.site.navigation.find((item) => item.to === path)
@@ -909,6 +1256,14 @@ function ensurePropertyEvaluationPreviewState() {
   propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
 }
 
+function resetPropertyEvaluationInquiry({ preserveUnlock = true } = {}) {
+  propertyEvaluationPreviewState.inquiryError = ""
+  propertyEvaluationPreviewState.inquiryResult = null
+  if (!preserveUnlock) {
+    propertyEvaluationPreviewState.detailUnlocked = false
+  }
+}
+
 async function refreshPropertyEvaluationHealth() {
   propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.checkingStatus
   propertyEvaluationPreviewState.statusTone = "checking"
@@ -941,6 +1296,9 @@ async function refreshPropertyEvaluationHealth() {
 async function runPropertyEvaluationPreview(form) {
   const request = buildPropertyEvaluationRequest(form)
   propertyEvaluationPreviewState.request = request
+  resetPropertyEvaluationInquiry({
+    preserveUnlock: propertyEvaluationPreviewState.detailUnlocked,
+  })
 
   if (propertyEvaluationPreviewState.liveConfigured) {
     propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.liveLoadingStatus
@@ -963,7 +1321,7 @@ async function runPropertyEvaluationPreview(form) {
       }
 
       propertyEvaluationPreviewState.response = payload
-      propertyEvaluationPreviewState.sourceLabel = "Live GridScope response"
+      propertyEvaluationPreviewState.sourceLabel = "Live parcel screen"
       propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.liveSuccessStatus
       propertyEvaluationPreviewState.statusTone = "live"
       syncPropertyEvaluationPreviewDom()
@@ -989,11 +1347,14 @@ function loadDemoPropertyEvaluationPreview(form) {
   const request = buildPropertyEvaluationRequest(form)
   propertyEvaluationPreviewState.request = request
   propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-  propertyEvaluationPreviewState.sourceLabel = "Demo response"
+  propertyEvaluationPreviewState.sourceLabel = "Demo parcel screen"
   propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoStatus
   propertyEvaluationPreviewState.statusTone = propertyEvaluationPreviewState.liveConfigured
     ? "live"
     : "demo"
+  resetPropertyEvaluationInquiry({
+    preserveUnlock: propertyEvaluationPreviewState.detailUnlocked,
+  })
   syncPropertyEvaluationPreviewDom()
 }
 
@@ -1015,8 +1376,110 @@ function buildPropertyEvaluationRequest(form) {
         PROPERTY_EVALUATION_PREVIEW.demoRequest.parcel.market,
     },
     modes: [mode || PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]],
-    include_report: formData.get("include_report") === "on",
-    include_ai_summary: formData.get("include_ai_summary") === "on",
+    include_report: true,
+    include_ai_summary: false,
+  }
+}
+
+function buildPropertyEvaluationInquiryPayload(form) {
+  const formData = new FormData(form)
+  const request = clonePreviewValue(propertyEvaluationPreviewState.request)
+  const response = propertyEvaluationPreviewState.response || createDemoEvaluationResponse(request)
+  const packageSlug = formData.get("package")?.toString().trim() || "pro_evaluation"
+  const selectedPackage =
+    PROPERTY_EVALUATION_PREVIEW.packages.find((item) => item.slug === packageSlug) ||
+    PROPERTY_EVALUATION_PREVIEW.packages[1]
+  const leadMode = getLeadModeEvaluation(response)
+  const parcel = response?.normalized_parcel || {}
+
+  return {
+    contact: {
+      name: formData.get("name")?.toString().trim() || "",
+      company: formData.get("company")?.toString().trim() || "",
+      email: formData.get("email")?.toString().trim() || "",
+      phone: formData.get("phone")?.toString().trim() || "",
+    },
+    offer: {
+      slug: selectedPackage.slug,
+      label: selectedPackage.name,
+      price: selectedPackage.price,
+      delivery: selectedPackage.delivery,
+    },
+    opportunity: {
+      role: formData.get("role")?.toString().trim() || "",
+      timeline: formData.get("timeline")?.toString().trim() || "",
+      notes: formData.get("notes")?.toString().trim() || "",
+    },
+    screening: {
+      source: propertyEvaluationPreviewState.sourceLabel,
+      live_configured: Boolean(propertyEvaluationPreviewState.liveConfigured),
+      request,
+      summary: {
+        parcel_id: pickPreviewValue(parcel?.locator?.parcel_id, parcel.parcel_id),
+        market: pickPreviewValue(parcel.market, response?.shared_facts?.market),
+        county: pickPreviewValue(parcel.county, response?.shared_facts?.county),
+        acreage: parcel.acreage ?? null,
+        lead_mode: leadMode ? formatPreviewOptionLabel(leadMode.mode) : "",
+        fit_band: leadMode ? formatFitBand(leadMode.score) : "",
+        score: leadMode?.score ?? null,
+        verdict: leadMode?.verdict || "",
+        summary: leadMode?.summary || "",
+        evaluation_id: response?.evaluation_id || "",
+        report_id: response?.report_id || "",
+      },
+    },
+    page: {
+      path: window.location.pathname,
+      referrer: document.referrer || "",
+      url: window.location.href,
+    },
+  }
+}
+
+async function submitPropertyEvaluationRequest(form) {
+  const submitButton = form.querySelector('button[type="submit"]')
+  const errorNode = form.querySelector("[data-preview-request-error]")
+
+  propertyEvaluationPreviewState.inquiryError = ""
+  if (errorNode) {
+    errorNode.textContent = ""
+  }
+
+  if (submitButton) {
+    submitButton.disabled = true
+    submitButton.textContent = "Submitting..."
+  }
+
+  try {
+    const payload = buildPropertyEvaluationInquiryPayload(form)
+    const response = await fetch(PROPERTY_EVALUATION_REQUEST_PATH, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(body.message || `request status ${response.status}`)
+    }
+
+    propertyEvaluationPreviewState.inquiryResult = body
+    propertyEvaluationPreviewState.inquiryError = ""
+    propertyEvaluationPreviewState.detailUnlocked = true
+    await render()
+  } catch (error) {
+    propertyEvaluationPreviewState.inquiryError =
+      error?.message || "The paid evaluation request could not be submitted."
+    if (errorNode) {
+      errorNode.textContent = propertyEvaluationPreviewState.inquiryError
+    }
+    if (submitButton) {
+      submitButton.disabled = false
+      submitButton.textContent = PROPERTY_EVALUATION_PREVIEW.requestForm.submitLabel
+    }
   }
 }
 
@@ -1085,34 +1548,39 @@ function createDemoEvaluationResponse(request) {
 }
 
 function syncPropertyEvaluationPreviewDom() {
-  const requestNode = document.querySelector("[data-preview-request]")
-  const responseNode = document.querySelector("[data-preview-response]")
+  const requestSummaryNode = document.querySelector("[data-preview-request-summary]")
+  const leadPanelNode = document.querySelector("[data-preview-lead-panel]")
   const highlightsNode = document.querySelector("[data-preview-highlights]")
-  const modesNode = document.querySelector("[data-preview-modes]")
-  const statusNode = document.querySelector("[data-preview-status]")
+  const publicReasonsNode = document.querySelector("[data-preview-public-reasons]")
   const healthBadgeNode = document.querySelector("[data-preview-health-badge]")
   const sourceBadgeNode = document.querySelector("[data-preview-source-badge]")
-  const metaNode = document.querySelector("[data-preview-meta]")
+  const premiumSurfaceNode = document.querySelector("[data-preview-premium-surface]")
 
   if (
-    !requestNode ||
-    !responseNode ||
+    !requestSummaryNode ||
+    !leadPanelNode ||
     !highlightsNode ||
-    !modesNode ||
-    !statusNode ||
+    !publicReasonsNode ||
     !healthBadgeNode ||
     !sourceBadgeNode ||
-    !metaNode
+    !premiumSurfaceNode
   ) {
     return
   }
 
-  requestNode.textContent = prettyJson(propertyEvaluationPreviewState.request)
-  responseNode.textContent = prettyJson(propertyEvaluationPreviewState.response)
+  requestSummaryNode.innerHTML = renderPropertyEvaluationRequestSummary(
+    propertyEvaluationPreviewState.request,
+  )
+  leadPanelNode.innerHTML = renderPropertyEvaluationLeadPanel(
+    propertyEvaluationPreviewState.response,
+  )
   highlightsNode.innerHTML = renderPropertyEvaluationHighlights(propertyEvaluationPreviewState.response)
-  modesNode.innerHTML = renderPropertyEvaluationModeCards(propertyEvaluationPreviewState.response)
-  metaNode.innerHTML = renderPropertyEvaluationMeta(propertyEvaluationPreviewState.response)
-  statusNode.textContent = propertyEvaluationPreviewState.statusMessage
+  publicReasonsNode.innerHTML = renderPropertyEvaluationPublicReasons(
+    propertyEvaluationPreviewState.response,
+  )
+  premiumSurfaceNode.innerHTML = renderPropertyEvaluationPremiumSurface(
+    propertyEvaluationPreviewState.response,
+  )
   healthBadgeNode.textContent =
     propertyEvaluationPreviewState.liveConfigured === null
       ? "Checking backend"
@@ -1121,16 +1589,18 @@ function syncPropertyEvaluationPreviewDom() {
         : "Demo mode"
   sourceBadgeNode.textContent = propertyEvaluationPreviewState.sourceLabel
 
+  const statusNode = document.querySelector("[data-preview-status]")
+
   applyEvaluationTone(healthBadgeNode, propertyEvaluationPreviewState.statusTone)
-  applyEvaluationTone(statusNode, propertyEvaluationPreviewState.statusTone)
+  if (statusNode) {
+    applyEvaluationTone(statusNode, propertyEvaluationPreviewState.statusTone)
+  }
 }
 
 function renderPropertyEvaluationHighlights(response) {
   const parcel = response?.normalized_parcel || {}
   const sharedFacts = response?.shared_facts || {}
-  const firstMode = Array.isArray(response?.mode_evaluations)
-    ? response.mode_evaluations[0]
-    : null
+  const firstMode = getLeadModeEvaluation(response)
   const highlights = [
     {
       label: "Parcel ID",
@@ -1153,8 +1623,8 @@ function renderPropertyEvaluationHighlights(response) {
       value: firstMode ? formatPreviewOptionLabel(firstMode.mode) : null,
     },
     {
-      label: "Score",
-      value: firstMode ? formatPreviewScore(firstMode.score) : null,
+      label: "Fit band",
+      value: firstMode ? formatFitBand(firstMode.score) : null,
     },
   ].filter((item) => item.value)
 
@@ -1206,16 +1676,32 @@ function renderPropertyEvaluationModeCards(response) {
 }
 
 function renderPropertyEvaluationMeta(response) {
+  const parcel = response?.normalized_parcel || {}
+  const evaluation = getLeadModeEvaluation(response)
   const entries = [
-    response?.evaluation_id
-      ? `<span class="pill">Evaluation ${escapeHtml(response.evaluation_id)}</span>`
+    evaluation
+      ? `<span class="pill">Top mode ${escapeHtml(formatPreviewOptionLabel(evaluation.mode))}</span>`
       : "",
-    response?.report_id
-      ? `<span class="pill">Report ${escapeHtml(response.report_id)}</span>`
-      : '<span class="pill">No report id requested</span>',
+    evaluation
+      ? `<span class="pill">${escapeHtml(formatFitBand(evaluation.score))}</span>`
+      : "",
+    parcel.county ? `<span class="pill">${escapeHtml(parcel.county)}</span>` : "",
+    propertyEvaluationPreviewState.liveConfigured === null
+      ? ""
+      : `<span class="pill">${propertyEvaluationPreviewState.liveConfigured ? "Live runtime" : "Demo data"}</span>`,
   ].filter(Boolean)
 
+  if (response?.report_id) {
+    entries.push(`<span class="pill">${escapeHtml(response.report_id)}</span>`)
+  }
+
   return entries.join("")
+}
+
+function getLeadModeEvaluation(response) {
+  return Array.isArray(response?.mode_evaluations)
+    ? response.mode_evaluations[0]
+    : null
 }
 
 function renderPreviewListBlock(label, items) {
@@ -1278,6 +1764,20 @@ function formatPreviewScore(score) {
     return "Not scored"
   }
   return `${Math.round(number * 100)} / 100`
+}
+
+function formatFitBand(score) {
+  const number = Number(score)
+  if (!Number.isFinite(number)) {
+    return "Unscored"
+  }
+  if (number >= 0.8) {
+    return "High fit"
+  }
+  if (number >= 0.65) {
+    return "Medium fit"
+  }
+  return "Low fit"
 }
 
 function formatPreviewAcreage(value) {
