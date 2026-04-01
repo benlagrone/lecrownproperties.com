@@ -11,6 +11,7 @@
     { "label": "首页", "to": "/" },
     { "label": "服务", "to": "/services" },
     { "label": "物业类型", "to": "/properties" },
+    { "label": "选址评估", "to": "/property-evaluation" },
     { "label": "客户", "to": "/clients" },
     { "label": "案例", "to": "/case-studies" },
     { "label": "观点", "to": "/insights" },
@@ -103,7 +104,7 @@
         "title": "用代表性物业画像说明 LeCrown 适合服务什么样的资产。",
         "summary": "新站不再放空洞的假列表，而是直接展示 LeCrown 擅长处理的物业类型、运营特点与管理重点。",
         "primaryCta": { "label": "沟通物业", "to": "/contact" },
-        "secondaryCta": { "label": "查看服务", "to": "/services" },
+        "secondaryCta": { "label": "开始选址筛选", "to": "/property-evaluation" },
         "brief": {
           "eyebrow": "资产视角",
           "title": "先看运营是否匹配。",

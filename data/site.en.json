@@ -11,6 +11,7 @@
     { "label": "Home", "to": "/" },
     { "label": "Services", "to": "/services" },
     { "label": "Properties", "to": "/properties" },
+    { "label": "Evaluate", "to": "/property-evaluation" },
     { "label": "Clients", "to": "/clients" },
     { "label": "Case Studies", "to": "/case-studies" },
     { "label": "Insights", "to": "/insights" },
@@ -103,7 +104,7 @@
         "title": "Asset types we support.",
         "summary": "LeCrown focuses on commercial properties that need better communication, stronger coordination, and dependable day-to-day oversight.",
         "primaryCta": { "label": "Discuss a property", "to": "/contact" },
-        "secondaryCta": { "label": "Review services", "to": "/services" },
+        "secondaryCta": { "label": "Screen a parcel", "to": "/property-evaluation" },
         "brief": {
           "eyebrow": "Property focus",
           "title": "Commercial buildings with active operating needs.",

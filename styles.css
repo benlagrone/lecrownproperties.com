@@ -807,7 +807,8 @@ img {
   max-width: 40rem;
 }
 
-.evaluation-preview-heading h1 {
+.evaluation-preview-heading h1,
+.evaluation-preview-heading h2 {
   margin: 0.45rem 0 0;
   font-family: var(--display);
   font-size: clamp(2.6rem, 5vw, 4.5rem);
@@ -1020,6 +1021,15 @@ img {
   gap: 0.9rem;
 }
 
+.evaluation-upgrade-heading {
+  max-width: none;
+  margin-bottom: 0;
+}
+
+.evaluation-upgrade-heading h2 {
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+}
+
 .evaluation-fact-list li strong {
   color: var(--text);
 }
@@ -1072,13 +1082,6 @@ img {
   color: var(--text);
   background: rgba(255, 255, 255, 0.02);
   outline: none;
-}
-
-.form-grid input:focus,
-.form-grid select:focus,
-.form-grid textarea:focus {
-  border-color: var(--line-strong);
-  box-shadow: 0 0 0 1px rgba(247, 214, 124, 0.22);
 }
 
 .form-grid input:focus,
@@ -1315,6 +1318,7 @@ img {
   }
 
   .evaluation-preview-heading h1,
+  .evaluation-preview-heading h2,
   .evaluation-lead-card h2 {
     font-size: clamp(2rem, 10vw, 3rem);
   }

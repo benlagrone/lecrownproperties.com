@@ -8,15 +8,18 @@ import json
 import mimetypes
 import os
 import posixpath
+import re
 import threading
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlsplit
 from urllib.request import Request, urlopen
+from uuid import uuid4
 
 
 ROOT = Path(__file__).resolve().parent
@@ -24,10 +27,14 @@ EXACT_STATIC_FILES = {"index.html", "app.js", "styles.css"}
 STATIC_DIRS = {"assets", "components", "data"}
 HEALTH_PATH = "/health"
 EVALUATE_PATH = "/api/gridscope/evaluate"
+EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 DEFAULT_TIMEOUT_MS = 15_000
 DEFAULT_CACHE_TTL_SECONDS = 300
 DEFAULT_MAX_BODY_BYTES = 64 * 1024
 DEFAULT_MAX_RESPONSE_BYTES = 2 * 1024 * 1024
+DEFAULT_EVALUATION_REQUEST_STORAGE_FILE = (
+    Path(os.getenv("TMPDIR", "/tmp")) / "lecrownproperties_property_evaluation_requests.ndjson"
+)
 ALLOWED_RESPONSE_FIELDS = (
     "normalized_parcel",
     "shared_facts",
@@ -96,6 +103,129 @@ def extract_error_message(raw_body: bytes) -> str | None:
             if isinstance(value, str) and value.strip():
                 return value.strip()[:200]
     return None
+
+
+def clean_string(value: Any, limit: int = 500) -> str:
+    if not isinstance(value, str):
+        return ""
+    return value.strip()[:limit]
+
+
+def is_valid_email(value: str) -> bool:
+    return bool(value) and bool(re.match(r".+@.+\..+", value))
+
+
+def validate_property_evaluation_request(payload: Any) -> str:
+    if not isinstance(payload, dict):
+        return "Request body must be a JSON object."
+
+    contact = payload.get("contact")
+    if not isinstance(contact, dict):
+        return "Contact details are required."
+
+    name = clean_string(contact.get("name"), 120)
+    email = clean_string(contact.get("email"), 240)
+    if not name:
+        return "Name is required."
+    if not email:
+        return "Email is required."
+    if not is_valid_email(email):
+        return "Email must look valid."
+
+    offer = payload.get("offer")
+    if not isinstance(offer, dict) or not clean_string(offer.get("slug"), 80):
+        return "Paid package selection is required."
+
+    opportunity = payload.get("opportunity")
+    if not isinstance(opportunity, dict):
+        return "Opportunity details are required."
+    if not clean_string(opportunity.get("notes"), 4000):
+        return "A short project note is required."
+
+    screening = payload.get("screening")
+    if not isinstance(screening, dict):
+        return "Screening summary is required."
+
+    screening_request = screening.get("request")
+    if not isinstance(screening_request, dict):
+        return "Screening request is required."
+
+    parcel = screening_request.get("parcel")
+    locator = parcel.get("locator") if isinstance(parcel, dict) else None
+    parcel_id = locator.get("parcel_id") if isinstance(locator, dict) else None
+    if not clean_string(parcel_id, 160):
+        return "Parcel ID is required."
+
+    summary = screening.get("summary")
+    if not isinstance(summary, dict):
+        return "Screening summary is required."
+
+    return ""
+
+
+def build_property_evaluation_request_record(
+    request_handler: BaseHTTPRequestHandler,
+    payload: dict[str, Any],
+) -> dict[str, Any]:
+    contact = payload.get("contact", {})
+    offer = payload.get("offer", {})
+    opportunity = payload.get("opportunity", {})
+    screening = payload.get("screening", {})
+    page = payload.get("page", {})
+    summary = screening.get("summary", {})
+
+    screening_request = screening.get("request")
+    if not isinstance(screening_request, dict):
+        screening_request = {}
+
+    record = {
+        "request_id": f"evalreq_{uuid4().hex[:12]}",
+        "submitted_at": datetime.now(timezone.utc).isoformat(),
+        "contact": {
+            "name": clean_string(contact.get("name"), 120),
+            "company": clean_string(contact.get("company"), 160),
+            "email": clean_string(contact.get("email"), 240),
+            "phone": clean_string(contact.get("phone"), 80),
+        },
+        "offer": {
+            "slug": clean_string(offer.get("slug"), 80),
+            "label": clean_string(offer.get("label"), 120),
+            "price": clean_string(offer.get("price"), 80),
+            "delivery": clean_string(offer.get("delivery"), 200),
+        },
+        "opportunity": {
+            "role": clean_string(opportunity.get("role"), 80),
+            "timeline": clean_string(opportunity.get("timeline"), 80),
+            "notes": clean_string(opportunity.get("notes"), 4000),
+        },
+        "screening": {
+            "source": clean_string(screening.get("source"), 80),
+            "live_configured": bool(screening.get("live_configured")),
+            "request": screening_request,
+            "summary": {
+                "parcel_id": clean_string(summary.get("parcel_id"), 160),
+                "market": clean_string(summary.get("market"), 120),
+                "county": clean_string(summary.get("county"), 120),
+                "acreage": summary.get("acreage"),
+                "lead_mode": clean_string(summary.get("lead_mode"), 120),
+                "fit_band": clean_string(summary.get("fit_band"), 80),
+                "score": summary.get("score"),
+                "verdict": clean_string(summary.get("verdict"), 200),
+                "summary": clean_string(summary.get("summary"), 1000),
+                "evaluation_id": clean_string(summary.get("evaluation_id"), 160),
+                "report_id": clean_string(summary.get("report_id"), 160),
+            },
+        },
+        "page": {
+            "path": clean_string(page.get("path"), 200),
+            "referrer": clean_string(page.get("referrer"), 500),
+            "url": clean_string(page.get("url"), 500),
+        },
+        "source_ip": request_handler.headers.get("x-forwarded-for")
+        or request_handler.client_address[0],
+        "user_agent": request_handler.headers.get("user-agent", ""),
+    }
+    return record
 
 
 @dataclass(frozen=True)
@@ -181,10 +311,30 @@ class ResponseCache:
             )
 
 
+class PropertyEvaluationRequestStore:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self._lock = threading.Lock()
+
+    @classmethod
+    def from_env(cls) -> "PropertyEvaluationRequestStore":
+        raw_path = os.getenv("EVALUATION_REQUEST_STORAGE_FILE", "").strip()
+        path = Path(raw_path) if raw_path else DEFAULT_EVALUATION_REQUEST_STORAGE_FILE
+        return cls(path)
+
+    def append(self, record: dict[str, Any]) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        line = json.dumps(record, separators=(",", ":"), ensure_ascii=True)
+        with self._lock:
+            with self.path.open("a", encoding="utf-8") as handle:
+                handle.write(f"{line}\n")
+
+
 @dataclass
 class AppState:
     gridscope: GridScopeConfig
     cache: ResponseCache
+    evaluation_requests: PropertyEvaluationRequestStore
 
 
 class AppRequestHandler(BaseHTTPRequestHandler):
@@ -204,7 +354,7 @@ class AppRequestHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
-        if path == EVALUATE_PATH:
+        if path in {EVALUATE_PATH, EVALUATION_REQUEST_PATH}:
             self.send_response(204)
             self.send_common_headers()
             self.send_header("Allow", "OPTIONS, POST")
@@ -218,11 +368,15 @@ class AppRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
-        if path != EVALUATE_PATH:
-            self.send_error_json(404, "not_found", "Route not found.")
+        if path == EVALUATE_PATH:
+            self.handle_gridscope_evaluate()
             return
 
-        self.handle_gridscope_evaluate()
+        if path == EVALUATION_REQUEST_PATH:
+            self.handle_property_evaluation_request()
+            return
+
+        self.send_error_json(404, "not_found", "Route not found.")
 
     def handle_read_request(self, *, include_body: bool) -> None:
         path = urlsplit(self.path).path
@@ -233,6 +387,7 @@ class AppRequestHandler(BaseHTTPRequestHandler):
                 {
                     "status": "ok",
                     "gridscope_configured": self.app_state.gridscope.configured,
+                    "evaluation_request_intake": True,
                 },
                 include_body=include_body,
                 extra_headers={"Cache-Control": "no-store"},
@@ -240,6 +395,16 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             return
 
         if path == EVALUATE_PATH:
+            self.send_error_json(
+                405,
+                "method_not_allowed",
+                "Use POST for this route.",
+                include_body=include_body,
+                extra_headers={"Allow": "OPTIONS, POST"},
+            )
+            return
+
+        if path == EVALUATION_REQUEST_PATH:
             self.send_error_json(
                 405,
                 "method_not_allowed",
@@ -339,6 +504,55 @@ class AppRequestHandler(BaseHTTPRequestHandler):
                 "Cache-Control": "no-store",
                 "X-Cache": "MISS",
             },
+        )
+
+    def handle_property_evaluation_request(self) -> None:
+        content_type = self.headers.get("Content-Type", "")
+        if "application/json" not in content_type:
+            self.send_error_json(
+                415,
+                "unsupported_media_type",
+                "Content-Type must be application/json.",
+            )
+            return
+
+        raw_body = self.read_request_body(DEFAULT_MAX_BODY_BYTES)
+        if raw_body is None:
+            return
+
+        try:
+            payload = json.loads(raw_body.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self.send_error_json(400, "invalid_json", "Request body must be valid JSON.")
+            return
+
+        validation_error = validate_property_evaluation_request(payload)
+        if validation_error:
+            self.send_error_json(400, "invalid_request", validation_error)
+            return
+
+        record = build_property_evaluation_request_record(self, payload)
+
+        try:
+            self.app_state.evaluation_requests.append(record)
+        except OSError:
+            self.send_error_json(
+                500,
+                "request_storage_failed",
+                "The paid evaluation request could not be stored.",
+            )
+            return
+
+        self.send_json(
+            201,
+            {
+                "request_id": record["request_id"],
+                "reply": "Paid evaluation request received.",
+                "next_step": "LeCrown can now review the parcel screen and scope the selected package.",
+                "offer": record["offer"],
+                "screening": record["screening"]["summary"],
+            },
+            extra_headers={"Cache-Control": "no-store"},
         )
 
     def serve_static_file(self, file_path: Path, *, include_body: bool) -> None:
@@ -611,6 +825,7 @@ def build_server(host: str, port: int) -> ThreadingHTTPServer:
     server.app_state = AppState(  # type: ignore[attr-defined]
         gridscope=GridScopeConfig.from_env(),
         cache=ResponseCache(),
+        evaluation_requests=PropertyEvaluationRequestStore.from_env(),
     )
     return server
 

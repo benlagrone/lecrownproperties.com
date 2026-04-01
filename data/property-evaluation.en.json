@@ -1,0 +1,142 @@
+{
+  "seoTitle": "Site Suitability Screen",
+  "hero": {
+    "eyebrow": "Property evaluation",
+    "title": "Parcel screening that turns early land review into a real diligence pipeline.",
+    "summary": "LeCrown pairs a browser-safe parcel screen with paid evaluation workflows for land, industrial, and power-led site opportunities. Teams can qualify a site quickly, then escalate the right parcels into structured follow-up.",
+    "primaryCta": { "label": "Screen a parcel", "to": "/property-evaluation#preview-intake" },
+    "secondaryCta": { "label": "Talk with LeCrown", "to": "/contact" },
+    "visual": {
+      "src": "/assets/warehouse.jpg",
+      "alt": "Industrial land and utility corridor",
+      "kicker": "Parcel -> scorecard -> diligence",
+      "title": "A client-facing screen with a real backend path",
+      "text": "Visitors can qualify a parcel without touching GridScope directly. Strong parcels move into paid evaluation, advisory, and operator follow-up."
+    },
+    "brief": {
+      "eyebrow": "Built for real use",
+      "title": "A first-pass acquisition surface, not a placeholder landing page.",
+      "text": "The public screen is intentionally concise. It helps brokers, developers, investors, and site selectors decide which parcels deserve deeper work and a formal evaluation package.",
+      "points": [
+        "Browser-safe parcel screen",
+        "Paid evaluation request capture",
+        "Operator-ready follow-up path through LeCrown"
+      ]
+    },
+    "metrics": [
+      { "value": "3", "label": "Target use cases" },
+      { "value": "Live / Sample", "label": "Environment-aware runtime" },
+      { "value": "1 page", "label": "Screen + request flow" }
+    ]
+  },
+  "screenHeading": {
+    "eyebrow": "Live screen",
+    "title": "Run an initial fit check on a parcel.",
+    "text": "Start with parcel, market, and target mode. The page returns a concise fit readout, key site facts, and a clear next move."
+  },
+  "stageHeader": {
+    "eyebrow": "Interactive screen",
+    "title": "Run a parcel through the current fit model.",
+    "text": "Use the tool to test the parcel, review the signal, and decide whether it should move into formal diligence."
+  },
+  "overviewHeading": {
+    "eyebrow": "Why this page exists",
+    "title": "Designed to move faster than a broker memo.",
+    "text": "This page gives LeCrown a finished client-facing product while preserving the commercial logic behind the evaluation workflow."
+  },
+  "overview": [
+    {
+      "title": "Qualify land early",
+      "text": "Cut down time spent on parcels that are clearly misaligned before analysts, principals, or operators go deeper."
+    },
+    {
+      "title": "Keep the signal readable",
+      "text": "Show the parcel, the lead mode, and the main reasons without overwhelming the first-pass reviewer."
+    },
+    {
+      "title": "Escalate without context loss",
+      "text": "Paid requests preserve the parcel, fit band, and selected package so formal follow-up starts with context."
+    }
+  ],
+  "signalHeading": {
+    "eyebrow": "Current readout",
+    "title": "The first screen stays concise and decision-oriented.",
+    "text": "The parcel signal is meant to help a team decide whether to keep moving, park the site, or request deeper work."
+  },
+  "workflowHeading": {
+    "eyebrow": "Workflow",
+    "title": "From parcel screen to scoped diligence.",
+    "text": "LeCrown uses the same parcel context all the way through the funnel, so strong sites do not need to be re-explained from scratch."
+  },
+  "workflow": [
+    {
+      "title": "Screen the parcel",
+      "text": "Enter the parcel ID, market, and target mode to generate the first fit signal."
+    },
+    {
+      "title": "Review the surfaced reasons",
+      "text": "Use the fit band, site facts, and readout cards to decide whether the parcel merits more attention."
+    },
+    {
+      "title": "Request formal evaluation",
+      "text": "Capture the parcel, package, and project context so LeCrown can scope the next layer of work."
+    },
+    {
+      "title": "Advance into diligence",
+      "text": "Strong parcels can move into scorecards, blocker review, operator memos, and advisory follow-up."
+    }
+  ],
+  "audienceHeading": {
+    "eyebrow": "Who it serves",
+    "title": "Useful across brokerage, development, and acquisition roles.",
+    "text": "Different teams look at the same parcel from different angles. The page supports all of them without pretending the first screen is full diligence."
+  },
+  "audiences": [
+    {
+      "title": "Developers and sponsors",
+      "text": "Triage land before spending serious time on entitlement, utility, or operator conversations."
+    },
+    {
+      "title": "Brokers and site selectors",
+      "text": "Give prospects a concrete first-pass readout and a clean path into formal evaluation."
+    },
+    {
+      "title": "Investors and acquisition teams",
+      "text": "Compare parcels using a consistent frame before committing deeper diligence budget."
+    },
+    {
+      "title": "Operators and advisors",
+      "text": "Carry the parcel context into the next conversation instead of rebuilding the story from zero."
+    }
+  ],
+  "faqHeading": {
+    "eyebrow": "FAQ",
+    "title": "What teams usually want to know before using the screen.",
+    "text": "These answers clarify the boundary between the instant screen and the paid evaluation work behind it."
+  },
+  "faq": [
+    {
+      "question": "Is the parcel screen the final diligence product?",
+      "answer": "No. The first screen is intentionally concise. It is built for triage, not for final investment or site decisions."
+    },
+    {
+      "question": "What happens when I request a paid evaluation?",
+      "answer": "LeCrown receives the parcel context, fit readout, selected package, and project note so the next step can be scoped around the site."
+    },
+    {
+      "question": "Does the page call GridScope directly from the browser?",
+      "answer": "No. The browser talks only to LeCrown's backend. GridScope credentials remain on the server side."
+    },
+    {
+      "question": "Can this run without live GridScope credentials?",
+      "answer": "Yes. The interface falls back to realistic sample data when the live environment is not configured, so the page remains usable during setup."
+    }
+  ],
+  "ctaBanner": {
+    "eyebrow": "Need a formal evaluation?",
+    "title": "Move a promising parcel into LeCrown's paid diligence flow.",
+    "text": "If a site looks viable, send it through with package intent and project context so the next layer of work starts with the right parcel and the right questions.",
+    "primaryLabel": "Request follow-up",
+    "secondaryLabel": "Email Benjamin"
+  }
+}
