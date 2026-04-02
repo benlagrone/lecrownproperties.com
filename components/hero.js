@@ -1,4 +1,5 @@
-export function renderHero(hero, { hrefFor }) {
+export function renderHero(hero, { hrefFor, variant = "default" } = {}) {
+  const heroClassName = variant === "default" ? "hero" : `hero hero-${variant}`
   const visual = hero.visual
     ? `
         <figure class="hero-visual">
@@ -18,25 +19,10 @@ export function renderHero(hero, { hrefFor }) {
       `
     : ""
 
-  return `
-    <section class="hero" data-reveal>
-      <div class="hero-copy">
-        <span class="eyebrow">${hero.eyebrow}</span>
-        <h1>${hero.title}</h1>
-        <p class="hero-summary">${hero.summary}</p>
-
-        <div class="hero-actions">
-          <a class="button button-primary" href="${hrefFor(hero.primaryCta.to)}" data-link>
-            ${hero.primaryCta.label}
-          </a>
-          <a class="button button-secondary" href="${hrefFor(hero.secondaryCta.to)}" data-link>
-            ${hero.secondaryCta.label}
-          </a>
-        </div>
-      </div>
-
-      <aside class="hero-side">
-        ${visual}
+  const briefCard =
+    variant === "compact"
+      ? ""
+      : `
         <div class="hero-brief-card">
           <div class="hero-brief-header">
             <div class="hero-mark-frame" aria-hidden="true">
@@ -65,6 +51,28 @@ export function renderHero(hero, { hrefFor }) {
             )
             .join("")}
         </div>
+      `
+
+  return `
+    <section class="${heroClassName}" data-reveal>
+      <div class="hero-copy">
+        <span class="eyebrow">${hero.eyebrow}</span>
+        <h1>${hero.title}</h1>
+        <p class="hero-summary">${hero.summary}</p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="${hrefFor(hero.primaryCta.to)}" data-link>
+            ${hero.primaryCta.label}
+          </a>
+          <a class="button button-secondary" href="${hrefFor(hero.secondaryCta.to)}" data-link>
+            ${hero.secondaryCta.label}
+          </a>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        ${visual}
+        ${briefCard}
       </aside>
     </section>
   `

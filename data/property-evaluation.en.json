@@ -2,71 +2,71 @@
   "seoTitle": "Site Suitability Screen",
   "hero": {
     "eyebrow": "Property evaluation",
-    "title": "Parcel screening that turns early land review into a real diligence pipeline.",
-    "summary": "LeCrown pairs a browser-safe parcel screen with paid evaluation workflows for land, industrial, and power-led site opportunities. Teams can qualify a site quickly, then escalate the right parcels into structured follow-up.",
+    "title": "Check whether a parcel fits the use you have in mind.",
+    "summary": "Enter a parcel, choose a market and target use, and get a quick fit readout. If the site looks promising, request a paid evaluation.",
     "primaryCta": { "label": "Screen a parcel", "to": "/property-evaluation#preview-intake" },
     "secondaryCta": { "label": "Talk with LeCrown", "to": "/contact" },
     "visual": {
       "src": "/assets/warehouse.jpg",
       "alt": "Industrial land and utility corridor",
-      "kicker": "Parcel -> scorecard -> diligence",
-      "title": "A client-facing screen with a real backend path",
-      "text": "Visitors can qualify a parcel without touching GridScope directly. Strong parcels move into paid evaluation, advisory, and operator follow-up."
+      "kicker": "Screen -> decide -> escalate",
+      "title": "Quick parcel screen for early land decisions",
+      "text": "The public result shows fit band, key reasons, and parcel facts. Paid follow-up adds deeper diligence and site-specific next steps."
     },
     "brief": {
-      "eyebrow": "Built for real use",
-      "title": "A first-pass acquisition surface, not a placeholder landing page.",
-      "text": "The public screen is intentionally concise. It helps brokers, developers, investors, and site selectors decide which parcels deserve deeper work and a formal evaluation package.",
+      "eyebrow": "What this is",
+      "title": "A fast screen, not a full underwriting memo.",
+      "text": "Use it to decide whether a parcel deserves more time.",
       "points": [
-        "Browser-safe parcel screen",
-        "Paid evaluation request capture",
-        "Operator-ready follow-up path through LeCrown"
+        "Parcel + use-case fit",
+        "Short reason list",
+        "Paid follow-up if worth it"
       ]
     },
     "metrics": [
-      { "value": "3", "label": "Target use cases" },
-      { "value": "Live / Sample", "label": "Environment-aware runtime" },
-      { "value": "1 page", "label": "Screen + request flow" }
+      { "value": "3", "label": "Use cases" },
+      { "value": "Live / Sample", "label": "Runtime" },
+      { "value": "1 flow", "label": "Screen + request" }
     ]
   },
   "screenHeading": {
     "eyebrow": "Live screen",
-    "title": "Run an initial fit check on a parcel.",
-    "text": "Start with parcel, market, and target mode. The page returns a concise fit readout, key site facts, and a clear next move."
+    "title": "Try a parcel and see what the screen returns.",
+    "text": "Enter a parcel ID, market, and target use. The screen returns a suggested use, fit band, and the reasons behind it."
   },
   "stageHeader": {
     "eyebrow": "Interactive screen",
-    "title": "Run a parcel through the current fit model.",
-    "text": "Use the tool to test the parcel, review the signal, and decide whether it should move into formal diligence."
+    "title": "Test the parcel.",
+    "text": "Use the tool to see whether the site looks promising enough to justify deeper work."
   },
   "overviewHeading": {
-    "eyebrow": "Why this page exists",
-    "title": "Designed to move faster than a broker memo.",
-    "text": "This page gives LeCrown a finished client-facing product while preserving the commercial logic behind the evaluation workflow."
+    "eyebrow": "What this page does",
+    "title": "It helps you decide whether to keep going.",
+    "text": "This is an early screen for land opportunities, not a final investment recommendation."
   },
   "overview": [
     {
-      "title": "Qualify land early",
-      "text": "Cut down time spent on parcels that are clearly misaligned before analysts, principals, or operators go deeper."
+      "title": "Screen fast",
+      "text": "Rule out weak parcels before spending more time on utilities, entitlement, or outreach."
     },
     {
-      "title": "Keep the signal readable",
-      "text": "Show the parcel, the lead mode, and the main reasons without overwhelming the first-pass reviewer."
+      "title": "See the reason",
+      "text": "Get the likely use, fit band, and main reasons in plain language."
     },
     {
-      "title": "Escalate without context loss",
-      "text": "Paid requests preserve the parcel, fit band, and selected package so formal follow-up starts with context."
+      "title": "Escalate when it is worth it",
+      "text": "Send promising sites into LeCrown's paid evaluation flow with the parcel context already attached."
     }
   ],
   "signalHeading": {
-    "eyebrow": "Current readout",
-    "title": "The first screen stays concise and decision-oriented.",
-    "text": "The parcel signal is meant to help a team decide whether to keep moving, park the site, or request deeper work."
+    "eyebrow": "Current parcel result",
+    "title": "What the screen found on this parcel.",
+    "text": "Below are the parcel ID, market, acreage, suggested use, and fit band from the current screen."
   },
   "workflowHeading": {
     "eyebrow": "Workflow",
-    "title": "From parcel screen to scoped diligence.",
-    "text": "LeCrown uses the same parcel context all the way through the funnel, so strong sites do not need to be re-explained from scratch."
+    "title": "From quick screen to paid evaluation.",
+    "text": "Strong parcels can move forward without re-entering the same context from scratch."
   },
   "workflow": [
     {

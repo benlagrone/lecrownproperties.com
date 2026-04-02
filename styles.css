@@ -264,6 +264,11 @@ img {
   background: var(--panel-strong);
 }
 
+.hero-compact {
+  grid-template-columns: minmax(0, 1.18fr) minmax(19rem, 0.82fr);
+  align-items: center;
+}
+
 .hero::before {
   content: "";
   position: absolute;
@@ -277,6 +282,10 @@ img {
   position: relative;
   z-index: 1;
   padding: clamp(1rem, 2vw, 1.4rem);
+}
+
+.hero-compact .hero-copy {
+  padding-block: clamp(0.9rem, 1.6vw, 1.15rem);
 }
 
 .eyebrow {
@@ -312,6 +321,12 @@ img {
   background-clip: text;
 }
 
+.hero-compact h1 {
+  max-width: 13.5ch;
+  font-size: clamp(2.9rem, 4.9vw, 4.8rem);
+  line-height: 0.93;
+}
+
 .hero-summary,
 .section-heading p,
 .panel p,
@@ -329,6 +344,11 @@ img {
   color: #f0eadc;
 }
 
+.hero-compact .hero-summary {
+  max-width: 58ch;
+  margin-top: 1rem;
+}
+
 .hero-actions,
 .cta-banner-actions,
 .form-actions {
@@ -340,6 +360,10 @@ img {
 
 .hero-actions {
   margin-top: 2rem;
+}
+
+.hero-compact .hero-actions {
+  margin-top: 1.35rem;
 }
 
 .button {
@@ -385,6 +409,10 @@ img {
   align-content: start;
 }
 
+.hero-compact .hero-side {
+  gap: 0;
+}
+
 .hero-visual {
   position: relative;
   min-height: 18rem;
@@ -394,6 +422,11 @@ img {
   border: 1px solid var(--line);
   background: #090909;
   box-shadow: var(--shadow);
+}
+
+.hero-compact .hero-visual,
+.hero-compact .hero-visual img {
+  min-height: clamp(20rem, 34vw, 29rem);
 }
 
 .hero-visual::after {
@@ -441,6 +474,10 @@ img {
   font-family: var(--display);
   font-size: clamp(1.9rem, 2.6vw, 2.8rem);
   line-height: 0.96;
+}
+
+.hero-compact .hero-visual-copy strong {
+  font-size: clamp(1.6rem, 2.1vw, 2.3rem);
 }
 
 .hero-visual-copy span:last-child {
@@ -1295,6 +1332,11 @@ img {
   .hero h1 {
     font-size: clamp(3.1rem, 14vw, 4.5rem);
     max-width: 9.3ch;
+  }
+
+  .hero-compact h1 {
+    font-size: clamp(2.8rem, 12vw, 4.1rem);
+    max-width: 11.5ch;
   }
 
   .hero-visual,

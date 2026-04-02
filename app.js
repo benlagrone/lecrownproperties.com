@@ -49,6 +49,42 @@ const ROUTE_ALIASES = new Map([
   [PROPERTY_EVALUATION_LEGACY_ROUTE, PROPERTY_EVALUATION_ROUTE],
 ])
 
+const PROPERTY_EVALUATION_DEMO_SCENARIOS = [
+  {
+    parcel: {
+      locator: {
+        parcel_id: "PCL-41A-TX-DC",
+      },
+      market: "tx-statewide",
+    },
+    modes: ["data_center"],
+    include_report: true,
+    include_ai_summary: false,
+  },
+  {
+    parcel: {
+      locator: {
+        parcel_id: "HOU-88-FLEX",
+      },
+      market: "houston-metro",
+    },
+    modes: ["industrial_flex"],
+    include_report: true,
+    include_ai_summary: false,
+  },
+  {
+    parcel: {
+      locator: {
+        parcel_id: "DFW-17-BESS",
+      },
+      market: "dfw-metro",
+    },
+    modes: ["battery_storage"],
+    include_report: true,
+    include_ai_summary: false,
+  },
+]
+
 const PROPERTY_EVALUATION_PREVIEW = {
   hero: {
     eyebrow: "GridScope Screen",
@@ -101,35 +137,48 @@ const PROPERTY_EVALUATION_PREVIEW = {
   },
   resultHeading: {
     eyebrow: "Public result",
-    title: "Show enough to qualify, not enough to give away the whole product",
+    title: "What the current screen found on this parcel",
     text:
-      "Visitors get parcel context, a top-mode recommendation, and coarse fit reasons. Paid evaluation requests unlock the deeper scorecard for this session and route the parcel into follow-up.",
+      "The free screen shows the parcel, suggested use, fit band, and the main reasons it surfaced. Paid follow-up adds the deeper scorecard.",
   },
   upgradeHeading: {
-    eyebrow: "Paid packages",
-    title: "Turn a promising parcel into paid work",
+    eyebrow: "Paid follow-up",
+    title: "If the parcel looks good, request the deeper evaluation",
     text:
-      "The public screen is the top of funnel. The money is in paid evaluation reports and analyst-backed diligence.",
+      "Paid work adds scorecards, blockers, and next diligence steps on this parcel.",
   },
   lockedHeading: {
-    eyebrow: "Premium detail",
-    title: "Detailed scorecards stay behind contact capture",
+    eyebrow: "Paid detail",
+    title: "What you get after the paid handoff",
     text:
-      "Use the free screen to qualify the parcel. Use the paid request to unlock per-mode numeric scoring, blockers, and diligence actions.",
+      "The free screen is a first-pass readout. Paid work adds the detailed score, blockers, and follow-up actions.",
   },
-  requestSummaryHeading: "Selected parcel",
+  requestSummaryHeading: "Current parcel",
   demoStatus:
-    "Sample parcel response loaded. Live results will take over automatically when the backend is configured.",
+    "Demo result loaded from the parcel ID, market, and mode you selected.",
   demoFallbackStatus:
-    "Live evaluation is not configured here, so the screen is showing sample parcel data.",
+    "Demo mode. This deployment is not connected to live parcel data, so the result below is example output shaped by your inputs.",
   liveReadyStatus:
-    "GridScope is configured. Running the screen will call the live evaluation endpoint.",
-  liveLoadingStatus: "Running parcel screen through the LeCrown backend...",
+    "Live mode. Run the screen to pull the current parcel evaluation.",
+  liveLoadingStatus: "Running live parcel evaluation...",
   liveSuccessStatus:
-    "Live parcel screen loaded through the LeCrown backend.",
+    "Live parcel evaluation loaded.",
   liveErrorStatus:
-    "The live request failed, so the page fell back to sample parcel data.",
-  checkingStatus: "Checking backend availability at /health...",
+    "Live parcel evaluation failed. Showing a demo result based on your inputs instead.",
+  checkingStatus: "Checking whether live parcel data is available...",
+  actionLabels: {
+    checkingPrimary: "Run screen",
+    checkingHelper: "Checking whether this deployment can reach live parcel data.",
+    livePrimary: "Run live screen",
+    liveSecondary: "Load example parcel",
+    liveHelper: "Live mode. This deployment pulls parcel evaluations from LeCrown's backend.",
+    demoPrimary: "Run demo screen",
+    demoSecondary: "Load another example",
+    demoHelper:
+      "Demo mode. The result below is example output shaped by your parcel ID, market, and mode, not live parcel data.",
+    liveRunning: "Running live screen...",
+    demoRunning: "Running demo screen...",
+  },
   publicFacts: [
     "Parcel identification and market context",
     "Top mode and coarse fit band",
@@ -212,29 +261,22 @@ const PROPERTY_EVALUATION_PREVIEW = {
   },
   marketOptions: ["tx-statewide", "houston-metro", "dfw-metro"],
   modeOptions: ["data_center", "industrial_flex", "battery_storage"],
-  demoRequest: {
-    parcel: {
-      locator: {
-        parcel_id: "PCL-41A-TX-DC",
-      },
-      market: "tx-statewide",
-    },
-    modes: ["data_center"],
-    include_report: true,
-    include_ai_summary: false,
-  },
+  demoScenarios: PROPERTY_EVALUATION_DEMO_SCENARIOS,
+  demoRequest: PROPERTY_EVALUATION_DEMO_SCENARIOS[0],
 }
 
 const propertyEvaluationPreviewState = {
   liveConfigured: null,
   statusMessage: PROPERTY_EVALUATION_PREVIEW.checkingStatus,
   statusTone: "checking",
-  sourceLabel: "Sample parcel response",
+  sourceLabel: "Demo result",
   request: null,
   response: null,
   inquiryError: "",
   inquiryResult: null,
   detailUnlocked: false,
+  previewRunning: false,
+  demoScenarioIndex: 0,
 }
 
 const cache = new Map()
@@ -468,7 +510,7 @@ function renderPropertyEvaluationPreviewPage() {
   const { request, response } = propertyEvaluationPreviewState
 
   return `
-    ${renderHero(page.hero, { hrefFor })}
+    ${renderHero(page.hero, { hrefFor, variant: "compact" })}
 
     <section class="section-block split-grid evaluation-preview-shell" data-reveal>
       <div class="stack-panel">
@@ -814,6 +856,7 @@ function renderPropertyEvaluationPreviewForm(request) {
   const mode =
     request?.modes?.[0] ||
     PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]
+  const actionCopy = getPreviewActionCopy()
 
   return `
     <form class="intake-form evaluation-form" data-property-evaluation-form id="preview-intake">
@@ -846,11 +889,13 @@ function renderPropertyEvaluationPreviewForm(request) {
         </label>
       </div>
       <div class="form-actions">
-        <button class="button button-primary" type="submit">Run site screen</button>
-        <button class="button button-secondary" type="button" data-preview-demo>
-          Load sample parcel
+        <button class="button button-primary" type="submit" data-preview-submit-label>
+          ${escapeHtml(actionCopy.submitLabel)}
         </button>
-        <p>Live results load automatically when GridScope is configured. Otherwise the page stays on sample parcel data.</p>
+        <button class="button button-secondary" type="button" data-preview-demo data-preview-demo-label>
+          ${escapeHtml(actionCopy.demoLabel)}
+        </button>
+        <p data-preview-helper>${escapeHtml(actionCopy.helper)}</p>
       </div>
     </form>
   `
@@ -878,8 +923,8 @@ function renderPropertyEvaluationRequestSummary(request) {
       <span class="pill">${escapeHtml(formatPreviewOptionLabel(mode))}</span>
     </div>
     <p class="evaluation-summary-copy">
-      The free screen gives a parcel fit readout. Paid work adds the scorecard,
-      blockers, and analyst follow-up around the same site.
+      The free screen shows the parcel, market, selected use, and fit readout.
+      Paid follow-up adds scoring, blockers, and next diligence steps.
     </p>
   `
 }
@@ -1383,6 +1428,7 @@ async function refreshPropertyEvaluationHealth() {
 async function runPropertyEvaluationPreview(form) {
   const request = buildPropertyEvaluationRequest(form)
   propertyEvaluationPreviewState.request = request
+  propertyEvaluationPreviewState.previewRunning = true
   resetPropertyEvaluationInquiry({
     preserveUnlock: propertyEvaluationPreviewState.detailUnlocked,
   })
@@ -1408,37 +1454,39 @@ async function runPropertyEvaluationPreview(form) {
       }
 
       propertyEvaluationPreviewState.response = payload
-      propertyEvaluationPreviewState.sourceLabel = "Live evaluation"
+      propertyEvaluationPreviewState.sourceLabel = "Live result"
       propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.liveSuccessStatus
       propertyEvaluationPreviewState.statusTone = "live"
+      propertyEvaluationPreviewState.previewRunning = false
       syncPropertyEvaluationPreviewDom()
       return
     } catch (error) {
       propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-      propertyEvaluationPreviewState.sourceLabel = "Sample parcel response"
+      propertyEvaluationPreviewState.sourceLabel = "Demo result"
       propertyEvaluationPreviewState.statusMessage = `${PROPERTY_EVALUATION_PREVIEW.liveErrorStatus} ${error.message}`
       propertyEvaluationPreviewState.statusTone = "error"
+      propertyEvaluationPreviewState.previewRunning = false
       syncPropertyEvaluationPreviewDom()
       return
     }
   }
 
   propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-  propertyEvaluationPreviewState.sourceLabel = "Sample parcel response"
-  propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoFallbackStatus
+  propertyEvaluationPreviewState.sourceLabel = "Demo result"
+  propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoStatus
   propertyEvaluationPreviewState.statusTone = "demo"
+  propertyEvaluationPreviewState.previewRunning = false
   syncPropertyEvaluationPreviewDom()
 }
 
 function loadDemoPropertyEvaluationPreview(form) {
-  const request = buildPropertyEvaluationRequest(form)
+  const request = getNextDemoScenarioRequest()
+  applyPropertyEvaluationRequestToForm(form, request)
   propertyEvaluationPreviewState.request = request
   propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-  propertyEvaluationPreviewState.sourceLabel = "Sample parcel response"
+  propertyEvaluationPreviewState.sourceLabel = "Demo result"
   propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoStatus
-  propertyEvaluationPreviewState.statusTone = propertyEvaluationPreviewState.liveConfigured
-    ? "live"
-    : "demo"
+  propertyEvaluationPreviewState.statusTone = "demo"
   resetPropertyEvaluationInquiry({
     preserveUnlock: propertyEvaluationPreviewState.detailUnlocked,
   })
@@ -1579,11 +1627,53 @@ function createDemoEvaluationResponse(request) {
     PROPERTY_EVALUATION_PREVIEW.demoRequest.parcel.market
   const mode = request?.modes?.[0] || PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]
   const slug = parcelId.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "preview"
-  const score = {
-    data_center: 0.84,
-    industrial_flex: 0.68,
-    battery_storage: 0.73,
+  const marketLabel = formatPreviewOptionLabel(market)
+  const modeLabel = formatPreviewOptionLabel(mode)
+  const seed = hashPreviewSeed(`${parcelId}:${market}:${mode}`)
+  const county = {
+    "tx-statewide": "Fort Bend County, TX",
+    "houston-metro": "Harris County, TX",
+    "dfw-metro": "Tarrant County, TX",
+  }[market] || "Fort Bend County, TX"
+  const baseScore = {
+    data_center: 0.79,
+    industrial_flex: 0.69,
+    battery_storage: 0.74,
   }[mode] || 0.7
+  const score = clampPreviewNumber(
+    baseScore + ((seed % 19) - 9) * 0.012,
+    0.52,
+    0.9,
+  )
+  const acreage = Math.round((18 + (seed % 68) * 0.8) * 10) / 10
+  const frontageFt = 420 + (seed % 1180)
+  const verdict =
+    score >= 0.82
+      ? "Strong shortlist candidate"
+      : score >= 0.66
+        ? "Viable with diligence"
+        : "Needs a narrower search"
+  const summary =
+    score >= 0.82
+      ? `This ${modeLabel.toLowerCase()} screen looks strong for an initial pass in ${marketLabel}.`
+      : score >= 0.66
+        ? `This parcel could work for ${modeLabel.toLowerCase()}, but utilities and entitlement still need confirmation.`
+        : `This parcel is only a weak ${modeLabel.toLowerCase()} fit on the current screen.`
+  const strengths = [
+    `${marketLabel} keeps the parcel inside the current search area.`,
+    `${formatPreviewAcreage(acreage)} is workable for an early ${modeLabel.toLowerCase()} screen.`,
+    "Road access and parcel shape look usable at first pass.",
+  ]
+  const constraints = [
+    "Utility availability still needs live confirmation.",
+    "Zoning and entitlement need municipality-level review.",
+    "Floodplain, drainage, and easements still need parcel-specific diligence.",
+  ]
+  const nextSteps = [
+    "Confirm utility and interconnection constraints.",
+    "Check zoning, access, and any easements.",
+    "Decide whether this parcel merits a paid evaluation.",
+  ]
 
   return {
     normalized_parcel: {
@@ -1591,42 +1681,37 @@ function createDemoEvaluationResponse(request) {
         parcel_id: parcelId,
       },
       market,
-      county: "Fort Bend County, TX",
-      acreage: 41.8,
-      frontage_ft: 1260,
+      county,
+      acreage,
+      frontage_ft: frontageFt,
     },
     shared_facts: {
       market,
-      power_readiness: "Dual-feed corridor roughly 1.4 miles away",
-      highway_access: "Interstate logistics access within 4.8 miles",
-      fiber_access: "Carrier route available within 7.2 miles",
-      floodplain: "Minimal overlap based on preliminary screen",
-      entitlement_path: "Industrial-compatible zoning path likely with diligence",
+      county,
+      power_readiness:
+        mode === "data_center"
+          ? "Grid and substation position still need live utility confirmation"
+          : "Utility capacity still needs a live site-specific check",
+      highway_access:
+        market === "houston-metro"
+          ? "Houston-area road access looks workable for first-pass screening"
+          : "Regional highway access looks workable for first-pass screening",
+      fiber_access:
+        mode === "data_center"
+          ? "Carrier route still needs live confirmation for data-center use"
+          : "Telecom routing is a secondary check on this use case",
+      floodplain: "Floodplain and drainage still need parcel-specific review",
+      entitlement_path: "Local zoning and entitlement path still need confirmation",
     },
     mode_evaluations: [
       {
         mode,
         score,
-        verdict: score >= 0.8 ? "Strong shortlist candidate" : "Viable with diligence",
-        summary:
-          mode === "data_center"
-            ? "Parcel shows strong utility adjacency and clean logistics access for initial data-center screening."
-            : "Parcel supports alternative industrial energy use cases, but utility and entitlement diligence still determine fit.",
-        strengths: [
-          "Utility corridor nearby for early-stage feasibility review",
-          "Parcel size supports phased site planning rather than a one-shot build",
-          "Shared access context is straightforward enough for broker-facing screening",
-        ],
-        constraints: [
-          "Entitlement path still needs municipality-level confirmation",
-          "Substation queue position and real deliverable capacity remain unknown",
-          "Floodplain and drainage assumptions need parcel-specific engineering review",
-        ],
-        next_steps: [
-          "Confirm substation ownership and available deliverable capacity",
-          "Resolve entitlement posture with municipality and county inputs",
-          "Generate operator memo and optional report if the parcel stays on the shortlist",
-        ],
+        verdict,
+        summary,
+        strengths,
+        constraints,
+        next_steps: nextSteps,
       },
     ],
     report_id: request?.include_report ? `report-${slug}` : undefined,
@@ -1672,12 +1757,13 @@ function syncPropertyEvaluationPreviewDom() {
     propertyEvaluationPreviewState.liveConfigured === null
       ? "Checking backend"
       : propertyEvaluationPreviewState.liveConfigured
-        ? "Live runtime ready"
-        : "Sample data"
+        ? "Live mode"
+        : "Demo mode"
   sourceBadgeNode.textContent = propertyEvaluationPreviewState.sourceLabel
 
   const statusNode = document.querySelector("[data-preview-status]")
 
+  syncPropertyEvaluationFormUi()
   applyEvaluationTone(healthBadgeNode, propertyEvaluationPreviewState.statusTone)
   if (statusNode) {
     applyEvaluationTone(statusNode, propertyEvaluationPreviewState.statusTone)
@@ -1835,6 +1921,104 @@ function clonePreviewValue(value) {
   return JSON.parse(JSON.stringify(value))
 }
 
+function getPreviewActionCopy() {
+  const labels = PROPERTY_EVALUATION_PREVIEW.actionLabels
+
+  if (propertyEvaluationPreviewState.previewRunning) {
+    return {
+      submitLabel: propertyEvaluationPreviewState.liveConfigured
+        ? labels.liveRunning
+        : labels.demoRunning,
+      demoLabel:
+        propertyEvaluationPreviewState.liveConfigured === false
+          ? labels.demoSecondary
+          : labels.liveSecondary,
+      helper:
+        propertyEvaluationPreviewState.liveConfigured === false
+          ? labels.demoHelper
+          : propertyEvaluationPreviewState.liveConfigured
+            ? labels.liveHelper
+            : labels.checkingHelper,
+    }
+  }
+
+  if (propertyEvaluationPreviewState.liveConfigured === true) {
+    return {
+      submitLabel: labels.livePrimary,
+      demoLabel: labels.liveSecondary,
+      helper: labels.liveHelper,
+    }
+  }
+
+  if (propertyEvaluationPreviewState.liveConfigured === false) {
+    return {
+      submitLabel: labels.demoPrimary,
+      demoLabel: labels.demoSecondary,
+      helper: labels.demoHelper,
+    }
+  }
+
+  return {
+    submitLabel: labels.checkingPrimary,
+    demoLabel: labels.liveSecondary,
+    helper: labels.checkingHelper,
+  }
+}
+
+function syncPropertyEvaluationFormUi() {
+  const form = document.querySelector("[data-property-evaluation-form]")
+  if (!form) {
+    return
+  }
+
+  const actionCopy = getPreviewActionCopy()
+  const submitButton = form.querySelector("[data-preview-submit-label]")
+  const demoButton = form.querySelector("[data-preview-demo-label]")
+  const helperNode = form.querySelector("[data-preview-helper]")
+
+  if (submitButton) {
+    submitButton.textContent = actionCopy.submitLabel
+    submitButton.disabled = propertyEvaluationPreviewState.previewRunning
+  }
+
+  if (demoButton) {
+    demoButton.textContent = actionCopy.demoLabel
+    demoButton.disabled = propertyEvaluationPreviewState.previewRunning
+  }
+
+  if (helperNode) {
+    helperNode.textContent = actionCopy.helper
+  }
+}
+
+function getNextDemoScenarioRequest() {
+  const nextIndex =
+    (propertyEvaluationPreviewState.demoScenarioIndex + 1) %
+    PROPERTY_EVALUATION_PREVIEW.demoScenarios.length
+  propertyEvaluationPreviewState.demoScenarioIndex = nextIndex
+  return clonePreviewValue(PROPERTY_EVALUATION_PREVIEW.demoScenarios[nextIndex])
+}
+
+function applyPropertyEvaluationRequestToForm(form, request) {
+  if (!form) {
+    return
+  }
+
+  const parcelId = request?.parcel?.locator?.parcel_id || ""
+  const market = request?.parcel?.market || ""
+  const mode = request?.modes?.[0] || ""
+
+  if (form.elements.parcel_id) {
+    form.elements.parcel_id.value = parcelId
+  }
+  if (form.elements.market) {
+    form.elements.market.value = market
+  }
+  if (form.elements.mode) {
+    form.elements.mode.value = mode
+  }
+}
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -1846,9 +2030,18 @@ function escapeHtml(value) {
 
 function formatPreviewOptionLabel(value) {
   return String(value || "")
-    .split("_")
+    .split(/[_-]/)
     .filter(Boolean)
-    .map((part) => part[0].toUpperCase() + part.slice(1))
+    .map((part) => {
+      const lower = part.toLowerCase()
+      if (lower === "tx") {
+        return "TX"
+      }
+      if (lower === "dfw") {
+        return "DFW"
+      }
+      return part[0].toUpperCase() + part.slice(1)
+    })
     .join(" ")
 }
 
@@ -1880,6 +2073,16 @@ function formatPreviewAcreage(value) {
     return null
   }
   return `${number.toFixed(1)} acres`
+}
+
+function clampPreviewNumber(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
+
+function hashPreviewSeed(value) {
+  return String(value)
+    .split("")
+    .reduce((total, character) => (total * 31 + character.charCodeAt(0)) % 10000, 7)
 }
 
 function pickPreviewValue(...values) {
