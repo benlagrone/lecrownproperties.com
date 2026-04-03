@@ -2,21 +2,21 @@
   "seoTitle": "Site Suitability Screen",
   "hero": {
     "eyebrow": "Property evaluation",
-    "title": "Check whether a parcel fits the use you have in mind.",
-    "summary": "Enter a parcel, choose a market and target use, and get a quick fit readout. If the site looks promising, request a paid evaluation.",
+    "title": "Check whether a parcel fits the use or project you have in mind.",
+    "summary": "Enter a parcel, choose a market and target use, and get a quick fit readout for land buyers, developers, and overseas capital partners. If the site looks promising, request a paid evaluation.",
     "primaryCta": { "label": "Screen a parcel", "to": "/property-evaluation#preview-intake" },
     "secondaryCta": { "label": "Talk with LeCrown", "to": "/contact" },
     "visual": {
       "src": "/assets/warehouse.jpg",
       "alt": "Industrial land and utility corridor",
       "kicker": "Screen -> decide -> escalate",
-      "title": "Quick parcel screen for early land decisions",
-      "text": "The public result shows fit band, key reasons, and parcel facts. Paid follow-up adds deeper diligence and site-specific next steps."
+      "title": "Quick parcel screen for early land and data center decisions",
+      "text": "The public result shows fit band, key reasons, and parcel facts. Paid follow-up adds deeper diligence, site-specific next steps, and a clearer basis for internal review."
     },
     "brief": {
       "eyebrow": "What this is",
       "title": "A fast screen, not a full underwriting memo.",
-      "text": "Use it to decide whether a parcel deserves more time.",
+      "text": "Use it to decide whether a parcel deserves more time from sponsors, banks, or local partners.",
       "points": [
         "Parcel + use-case fit",
         "Short reason list",
@@ -47,7 +47,7 @@
   "overview": [
     {
       "title": "Screen fast",
-      "text": "Rule out weak parcels before spending more time on utilities, entitlement, or outreach."
+      "text": "Rule out weak parcels before spending more time on utilities, entitlement, outreach, or partner conversations."
     },
     {
       "title": "See the reason",
@@ -88,8 +88,8 @@
   ],
   "audienceHeading": {
     "eyebrow": "Who it serves",
-    "title": "Useful across brokerage, development, and acquisition roles.",
-    "text": "Different teams look at the same parcel from different angles. The page supports all of them without pretending the first screen is full diligence."
+    "title": "Useful across brokerage, development, acquisition, and overseas capital roles.",
+    "text": "Different teams look at the same parcel from different angles. The page supports sponsors, banks, site selectors, and local partners without pretending the first screen is full diligence."
   },
   "audiences": [
     {
@@ -101,12 +101,12 @@
       "text": "Give prospects a concrete first-pass readout and a clean path into formal evaluation."
     },
     {
-      "title": "Investors and acquisition teams",
-      "text": "Compare parcels using a consistent frame before committing deeper diligence budget."
+      "title": "Investors, banks, and acquisition teams",
+      "text": "Compare parcels using a consistent frame before committing deeper diligence budget or internal committee time."
     },
     {
-      "title": "Operators and advisors",
-      "text": "Carry the parcel context into the next conversation instead of rebuilding the story from zero."
+      "title": "Overseas capital and local JV partners",
+      "text": "Use a common parcel readout before moving into local partner, operator, or deeper diligence conversations."
     }
   ],
   "faqHeading": {

@@ -147,30 +147,30 @@
     "clients": {
       "hero": {
         "eyebrow": "Clients",
-        "title": "A strong fit for owners who want clean communication.",
-        "summary": "LeCrown works best with owners, investors, and stakeholders who want direct updates, practical follow-through, and a management team that represents the property well.",
+        "title": "A strong fit for owners, overseas capital, and local partners who want clean communication.",
+        "summary": "LeCrown works best when Houston-side execution needs to be legible to remote ownership, investors, lenders, and JV stakeholders.",
         "primaryCta": { "label": "See how we work", "to": "/about" },
         "secondaryCta": { "label": "Start a conversation", "to": "/contact" },
         "brief": {
           "eyebrow": "Best fit",
           "title": "Where LeCrown adds the most value.",
-          "text": "We are a good fit when the property needs a reliable management presence and the owner wants fewer surprises.",
+          "text": "We are a good fit when the asset needs a reliable local operator and the ownership side wants fewer blind spots.",
           "points": [
-            "Owners who want more consistent updates",
-            "Properties with active tenant communication needs",
+            "Overseas owners who need local visibility",
+            "Land and acquisition teams screening sites",
             "Stakeholders who value bilingual support"
           ]
         },
         "metrics": [
           { "value": "Owners", "label": "Direct reporting relationships" },
-          { "value": "Investors", "label": "Clear oversight and updates" },
-          { "value": "Tenants", "label": "Responsive communication" }
+          { "value": "Capital", "label": "Local execution and updates" },
+          { "value": "Partners", "label": "JV, brokerage, and tenant coordination" }
         ]
       },
       "gridHeading": {
         "eyebrow": "Client profiles",
         "title": "Who we typically support",
-        "text": "These relationship types reflect the owners and stakeholders who benefit most from LeCrown's management style."
+        "text": "These profiles reflect the owners, cross-border investors, and local deal partners who benefit most from LeCrown's operating style."
       },
       "principlesHeading": {
         "eyebrow": "Working principles",
@@ -179,18 +179,18 @@
       },
       "relationshipNote": {
         "eyebrow": "What strong relationships need",
-        "title": "Clear points of contact and consistent follow-through.",
-        "text": "Properties run better when owners, tenants, and vendors know who owns the next step.",
+        "title": "Control depends on context and follow-through.",
+        "text": "Remote owners and deal teams need updates that translate site activity into decisions, not just more noise.",
         "points": [
-          "Clear reporting",
-          "Reliable contacts",
-          "Fast escalation when issues matter"
+          "Decision-ready reporting",
+          "Trusted local contacts",
+          "Fast escalation from site issue to next step"
         ]
       },
       "ctaBanner": {
         "eyebrow": "Looking for a better management relationship?",
-        "title": "Tell us how the property is being managed today.",
-        "text": "A short intake helps us understand the current setup and where stronger support would make the biggest difference.",
+        "title": "Tell us how the property or site is being handled today.",
+        "text": "A short intake helps us understand the ownership structure, the local operating gaps, and where stronger support would matter most.",
         "primaryLabel": "Talk with LeCrown",
         "secondaryLabel": "Email Benjamin"
       }
@@ -234,35 +234,35 @@
     "insights": {
       "hero": {
         "eyebrow": "Insights",
-        "title": "Short notes on property operations and owner communication.",
-        "summary": "This section covers practical topics for owners, investors, and commercial property stakeholders.",
+        "title": "Short notes on cross-border ownership, land screening, and asset operations.",
+        "summary": "This section covers practical topics for owners, overseas investors, brokers, and commercial property stakeholders.",
         "primaryCta": { "label": "Contact the team", "to": "/contact" },
         "secondaryCta": { "label": "Learn about LeCrown", "to": "/about" },
         "brief": {
           "eyebrow": "Topics",
-          "title": "Practical topics for active properties.",
-          "text": "The goal is to share useful perspective on reporting, tenant communication, and day-to-day operations.",
+          "title": "Practical topics for active assets and early land decisions.",
+          "text": "The goal is to share useful perspective on reporting, parcel screening, tenant communication, and day-to-day operations.",
           "points": [
-            "Owner reporting",
-            "Tenant communication",
+            "Cross-border ownership and reporting",
+            "Land and parcel screening",
             "Commercial property operations"
           ]
         },
         "metrics": [
           { "value": "Operations", "label": "Core topic" },
-          { "value": "Service", "label": "Owner and tenant experience" },
+          { "value": "Land", "label": "Parcel and diligence context" },
           { "value": "Bilingual", "label": "English and Mandarin context" }
         ]
       },
       "gridHeading": {
         "eyebrow": "Latest topics",
-        "title": "Useful reads for owners and partners",
-        "text": "These short pieces answer common questions and show how LeCrown approaches service."
+        "title": "Useful reads for owners, partners, and deal teams",
+        "text": "These short pieces show how LeCrown thinks about property operations, land decisions, and cross-border execution."
       },
       "ctaBanner": {
-        "eyebrow": "Have a question about your property?",
-        "title": "Need an answer specific to your building?",
-        "text": "A direct conversation is usually more useful than a generic article when the situation is time-sensitive.",
+        "eyebrow": "Have a question about your property or site?",
+        "title": "Need an answer specific to the asset or parcel?",
+        "text": "A direct conversation is usually more useful than a generic article when timing, diligence, or ownership structure matters.",
         "primaryLabel": "Get in touch",
         "secondaryLabel": "Email Benjamin"
       }

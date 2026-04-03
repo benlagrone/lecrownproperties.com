@@ -11,26 +11,37 @@
     "outcome": "Better visibility without ownership carrying the day-to-day burden."
   },
   {
-    "segment": "Investor groups",
-    "title": "Stakeholders who need cleaner reporting",
-    "summary": "Owners and investors who want a management partner that keeps communication direct and operationally useful.",
-    "needs": [
-      "Clear owner updates",
-      "Reliable follow-through on property issues",
-      "A stronger management presence on the asset"
-    ],
-    "outcome": "More confidence in what is happening at the property and what needs a decision."
-  },
-  {
-    "segment": "Cross-border ownership",
-    "title": "English and Mandarin-speaking owners or partners",
-    "summary": "Relationships where bilingual communication keeps decisions moving and reduces misunderstanding.",
+    "segment": "Cross-border capital",
+    "title": "Overseas owners, family offices, and investment partners",
+    "summary": "Remote ownership works better when a Houston-side operator can turn site activity, tenant issues, and vendor work into clean decisions.",
     "needs": [
       "English and Mandarin communication support",
-      "Operational context that translates clearly",
-      "More confidence in reporting and follow-up"
+      "Reporting that travels well across time zones",
+      "A reliable operating partner on the ground"
     ],
-    "outcome": "Better alignment between ownership expectations and property operations."
+    "outcome": "More control over the asset without having to manage every site detail from abroad."
+  },
+  {
+    "segment": "Land and development",
+    "title": "Sponsors exploring industrial, infrastructure, or data center land",
+    "summary": "Early land decisions move faster when parcels can be screened quickly and escalated into deeper diligence only when warranted.",
+    "needs": [
+      "Fast parcel triage",
+      "Clear next questions on power, entitlement, and access",
+      "A local partner who can carry site context forward"
+    ],
+    "outcome": "Less time wasted on weak sites and a cleaner path into serious diligence."
+  },
+  {
+    "segment": "Local deal partners",
+    "title": "Local buyers, brokers, and venture partners representing outside capital",
+    "summary": "LeCrown helps bridge the gap between remote capital and Houston execution when acquisitions, land strategy, and property operations overlap.",
+    "needs": [
+      "A local control layer",
+      "Clean communication between deal and operating teams",
+      "A management partner who can represent the asset well"
+    ],
+    "outcome": "Stronger coordination from acquisition through early operating oversight."
   },
   {
     "segment": "Tenant-sensitive assets",
