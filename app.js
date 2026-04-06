@@ -18,7 +18,29 @@ const DEFAULT_LANG = "en"
 const GA_TRACKING_ID = "G-M5058P5ZVQ"
 const PROPERTY_EVALUATION_ROUTE = "/property-evaluation"
 const PROPERTY_EVALUATION_LEGACY_ROUTE = "/property-evaluation-preview"
+const PROPERTY_EVALUATION_MARKETS_PATH = "/api/gridscope/markets"
 const PROPERTY_EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
+const PROPERTY_EVALUATION_SUPPORTED_MARKETS = [
+  {
+    slug: "tx-statewide",
+    name: "Texas Statewide",
+    summary: "Statewide Texas parcel screening against the current GridScope data stack.",
+    is_default: true,
+  },
+  {
+    slug: "tx-houston-1h",
+    name: "Texas Houston 1H",
+    summary: "Houston 1-hour market cut for faster parcel evaluation and parity checks.",
+    is_default: false,
+  },
+]
+const PROPERTY_EVALUATION_SUPPORTED_MARKET_SLUGS = new Set(
+  PROPERTY_EVALUATION_SUPPORTED_MARKETS.map((item) => item.slug),
+)
+const PROPERTY_EVALUATION_MARKET_COUNTIES = {
+  "tx-statewide": "Texas",
+  "tx-houston-1h": "Houston area, TX",
+}
 
 const DATASETS = [
   "site",
@@ -53,7 +75,7 @@ const PROPERTY_EVALUATION_DEMO_SCENARIOS = [
   {
     parcel: {
       locator: {
-        parcel_id: "PCL-41A-TX-DC",
+        parcel_id: "00000324724000000",
       },
       market: "tx-statewide",
     },
@@ -64,22 +86,22 @@ const PROPERTY_EVALUATION_DEMO_SCENARIOS = [
   {
     parcel: {
       locator: {
-        parcel_id: "HOU-88-FLEX",
+        parcel_id: "0410880000003",
       },
-      market: "houston-metro",
+      market: "tx-houston-1h",
     },
-    modes: ["industrial_flex"],
+    modes: ["data_center"],
     include_report: true,
     include_ai_summary: false,
   },
   {
     parcel: {
       locator: {
-        parcel_id: "DFW-17-BESS",
+        parcel_id: "00000760432000000",
       },
-      market: "dfw-metro",
+      market: "tx-statewide",
     },
-    modes: ["battery_storage"],
+    modes: ["data_center"],
     include_report: true,
     include_ai_summary: false,
   },
@@ -108,11 +130,11 @@ const PROPERTY_EVALUATION_PREVIEW = {
     },
     brief: {
       eyebrow: "Commercial flow",
-      title: "Use the public screen to qualify demand",
+      title: "Use the public screen to qualify a site",
       text:
-        "The browser only talks to LeCrown. Strong parcels can be upgraded into a paid evaluation request with the parcel, top mode, and fit summary already attached.",
+        "The browser only talks to LeCrown. Strong parcels can be upgraded into a paid evaluation request with the parcel, data center fit, and first readout already attached.",
       points: [
-        "Public screen identifies parcel and top mode",
+        "Public screen identifies parcel and fit band",
         "Paid request routes into LeCrown's review queue",
         "Same-origin proxy keeps GridScope credentials server-side",
       ],
@@ -125,9 +147,9 @@ const PROPERTY_EVALUATION_PREVIEW = {
   },
   intakeHeading: {
     eyebrow: "Run the screen",
-    title: "Start with parcel, market, and mode",
+    title: "Start with parcel and market",
     text:
-      "Use the public screen to qualify whether a parcel deserves deeper work. The page falls back to realistic demo data when the live runtime is unavailable.",
+      "Use the public screen to qualify whether a parcel deserves deeper work. The page falls back to example output when the live runtime is unavailable.",
   },
   runtimeHeading: {
     eyebrow: "Screen status",
@@ -139,7 +161,7 @@ const PROPERTY_EVALUATION_PREVIEW = {
     eyebrow: "Public result",
     title: "What the current screen found on this parcel",
     text:
-      "The free screen shows the parcel, suggested use, fit band, and the main reasons it surfaced. Paid follow-up adds the deeper scorecard.",
+      "The public screen shows the parcel, data center fit, and the main reasons it surfaced. Paid follow-up adds the deeper scorecard.",
   },
   upgradeHeading: {
     eyebrow: "Paid follow-up",
@@ -155,16 +177,16 @@ const PROPERTY_EVALUATION_PREVIEW = {
   },
   requestSummaryHeading: "Current parcel",
   demoStatus:
-    "Demo result loaded from the parcel ID, market, and mode you selected.",
+    "Example result loaded from the parcel ID and market you selected.",
   demoFallbackStatus:
-    "Demo mode. This deployment is not connected to live parcel data, so the result below is example output shaped by your inputs.",
+    "Example mode. This environment is not connected to live GridScope, so the result below is example output shaped by your inputs.",
   liveReadyStatus:
-    "Live mode. Run the screen to pull the current parcel evaluation.",
+    "Live mode is available for this page.",
   liveLoadingStatus: "Running live parcel evaluation...",
   liveSuccessStatus:
     "Live parcel evaluation loaded.",
   liveErrorStatus:
-    "Live parcel evaluation failed. Showing a demo result based on your inputs instead.",
+    "Live parcel evaluation failed. Showing example output based on your inputs instead.",
   checkingStatus: "Checking whether live parcel data is available...",
   actionLabels: {
     checkingPrimary: "Run screen",
@@ -172,12 +194,12 @@ const PROPERTY_EVALUATION_PREVIEW = {
     livePrimary: "Run live screen",
     liveSecondary: "Load example parcel",
     liveHelper: "Live mode. This deployment pulls parcel evaluations from LeCrown's backend.",
-    demoPrimary: "Run demo screen",
+    demoPrimary: "Run example screen",
     demoSecondary: "Load another example",
     demoHelper:
-      "Demo mode. The result below is example output shaped by your parcel ID, market, and mode, not live parcel data.",
+      "Example mode. The result below is generated from your parcel ID and market selection because live GridScope is not configured here.",
     liveRunning: "Running live screen...",
-    demoRunning: "Running demo screen...",
+    demoRunning: "Running example screen...",
   },
   publicFacts: [
     "Parcel identification and market context",
@@ -259,8 +281,8 @@ const PROPERTY_EVALUATION_PREVIEW = {
       "LeCrown now has the parcel context, contact details, and package intent. The next step is to scope the evaluation around this specific site.",
     resetLabel: "Request another parcel",
   },
-  marketOptions: ["tx-statewide", "houston-metro", "dfw-metro"],
-  modeOptions: ["data_center", "industrial_flex", "battery_storage"],
+  marketOptions: PROPERTY_EVALUATION_SUPPORTED_MARKETS.map((item) => item.slug),
+  modeOptions: ["data_center"],
   demoScenarios: PROPERTY_EVALUATION_DEMO_SCENARIOS,
   demoRequest: PROPERTY_EVALUATION_DEMO_SCENARIOS[0],
 }
@@ -269,7 +291,7 @@ const propertyEvaluationPreviewState = {
   liveConfigured: null,
   statusMessage: PROPERTY_EVALUATION_PREVIEW.checkingStatus,
   statusTone: "checking",
-  sourceLabel: "Demo result",
+  sourceLabel: "Awaiting screen",
   request: null,
   response: null,
   inquiryError: "",
@@ -277,6 +299,7 @@ const propertyEvaluationPreviewState = {
   detailUnlocked: false,
   previewRunning: false,
   demoScenarioIndex: 0,
+  marketCatalog: clonePreviewValue(PROPERTY_EVALUATION_SUPPORTED_MARKETS),
 }
 
 const cache = new Map()
@@ -605,7 +628,7 @@ function renderPropertyEvaluationLeadPanel(response) {
     <h2>${escapeHtml(evaluation?.verdict || "Run a parcel screen")}</h2>
     <p class="evaluation-summary-copy">
       ${escapeHtml(
-        evaluation?.summary || "Choose a parcel and run the screen to load a fit signal.",
+        evaluation?.summary || "Choose a parcel and run the screen to load a live data center fit signal.",
       )}
     </p>
     ${
@@ -857,6 +880,7 @@ function renderPropertyEvaluationPreviewForm(request) {
     request?.modes?.[0] ||
     PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]
   const actionCopy = getPreviewActionCopy()
+  const markets = getPropertyEvaluationMarketOptions()
 
   return `
     <form class="intake-form evaluation-form" data-property-evaluation-form id="preview-intake">
@@ -868,26 +892,16 @@ function renderPropertyEvaluationPreviewForm(request) {
         <label>
           <span>Market</span>
           <select name="market">
-            ${PROPERTY_EVALUATION_PREVIEW.marketOptions
+            ${markets
               .map(
                 (option) =>
-                  `<option value="${escapeHtml(option)}"${option === market ? " selected" : ""}>${escapeHtml(formatPreviewOptionLabel(option))}</option>`,
-              )
-              .join("")}
-          </select>
-        </label>
-        <label>
-          <span>Mode</span>
-          <select name="mode">
-            ${PROPERTY_EVALUATION_PREVIEW.modeOptions
-              .map(
-                (option) =>
-                  `<option value="${escapeHtml(option)}"${option === mode ? " selected" : ""}>${escapeHtml(formatPreviewOptionLabel(option))}</option>`,
+                  `<option value="${escapeHtml(option.slug)}"${option.slug === market ? " selected" : ""}>${escapeHtml(option.name || formatPreviewOptionLabel(option.slug))}</option>`,
               )
               .join("")}
           </select>
         </label>
       </div>
+      <input name="mode" type="hidden" value="${escapeHtml(mode)}" />
       <div class="form-actions">
         <button class="button button-primary" type="submit" data-preview-submit-label>
           ${escapeHtml(actionCopy.submitLabel)}
@@ -915,15 +929,15 @@ function renderPropertyEvaluationRequestSummary(request) {
   return `
     <div class="card-topline">
       <strong>${PROPERTY_EVALUATION_PREVIEW.requestSummaryHeading}</strong>
-      <span class="card-highlight">Free screen</span>
+      <span class="card-highlight">Public screen</span>
     </div>
     <div class="pill-cloud evaluation-pill-cloud">
       <span class="pill">${escapeHtml(parcelId)}</span>
-      <span class="pill">${escapeHtml(formatPreviewOptionLabel(market))}</span>
+      <span class="pill">${escapeHtml(formatPropertyEvaluationMarketLabel(market))}</span>
       <span class="pill">${escapeHtml(formatPreviewOptionLabel(mode))}</span>
     </div>
     <p class="evaluation-summary-copy">
-      The free screen shows the parcel, market, selected use, and fit readout.
+      The public screen shows the parcel, market, data center fit, and the first reasons.
       Paid follow-up adds scoring, blockers, and next diligence steps.
     </p>
   `
@@ -1379,13 +1393,14 @@ function initializePropertyEvaluationPreview(path) {
 }
 
 function ensurePropertyEvaluationPreviewState() {
-  if (propertyEvaluationPreviewState.request && propertyEvaluationPreviewState.response) {
+  if (propertyEvaluationPreviewState.request) {
     return
   }
 
   const request = clonePreviewValue(PROPERTY_EVALUATION_PREVIEW.demoRequest)
   propertyEvaluationPreviewState.request = request
-  propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
+  propertyEvaluationPreviewState.response = null
+  propertyEvaluationPreviewState.sourceLabel = "Awaiting screen"
 }
 
 function resetPropertyEvaluationInquiry({ preserveUnlock = true } = {}) {
@@ -1400,6 +1415,7 @@ async function refreshPropertyEvaluationHealth() {
   propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.checkingStatus
   propertyEvaluationPreviewState.statusTone = "checking"
   syncPropertyEvaluationPreviewDom()
+  const previewForm = document.querySelector("[data-property-evaluation-form]")
 
   try {
     const response = await fetch("/health", { headers: { Accept: "application/json" } })
@@ -1410,16 +1426,30 @@ async function refreshPropertyEvaluationHealth() {
     const payload = await response.json()
     propertyEvaluationPreviewState.liveConfigured = Boolean(payload.gridscope_configured)
     if (propertyEvaluationPreviewState.liveConfigured) {
+      await refreshPropertyEvaluationMarkets()
       propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.liveReadyStatus
       propertyEvaluationPreviewState.statusTone = "live"
+      syncPropertyEvaluationPreviewDom()
+      if (previewForm) {
+        await runPropertyEvaluationPreview(previewForm)
+        return
+      }
     } else {
       propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoFallbackStatus
       propertyEvaluationPreviewState.statusTone = "demo"
+      propertyEvaluationPreviewState.response = createDemoEvaluationResponse(
+        propertyEvaluationPreviewState.request,
+      )
+      propertyEvaluationPreviewState.sourceLabel = "Example result"
     }
   } catch (error) {
     propertyEvaluationPreviewState.liveConfigured = false
     propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoFallbackStatus
     propertyEvaluationPreviewState.statusTone = "demo"
+    propertyEvaluationPreviewState.response = createDemoEvaluationResponse(
+      propertyEvaluationPreviewState.request,
+    )
+    propertyEvaluationPreviewState.sourceLabel = "Example result"
   }
 
   syncPropertyEvaluationPreviewDom()
@@ -1462,7 +1492,7 @@ async function runPropertyEvaluationPreview(form) {
       return
     } catch (error) {
       propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-      propertyEvaluationPreviewState.sourceLabel = "Demo result"
+      propertyEvaluationPreviewState.sourceLabel = "Example result"
       propertyEvaluationPreviewState.statusMessage = `${PROPERTY_EVALUATION_PREVIEW.liveErrorStatus} ${error.message}`
       propertyEvaluationPreviewState.statusTone = "error"
       propertyEvaluationPreviewState.previewRunning = false
@@ -1472,24 +1502,33 @@ async function runPropertyEvaluationPreview(form) {
   }
 
   propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-  propertyEvaluationPreviewState.sourceLabel = "Demo result"
+  propertyEvaluationPreviewState.sourceLabel = "Example result"
   propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoStatus
   propertyEvaluationPreviewState.statusTone = "demo"
   propertyEvaluationPreviewState.previewRunning = false
   syncPropertyEvaluationPreviewDom()
 }
 
-function loadDemoPropertyEvaluationPreview(form) {
+async function loadDemoPropertyEvaluationPreview(form) {
   const request = getNextDemoScenarioRequest()
   applyPropertyEvaluationRequestToForm(form, request)
   propertyEvaluationPreviewState.request = request
-  propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
-  propertyEvaluationPreviewState.sourceLabel = "Demo result"
-  propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoStatus
-  propertyEvaluationPreviewState.statusTone = "demo"
   resetPropertyEvaluationInquiry({
     preserveUnlock: propertyEvaluationPreviewState.detailUnlocked,
   })
+
+  if (propertyEvaluationPreviewState.liveConfigured) {
+    propertyEvaluationPreviewState.response = null
+    propertyEvaluationPreviewState.sourceLabel = "Loading live result"
+    syncPropertyEvaluationPreviewDom()
+    await runPropertyEvaluationPreview(form)
+    return
+  }
+
+  propertyEvaluationPreviewState.response = createDemoEvaluationResponse(request)
+  propertyEvaluationPreviewState.sourceLabel = "Example result"
+  propertyEvaluationPreviewState.statusMessage = PROPERTY_EVALUATION_PREVIEW.demoStatus
+  propertyEvaluationPreviewState.statusTone = "demo"
   syncPropertyEvaluationPreviewDom()
 }
 
@@ -1627,14 +1666,10 @@ function createDemoEvaluationResponse(request) {
     PROPERTY_EVALUATION_PREVIEW.demoRequest.parcel.market
   const mode = request?.modes?.[0] || PROPERTY_EVALUATION_PREVIEW.demoRequest.modes[0]
   const slug = parcelId.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "preview"
-  const marketLabel = formatPreviewOptionLabel(market)
+  const marketLabel = formatPropertyEvaluationMarketLabel(market)
   const modeLabel = formatPreviewOptionLabel(mode)
   const seed = hashPreviewSeed(`${parcelId}:${market}:${mode}`)
-  const county = {
-    "tx-statewide": "Fort Bend County, TX",
-    "houston-metro": "Harris County, TX",
-    "dfw-metro": "Tarrant County, TX",
-  }[market] || "Fort Bend County, TX"
+  const county = PROPERTY_EVALUATION_MARKET_COUNTIES[market] || ""
   const baseScore = {
     data_center: 0.79,
     industrial_flex: 0.69,
@@ -1693,7 +1728,7 @@ function createDemoEvaluationResponse(request) {
           ? "Grid and substation position still need live utility confirmation"
           : "Utility capacity still needs a live site-specific check",
       highway_access:
-        market === "houston-metro"
+        market === "tx-houston-1h"
           ? "Houston-area road access looks workable for first-pass screening"
           : "Regional highway access looks workable for first-pass screening",
       fiber_access:
@@ -1758,7 +1793,7 @@ function syncPropertyEvaluationPreviewDom() {
       ? "Checking backend"
       : propertyEvaluationPreviewState.liveConfigured
         ? "Live mode"
-        : "Demo mode"
+        : "Example mode"
   sourceBadgeNode.textContent = propertyEvaluationPreviewState.sourceLabel
 
   const statusNode = document.querySelector("[data-preview-status]")
@@ -1771,17 +1806,24 @@ function syncPropertyEvaluationPreviewDom() {
 }
 
 function renderPropertyEvaluationHighlights(response) {
+  const request = propertyEvaluationPreviewState.request || {}
   const parcel = response?.normalized_parcel || {}
   const sharedFacts = response?.shared_facts || {}
   const firstMode = getLeadModeEvaluation(response)
   const highlights = [
     {
       label: "Parcel ID",
-      value: pickPreviewValue(parcel?.locator?.parcel_id, parcel.parcel_id),
+      value: pickPreviewValue(
+        parcel?.locator?.parcel_id,
+        parcel.parcel_id,
+        request?.parcel?.locator?.parcel_id,
+      ),
     },
     {
       label: "Market",
-      value: pickPreviewValue(parcel.market, sharedFacts.market),
+      value: formatPropertyEvaluationMarketLabel(
+        pickPreviewValue(parcel.market, sharedFacts.market, request?.parcel?.market),
+      ),
     },
     {
       label: "County",
@@ -1792,8 +1834,12 @@ function renderPropertyEvaluationHighlights(response) {
       value: formatPreviewAcreage(parcel.acreage),
     },
     {
-      label: "Lead mode",
-      value: firstMode ? formatPreviewOptionLabel(firstMode.mode) : null,
+      label: "Use case",
+      value: firstMode
+        ? formatPreviewOptionLabel(firstMode.mode)
+        : request?.modes?.[0]
+          ? formatPreviewOptionLabel(request.modes[0])
+          : null,
     },
     {
       label: "Fit band",
@@ -1861,7 +1907,7 @@ function renderPropertyEvaluationMeta(response) {
     parcel.county ? `<span class="pill">${escapeHtml(parcel.county)}</span>` : "",
     propertyEvaluationPreviewState.liveConfigured === null
       ? ""
-      : `<span class="pill">${propertyEvaluationPreviewState.liveConfigured ? "Live runtime" : "Sample data"}</span>`,
+      : `<span class="pill">${propertyEvaluationPreviewState.liveConfigured ? "Live runtime" : "Example fallback"}</span>`,
   ].filter(Boolean)
 
   if (propertyEvaluationPreviewState.detailUnlocked) {
@@ -2016,6 +2062,93 @@ function applyPropertyEvaluationRequestToForm(form, request) {
   }
   if (form.elements.mode) {
     form.elements.mode.value = mode
+  }
+}
+
+function getPropertyEvaluationMarketOptions() {
+  if (
+    Array.isArray(propertyEvaluationPreviewState.marketCatalog) &&
+    propertyEvaluationPreviewState.marketCatalog.length
+  ) {
+    return propertyEvaluationPreviewState.marketCatalog
+  }
+
+  return PROPERTY_EVALUATION_SUPPORTED_MARKETS
+}
+
+function findPropertyEvaluationMarket(slug) {
+  return getPropertyEvaluationMarketOptions().find((item) => item.slug === slug)
+}
+
+function formatPropertyEvaluationMarketLabel(value) {
+  const market = findPropertyEvaluationMarket(value)
+  return market?.name || formatPreviewOptionLabel(value)
+}
+
+async function refreshPropertyEvaluationMarkets() {
+  try {
+    const response = await fetch(PROPERTY_EVALUATION_MARKETS_PATH, {
+      headers: { Accept: "application/json" },
+    })
+
+    if (!response.ok) {
+      throw new Error(`markets status ${response.status}`)
+    }
+
+    const payload = await response.json()
+    const markets = Array.isArray(payload?.markets)
+      ? payload.markets
+          .filter(
+            (item) =>
+              item &&
+              typeof item.slug === "string" &&
+              PROPERTY_EVALUATION_SUPPORTED_MARKET_SLUGS.has(item.slug),
+          )
+          .map((item) => ({
+            slug: item.slug,
+            name: item.name || formatPreviewOptionLabel(item.slug),
+            summary: item.summary || "",
+            is_default: Boolean(item.is_default),
+          }))
+      : []
+
+    propertyEvaluationPreviewState.marketCatalog = markets.length
+      ? markets
+      : clonePreviewValue(PROPERTY_EVALUATION_SUPPORTED_MARKETS)
+  } catch (error) {
+    propertyEvaluationPreviewState.marketCatalog = clonePreviewValue(
+      PROPERTY_EVALUATION_SUPPORTED_MARKETS,
+    )
+  }
+
+  syncPropertyEvaluationMarketOptions()
+}
+
+function syncPropertyEvaluationMarketOptions() {
+  const form = document.querySelector("[data-property-evaluation-form]")
+  const marketField = form?.elements?.market
+  if (!marketField) {
+    return
+  }
+
+  const markets = getPropertyEvaluationMarketOptions()
+  const selectedMarket =
+    propertyEvaluationPreviewState.request?.parcel?.market ||
+    PROPERTY_EVALUATION_PREVIEW.demoRequest.parcel.market
+
+  marketField.innerHTML = markets
+    .map(
+      (option) =>
+        `<option value="${escapeHtml(option.slug)}"${option.slug === selectedMarket ? " selected" : ""}>${escapeHtml(option.name || formatPreviewOptionLabel(option.slug))}</option>`,
+    )
+    .join("")
+
+  const nextMarket = markets.some((item) => item.slug === selectedMarket)
+    ? selectedMarket
+    : markets[0]?.slug || ""
+  marketField.value = nextMarket
+  if (propertyEvaluationPreviewState.request?.parcel) {
+    propertyEvaluationPreviewState.request.parcel.market = nextMarket
   }
 }
 
