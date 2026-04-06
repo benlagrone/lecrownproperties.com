@@ -27,6 +27,7 @@ EXACT_STATIC_FILES = {"index.html", "app.js", "styles.css"}
 STATIC_DIRS = {"assets", "components", "data"}
 HEALTH_PATH = "/health"
 EVALUATE_PATH = "/api/gridscope/evaluate"
+MARKETS_PATH = "/api/gridscope/markets"
 EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 DEFAULT_TIMEOUT_MS = 15_000
 DEFAULT_CACHE_TTL_SECONDS = 300
@@ -41,6 +42,13 @@ ALLOWED_RESPONSE_FIELDS = (
     "mode_evaluations",
     "report_id",
     "evaluation_id",
+)
+ALLOWED_MARKET_FIELDS = (
+    "slug",
+    "name",
+    "summary",
+    "delivery_status",
+    "is_default",
 )
 
 
@@ -354,11 +362,12 @@ class AppRequestHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
-        if path in {EVALUATE_PATH, EVALUATION_REQUEST_PATH}:
+        if path in {EVALUATE_PATH, MARKETS_PATH, EVALUATION_REQUEST_PATH}:
             self.send_response(204)
             self.send_common_headers()
-            self.send_header("Allow", "OPTIONS, POST")
-            self.send_header("Access-Control-Allow-Methods", "OPTIONS, POST")
+            allow_value = "OPTIONS, GET" if path == MARKETS_PATH else "OPTIONS, POST"
+            self.send_header("Allow", allow_value)
+            self.send_header("Access-Control-Allow-Methods", allow_value)
             self.send_header("Access-Control-Allow-Headers", "Content-Type")
             self.send_header("Content-Length", "0")
             self.end_headers()
@@ -394,6 +403,10 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             )
             return
 
+        if path == MARKETS_PATH:
+            self.handle_gridscope_markets(include_body=include_body)
+            return
+
         if path == EVALUATE_PATH:
             self.send_error_json(
                 405,
@@ -401,6 +414,16 @@ class AppRequestHandler(BaseHTTPRequestHandler):
                 "Use POST for this route.",
                 include_body=include_body,
                 extra_headers={"Allow": "OPTIONS, POST"},
+            )
+            return
+
+        if path == MARKETS_PATH:
+            self.send_error_json(
+                405,
+                "method_not_allowed",
+                "Use GET for this route.",
+                include_body=include_body,
+                extra_headers={"Allow": "OPTIONS, GET"},
             )
             return
 
@@ -420,6 +443,34 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             return
 
         self.serve_static_file(static_path, include_body=include_body)
+
+    def handle_gridscope_markets(self, *, include_body: bool) -> None:
+        config = self.app_state.gridscope
+        if not config.configured:
+            self.send_error_json(
+                503,
+                "gridscope_unavailable",
+                "GridScope integration is not configured.",
+                include_body=include_body,
+            )
+            return
+
+        upstream_status, upstream_payload = fetch_gridscope_markets(config)
+        if upstream_status != 200:
+            self.send_json(
+                upstream_status,
+                upstream_payload,
+                include_body=include_body,
+                extra_headers={"Cache-Control": "no-store", "X-Cache": "BYPASS"},
+            )
+            return
+
+        self.send_json(
+            200,
+            upstream_payload,
+            include_body=include_body,
+            extra_headers={"Cache-Control": "no-store", "X-Cache": "BYPASS"},
+        )
 
     def handle_gridscope_evaluate(self) -> None:
         config = self.app_state.gridscope
@@ -808,16 +859,312 @@ def fetch_gridscope_evaluation(
         )
 
 
+def fetch_gridscope_markets(config: GridScopeConfig) -> tuple[int, dict[str, Any]]:
+    request = Request(
+        f"{config.base_url}/v1/markets",
+        method="GET",
+        headers={
+            "Accept": "application/json",
+            **config.auth_headers(),
+        },
+    )
+
+    try:
+        with urlopen(request, timeout=config.timeout_ms / 1000) as response:
+            raw_body = response.read(config.max_response_bytes + 1)
+            if len(raw_body) > config.max_response_bytes:
+                return (
+                    502,
+                    {
+                        "error": "upstream_response_too_large",
+                        "message": "GridScope response exceeded the configured size limit.",
+                    },
+                )
+
+            try:
+                payload = json.loads(raw_body.decode("utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError):
+                return (
+                    502,
+                    {
+                        "error": "invalid_upstream_response",
+                        "message": "GridScope did not return valid JSON.",
+                    },
+                )
+
+            if not isinstance(payload, dict):
+                return (
+                    502,
+                    {
+                        "error": "invalid_upstream_response",
+                        "message": "GridScope returned an unexpected response shape.",
+                    },
+                )
+
+            markets = payload.get("markets")
+            if not isinstance(markets, list):
+                return (
+                    502,
+                    {
+                        "error": "invalid_upstream_response",
+                        "message": "GridScope returned an unexpected markets payload.",
+                    },
+                )
+
+            filtered_markets = []
+            for market in markets:
+                if not isinstance(market, dict):
+                    continue
+                filtered_markets.append(
+                    {key: market[key] for key in ALLOWED_MARKET_FIELDS if key in market},
+                )
+
+            return 200, {"markets": filtered_markets}
+    except HTTPError as error:
+        raw_body = error.read(config.max_response_bytes + 1)
+        message = extract_error_message(raw_body)
+        if error.code in {401, 403}:
+            return (
+                502,
+                {
+                    "error": "upstream_auth_error",
+                    "message": "GridScope authentication failed.",
+                },
+            )
+        return (
+            502,
+            {
+                "error": "upstream_error",
+                "message": message or "GridScope markets request failed.",
+            },
+        )
+    except TimeoutError:
+        return (
+            504,
+            {
+                "error": "upstream_timeout",
+                "message": "GridScope did not respond before the timeout.",
+            },
+        )
+    except URLError:
+        return (
+            502,
+            {
+                "error": "upstream_unreachable",
+                "message": "GridScope is unreachable from this server.",
+            },
+        )
+
+
 def filter_gridscope_response(payload: dict[str, Any]) -> dict[str, Any] | None:
-    filtered = {
-        key: payload[key]
-        for key in ALLOWED_RESPONSE_FIELDS
-        if key in payload
+    normalized = normalize_gridscope_response(payload)
+    if normalized is None:
+        return None
+    return normalized
+
+
+def normalize_gridscope_response(payload: dict[str, Any]) -> dict[str, Any] | None:
+    normalized_parcel = payload.get("normalized_parcel")
+    mode_evaluations = payload.get("mode_evaluations")
+    if not isinstance(normalized_parcel, dict) or not isinstance(mode_evaluations, list):
+        return None
+
+    normalized_modes = normalize_mode_evaluations(mode_evaluations)
+    if not normalized_modes:
+        return None
+
+    return {
+        "normalized_parcel": normalized_parcel,
+        "shared_facts": normalize_shared_facts(payload),
+        "mode_evaluations": normalized_modes,
+        "report_id": payload.get("report_id"),
+        "evaluation_id": payload.get("evaluation_id"),
     }
 
-    if "mode_evaluations" not in filtered:
+
+def normalize_shared_facts(payload: dict[str, Any]) -> dict[str, Any]:
+    parcel = payload.get("normalized_parcel")
+    parcel_dict = parcel if isinstance(parcel, dict) else {}
+    facts = payload.get("shared_facts")
+    fact_map: dict[str, dict[str, Any]] = {}
+
+    if isinstance(facts, list):
+        for fact in facts:
+            if not isinstance(fact, dict):
+                continue
+            key = clean_string(fact.get("key"), 80)
+            if key:
+                fact_map[key] = fact
+
+    power_distance = format_fact_distance(fact_map.get("distance_power_m"))
+    substation_kv = fact_map.get("nearest_substation_kv", {}).get("value")
+    mw_band = clean_string(fact_map.get("inferred_mw_band", {}).get("value"), 80)
+    fiber_distance = format_fact_distance(fact_map.get("distance_fiber_m"))
+    floodplain_overlap = fact_map.get("floodplain_overlap_pct", {}).get("value")
+    water_district = fact_map.get("within_water_district", {}).get("value")
+    current_use = clean_string(fact_map.get("current_use_screen", {}).get("value"), 80)
+
+    power_parts = [power_distance] if power_distance else []
+    if substation_kv not in {None, ""}:
+        power_parts.append(f"nearest substation {substation_kv} kV")
+    if mw_band:
+        power_parts.append(f"inferred power band {mw_band}")
+
+    shared = {
+        "market": clean_string(parcel_dict.get("market"), 120),
+        "county": clean_string(parcel_dict.get("county"), 120),
+        "power_readiness": ", ".join(part for part in power_parts if part) or "",
+        "highway_access": "",
+        "fiber_access": fiber_distance,
+        "floodplain": format_floodplain_overlap(floodplain_overlap),
+        "entitlement_path": (
+            f"Current-use screen: {current_use}" if current_use else ""
+        ),
+    }
+
+    if water_district is True:
+        shared["fiber_access"] = join_fact_text(
+            shared["fiber_access"],
+            "inside configured water district",
+        )
+    elif water_district is False:
+        shared["fiber_access"] = join_fact_text(
+            shared["fiber_access"],
+            "outside configured water district",
+        )
+
+    return {key: value for key, value in shared.items() if value}
+
+
+def normalize_mode_evaluations(mode_evaluations: list[Any]) -> list[dict[str, Any]]:
+    normalized = []
+    for evaluation in mode_evaluations:
+        if not isinstance(evaluation, dict):
+            continue
+
+        score = normalize_fit_score(evaluation.get("fit_score"))
+        positives = evaluation.get("positives") if isinstance(evaluation.get("positives"), list) else []
+        blockers = evaluation.get("blockers") if isinstance(evaluation.get("blockers"), list) else []
+        next_actions = evaluation.get("next_actions") if isinstance(evaluation.get("next_actions"), list) else []
+
+        strengths = extract_findings(positives, include_severities={"positive"})
+        warning_findings = extract_findings(positives, include_severities={"warning"})
+        blocker_findings = extract_findings(blockers)
+        constraints = blocker_findings + [item for item in warning_findings if item not in blocker_findings]
+        next_steps = extract_next_actions(next_actions)
+        summary = (
+            blocker_findings[0]
+            if blocker_findings
+            else strengths[0]
+            if strengths
+            else build_mode_summary(evaluation, score)
+        )
+
+        normalized.append(
+            {
+                "mode": clean_string(evaluation.get("mode"), 80),
+                "score": score,
+                "verdict": format_disposition_label(evaluation.get("disposition")),
+                "summary": summary,
+                "strengths": strengths,
+                "constraints": constraints,
+                "next_steps": next_steps,
+            },
+        )
+
+    return normalized
+
+
+def normalize_fit_score(value: Any) -> float | None:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
         return None
-    return filtered
+
+    normalized = number if number <= 1 else number / 100
+    return max(0.0, min(1.0, normalized))
+
+
+def extract_findings(items: list[Any], include_severities: set[str] | None = None) -> list[str]:
+    findings: list[str] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        severity = clean_string(item.get("severity"), 40).lower()
+        if include_severities is not None and severity not in include_severities:
+            continue
+        finding = clean_string(item.get("finding"), 400)
+        if finding and finding not in findings:
+            findings.append(finding)
+    return findings
+
+
+def extract_next_actions(items: list[Any]) -> list[str]:
+    actions: list[str] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        action = clean_string(item.get("action"), 160)
+        reason = clean_string(item.get("reason"), 320)
+        text = action
+        if action and reason:
+            text = f"{action}: {reason}"
+        elif reason:
+            text = reason
+        if text and text not in actions:
+            actions.append(text)
+    return actions
+
+
+def build_mode_summary(evaluation: dict[str, Any], score: float | None) -> str:
+    mode = clean_string(evaluation.get("mode"), 80).replace("_", " ").strip()
+    disposition = format_disposition_label(evaluation.get("disposition"))
+    if score is None:
+        return f"{mode.title() or 'Parcel'} screen returned {disposition.lower()}."
+    return f"{mode.title() or 'Parcel'} screen returned {disposition.lower()} at {round(score * 100, 1)} / 100."
+
+
+def format_disposition_label(value: Any) -> str:
+    normalized = clean_string(value, 80).lower()
+    mapping = {
+        "blocked": "Blocked on current screen",
+        "needs_review": "Needs parcel review",
+        "candidate": "Candidate parcel",
+        "shortlist": "Shortlist candidate",
+        "qualified": "Qualified parcel",
+        "pass": "Passing screen",
+    }
+    if normalized in mapping:
+        return mapping[normalized]
+    if not normalized:
+        return "Evaluation result"
+    return normalized.replace("_", " ").title()
+
+
+def format_fact_distance(fact: dict[str, Any] | None) -> str:
+    if not isinstance(fact, dict):
+        return ""
+    try:
+        number = float(fact.get("value"))
+    except (TypeError, ValueError):
+        return ""
+    if number >= 1000:
+        return f"{round(number / 1000, 2)} km from nearest mapped utility path"
+    return f"{round(number, 1)} m from nearest mapped utility path"
+
+
+def format_floodplain_overlap(value: Any) -> str:
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return ""
+    return f"{round(number, 2)}% overlap in current floodplain screen"
+
+
+def join_fact_text(base: str, extra: str) -> str:
+    if base and extra:
+        return f"{base}, {extra}"
+    return base or extra
 
 
 def build_server(host: str, port: int) -> ThreadingHTTPServer:
@@ -843,7 +1190,7 @@ def main() -> None:
     httpd = build_server(args.host, args.port)
     print(f"Serving {ROOT} on http://{args.host}:{args.port}")
     if httpd.app_state.gridscope.configured:  # type: ignore[attr-defined]
-        print("GridScope proxy enabled at /api/gridscope/evaluate")
+        print("GridScope proxy enabled at /api/gridscope/evaluate and /api/gridscope/markets")
     else:
         print("GridScope proxy disabled until server-side env is configured")
     httpd.serve_forever()
