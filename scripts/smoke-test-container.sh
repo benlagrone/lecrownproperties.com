@@ -42,6 +42,9 @@ curl -fsSI "http://127.0.0.1:${HOST_PORT}/contact?lang=zh" >/dev/null
 curl -fsS "http://127.0.0.1:${HOST_PORT}/health" >/dev/null
 curl -fsS "http://127.0.0.1:${HOST_PORT}/data/site.en.json" >/dev/null
 curl -fsS "http://127.0.0.1:${HOST_PORT}/data/site.zh.json" >/dev/null
+curl -fsSI "http://127.0.0.1:${HOST_PORT}/short-term-office-lease" >/dev/null
+curl -fsS "http://127.0.0.1:${HOST_PORT}/data/short-term-lease.en.json" >/dev/null
+curl -fsSI "http://127.0.0.1:${HOST_PORT}/assets/lease-maps/7th-floor-lease-map-web.jpg" >/dev/null
 curl -fsSI "http://127.0.0.1:${HOST_PORT}/assets/logo-mark.svg" >/dev/null
 
 echo "Container smoke test ok"

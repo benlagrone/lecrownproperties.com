@@ -11,6 +11,7 @@
     { "label": "首页", "to": "/" },
     { "label": "服务", "to": "/services" },
     { "label": "物业类型", "to": "/properties" },
+    { "label": "短租办公室", "to": "/short-term-office-lease" },
     { "label": "选址评估", "to": "/property-evaluation" },
     { "label": "客户", "to": "/clients" },
     { "label": "案例", "to": "/case-studies" },

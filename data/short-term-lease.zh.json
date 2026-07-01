@@ -1,0 +1,418 @@
+{
+  "feature": {
+    "eyebrow": "正在招租",
+    "title": "Suite 700 短租办公室平面图已上线。",
+    "text": "查看 9800 Richmond Ave, Suite 700 的第 7 层办公室图，包含房号、面积和图上可确认的租金。",
+    "primaryCta": {
+      "label": "查看办公室图",
+      "to": "/short-term-office-lease"
+    },
+    "highlights": [
+      "独立办公室",
+      "固定工位",
+      "图上租金 $300/月起"
+    ]
+  },
+  "page": {
+    "hero": {
+      "eyebrow": "短租办公室",
+      "title": "Suite 700 独立办公室可用于短期租赁。",
+      "summary": "9800 Richmond Ave, Suite 700, Houston, TX 77042 的第 7 层办公室图已校正方向，并整理为可阅读的在线版本。",
+      "primaryCta": {
+        "label": "咨询可用房间",
+        "to": "/contact"
+      },
+      "secondaryCta": {
+        "label": "查看租金表",
+        "to": "/short-term-office-lease#rent-table"
+      },
+      "visual": {
+        "src": "/assets/lease-maps/7th-floor-lease-map-web.jpg",
+        "alt": "Suite 700 第 7 层办公室租赁图，包含房号、面积和手写租金。",
+        "kicker": "校正后地图",
+        "title": "房号、面积与图上可见租金。",
+        "text": "原邮件图片带有错误的方向信息。此版本去除了 EXIF 旋转问题，使平面图在网页上保持正向。"
+      },
+      "brief": {
+        "eyebrow": "招租说明",
+        "title": "独立办公室、固定工位与共享配套。",
+        "text": "可根据下方平面图和表格查看房号、面积，以及图上清楚标注的租金。",
+        "points": [
+          "多数外圈独立办公室标注为 $499/月",
+          "125 平方英尺小办公室标注为 $300/月",
+          "固定工位标注为 $250/desk"
+        ]
+      },
+      "metrics": [
+        {
+          "value": "Suite 700",
+          "label": "9800 Richmond Ave, Houston"
+        },
+        {
+          "value": "第 7 层",
+          "label": "企业办公平面图"
+        },
+        {
+          "value": "$300+",
+          "label": "图上标注月租"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "value": "9800 Richmond Ave",
+        "label": "Suite 700, Houston, TX 77042"
+      },
+      {
+        "value": "$300/月起",
+        "label": "图上标注的独立办公室"
+      },
+      {
+        "value": "$250/desk",
+        "label": "固定工位标注"
+      }
+    ],
+    "mapHeading": {
+      "eyebrow": "校正后来源图",
+      "title": "可阅读的第 7 层办公室图。",
+      "text": "此图片保留原照片中的正向像素，并去除了会导致网页翻转的 EXIF 方向标签。"
+    },
+    "map": {
+      "src": "/assets/lease-maps/7th-floor-lease-map-web.jpg",
+      "alt": "Suite 700 第 7 层短租办公室房号图。",
+      "caption": "来源：Jie Huang 于 2026 年 7 月 1 日 UTC 发送的最新邮件。租金根据图上手写标注整理。"
+    },
+    "rentHeading": {
+      "eyebrow": "租金档位",
+      "title": "图上可确认的租金模式。",
+      "text": "只有手写箭头清楚对应的房间才列为固定租金；不清楚的房间放入待确认清单。"
+    },
+    "rentBands": [
+      {
+        "price": "$300/月",
+        "label": "小型独立办公室",
+        "rooms": "房间 740 与 708，各 125 SF"
+      },
+      {
+        "price": "$399/月",
+        "label": "内侧独立办公室",
+        "rooms": "房间 734, 735, 736, 737, 717, 715, 716"
+      },
+      {
+        "price": "$499/月",
+        "label": "多数外圈独立办公室",
+        "rooms": "房间 732, 731, 730, 729, 727, 723, 722, 721, 720, 719, 713, 738, 739, 741, 742, 743, 744, 711, 710, 707, 706, 705, 704, 701"
+      },
+      {
+        "price": "$599/月",
+        "label": "较大转角办公室",
+        "rooms": "房间 733 与 703，各 264 SF"
+      },
+      {
+        "price": "$250/desk",
+        "label": "固定工位",
+        "rooms": "房间 714，383 SF"
+      }
+    ],
+    "tableHeading": {
+      "eyebrow": "房间租金表",
+      "title": "根据平面图整理的房号、面积与租金。",
+      "text": "此表来自可读来源图。对外发布前仍应确认最终可租状态和租约条件。"
+    },
+    "tableLabels": {
+      "room": "房号",
+      "squareFeet": "面积",
+      "rent": "租金",
+      "type": "类型",
+      "status": "状态"
+    },
+    "rooms": [
+      {
+        "room": "708",
+        "squareFeet": "125",
+        "rent": "$300/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "740",
+        "squareFeet": "125",
+        "rent": "$300/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "715",
+        "squareFeet": "150",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "716",
+        "squareFeet": "136",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "717",
+        "squareFeet": "151",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "734",
+        "squareFeet": "131",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "735",
+        "squareFeet": "128",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "736",
+        "squareFeet": "115",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "737",
+        "squareFeet": "115",
+        "rent": "$399/月",
+        "type": "内侧办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "701",
+        "squareFeet": "172",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "704",
+        "squareFeet": "188",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "705",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "706",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "707",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "710",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "711",
+        "squareFeet": "188",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "713",
+        "squareFeet": "240",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "719",
+        "squareFeet": "191",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "720",
+        "squareFeet": "191",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "721",
+        "squareFeet": "191",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "722",
+        "squareFeet": "191",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "723",
+        "squareFeet": "192",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "727",
+        "squareFeet": "192",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "729",
+        "squareFeet": "187",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "730",
+        "squareFeet": "187",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "731",
+        "squareFeet": "189",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "732",
+        "squareFeet": "176",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "738",
+        "squareFeet": "188",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "739",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "741",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "742",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "743",
+        "squareFeet": "190",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "744",
+        "squareFeet": "192",
+        "rent": "$499/月",
+        "type": "独立办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "703",
+        "squareFeet": "264",
+        "rent": "$599/月",
+        "type": "转角办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "733",
+        "squareFeet": "264",
+        "rent": "$599/月",
+        "type": "转角办公室",
+        "status": "图上标注"
+      },
+      {
+        "room": "714",
+        "squareFeet": "383",
+        "rent": "$250/desk",
+        "type": "固定工位",
+        "status": "图上标注"
+      }
+    ],
+    "notesHeading": {
+      "eyebrow": "重要说明",
+      "title": "对外发布前请确认最终条款。",
+      "text": "此页面以来源平面图为起点，并非已签署的租赁价目表。"
+    },
+    "notes": [
+      "原邮件要求整理房号、房间面积和房间租金。",
+      "Office 745、Office 724 以及一个 26 SF 房间在图上看起来已被划掉；709、712、726、728、728A、746、746A、747、747A、747B 在可见手写部分中没有清楚对应的租金箭头。",
+      "来源图还写有 setup、钥匙/门禁卡、mail room/business address、会议室、打印和 no parking 等备注。具体服务费对外报价前应再次确认。"
+    ],
+    "unpricedHeading": {
+      "eyebrow": "待确认",
+      "title": "可见但未确认租金的房间。",
+      "text": "这些房间在图上可见，但手写租金不够清楚，暂不作为固定月租发布。"
+    },
+    "unpricedRooms": [
+      "709 - 113 SF",
+      "712 - 264 SF",
+      "726 - 157 SF",
+      "728 - 127 SF",
+      "728A - 125 SF",
+      "746 - 245 SF",
+      "746A - 288 SF",
+      "747 - 177 SF",
+      "747A - 119 SF",
+      "747B - 115 SF"
+    ],
+    "ctaBanner": {
+      "eyebrow": "对 Suite 700 感兴趣？",
+      "title": "请咨询 LeCrown 哪些房间仍可租。",
+      "text": "发送想看的房号、入驻时间，以及需要独立办公室还是固定工位。",
+      "primaryLabel": "咨询可用房间",
+      "secondaryLabel": "邮件联系 Benjamin"
+    }
+  }
+}

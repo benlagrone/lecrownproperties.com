@@ -18,6 +18,7 @@ const DEFAULT_LANG = "en"
 const GA_TRACKING_ID = "G-M5058P5ZVQ"
 const PROPERTY_EVALUATION_ROUTE = "/property-evaluation"
 const PROPERTY_EVALUATION_LEGACY_ROUTE = "/property-evaluation-preview"
+const SHORT_TERM_LEASE_ROUTE = "/short-term-office-lease"
 const PROPERTY_EVALUATION_MARKETS_PATH = "/api/gridscope/markets"
 const PROPERTY_EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 const PROPERTY_EVALUATION_SUPPORTED_MARKETS = [
@@ -49,6 +50,7 @@ const DATASETS = [
   "contact",
   "services",
   "properties",
+  "short-term-lease",
   "property-evaluation",
   "clients",
   "case-studies",
@@ -59,6 +61,7 @@ const ROUTES = new Set([
   "/",
   "/services",
   "/properties",
+  SHORT_TERM_LEASE_ROUTE,
   PROPERTY_EVALUATION_ROUTE,
   "/clients",
   "/case-studies",
@@ -359,6 +362,8 @@ function renderPage(path) {
       return renderServicesPage()
     case "/properties":
       return renderPropertiesPage()
+    case SHORT_TERM_LEASE_ROUTE:
+      return renderShortTermLeasePage()
     case PROPERTY_EVALUATION_ROUTE:
       return renderPropertyEvaluationPreviewPage()
     case "/clients":
@@ -462,6 +467,8 @@ function renderPropertiesPage() {
   return `
     ${renderHero(page.hero, { hrefFor })}
 
+    ${state.data.shortTermLease?.feature ? renderLeaseFeature(state.data.shortTermLease.feature) : ""}
+
     <section class="section-block" data-reveal>
       ${renderSectionHeading(page.gridHeading)}
       <div class="card-grid cols-2">
@@ -483,6 +490,116 @@ function renderPropertiesPage() {
         <span class="eyebrow">${page.note.eyebrow}</span>
         <h2>${page.note.title}</h2>
         <p>${page.note.text}</p>
+      </div>
+    </section>
+
+    ${renderBanner(page.ctaBanner, site.contact.email)}
+  `
+}
+
+function renderLeaseFeature(feature) {
+  return `
+    <section class="section-block lease-feature" data-reveal>
+      <div>
+        <span class="eyebrow">${feature.eyebrow}</span>
+        <h2>${feature.title}</h2>
+        <p>${feature.text}</p>
+      </div>
+      <div class="lease-feature-actions">
+        <div class="pill-cloud">
+          ${feature.highlights.map((item) => `<span class="pill">${item}</span>`).join("")}
+        </div>
+        <a class="button button-primary" href="${hrefFor(feature.primaryCta.to)}" data-link>
+          ${feature.primaryCta.label}
+        </a>
+      </div>
+    </section>
+  `
+}
+
+function renderShortTermLeasePage() {
+  const { site, shortTermLease } = state.data
+  const page = shortTermLease.page
+
+  return `
+    ${renderHero(page.hero, { hrefFor })}
+
+    <section class="section-block" data-reveal>
+      <div class="metrics-grid lease-summary-grid">
+        ${page.summary.map(renderMetricCard).join("")}
+      </div>
+    </section>
+
+    <section class="section-block split-grid lease-map-section" data-reveal>
+      <div class="panel panel-rich lease-map-panel">
+        ${renderSectionHeading(page.mapHeading, "left")}
+        <figure class="lease-map-frame">
+          <img src="${page.map.src}" alt="${page.map.alt}" loading="eager" decoding="async" />
+          <figcaption>${page.map.caption}</figcaption>
+        </figure>
+      </div>
+      <div class="stack-panel">
+        ${renderSectionHeading(page.rentHeading, "left")}
+        <div class="lease-rent-grid">
+          ${page.rentBands
+            .map(
+              (band) => `
+                <article class="lease-rent-band">
+                  <strong>${band.price}</strong>
+                  <span>${band.label}</span>
+                  <p>${band.rooms}</p>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block lease-table-section" id="rent-table" data-reveal>
+      ${renderSectionHeading(page.tableHeading)}
+      <div class="lease-table-shell">
+        <table class="lease-room-table">
+          <thead>
+            <tr>
+              <th>${page.tableLabels.room}</th>
+              <th>${page.tableLabels.squareFeet}</th>
+              <th>${page.tableLabels.rent}</th>
+              <th>${page.tableLabels.type}</th>
+              <th>${page.tableLabels.status}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${page.rooms
+              .map(
+                (room) => `
+                  <tr>
+                    <td>${room.room}</td>
+                    <td>${room.squareFeet}</td>
+                    <td>${room.rent}</td>
+                    <td>${room.type}</td>
+                    <td>${room.status}</td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-block split-grid" data-reveal>
+      <div class="panel panel-brief">
+        ${renderSectionHeading(page.notesHeading, "left")}
+        <ul class="detail-list">
+          ${page.notes.map((item) => `<li>${item}</li>`).join("")}
+        </ul>
+      </div>
+      <div class="panel panel-rich">
+        ${renderSectionHeading(page.unpricedHeading, "left")}
+        <div class="pill-cloud">
+          ${page.unpricedRooms.map((item) => `<span class="pill">${item}</span>`).join("")}
+        </div>
       </div>
     </section>
 
