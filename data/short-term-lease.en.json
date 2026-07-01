@@ -13,6 +13,43 @@
       "Marked rents from $300/mo"
     ]
   },
+  "leadCapture": {
+    "endpoint": "/api/lease-inquiries",
+    "source": "suite_700_short_term_office",
+    "crmTarget": "espcrm",
+    "recipientEmail": "jessica@lecrownproperties.com",
+    "galleryOpenLabel": "View gallery",
+    "inquiryOpenLabel": "Inquire",
+    "galleryCloseLabel": "Close",
+    "galleryTabLabel": "Gallery",
+    "inquiryTabLabel": "Inquire",
+    "galleryEmptyTitle": "Room photos can be added here.",
+    "galleryEmptyText": "Interior photos are not online yet. The corrected floor map stays available as the reference until room photos are attached.",
+    "galleryMapLabel": "Suite 700 map reference",
+    "inquiryHeadingPrefix": "Inquire about Room",
+    "inquiryText": "Send the room number, rent, and contact details into the lease inquiry queue. Jessica can follow up directly, and the record is shaped for ESPCRM forwarding.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "timeline": "Move-in timing",
+      "notes": "Notes"
+    },
+    "timelineOptions": [
+      "Immediate",
+      "This month",
+      "Next 30 days",
+      "Exploring"
+    ],
+    "submitLabel": "Send inquiry",
+    "submittingLabel": "Sending...",
+    "helper": "The site stores a structured lease lead now; ESPCRM forwarding can use the same payload when the integration is connected.",
+    "successTitle": "Inquiry captured",
+    "successText": "The room details and contact request are stored for Jessica and ESPCRM routing.",
+    "resetLabel": "Send another inquiry",
+    "fallbackLabel": "Email Jessica directly",
+    "errorFallback": "The inquiry could not be submitted. Email Jessica directly from the fallback link."
+  },
   "page": {
     "hero": {
       "eyebrow": "Short-term office lease",
@@ -114,6 +151,11 @@
         "rooms": "Room 714, 383 SF"
       }
     ],
+    "roomGalleryHeading": {
+      "eyebrow": "Room catalog",
+      "title": "Click a room to view photos or inquire.",
+      "text": "Each priced room now has a gallery slot and an inquiry action. Room photos can be attached as they are collected."
+    },
     "tableHeading": {
       "eyebrow": "Room rent table",
       "title": "Transcribed rooms and visible rents.",

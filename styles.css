@@ -917,6 +917,184 @@ img {
   line-height: 1.55;
 }
 
+.lease-room-card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.lease-room-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 42%),
+    rgba(8, 8, 8, 0.88);
+}
+
+.lease-room-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.lease-room-card-topline strong {
+  color: var(--gold-strong);
+  white-space: nowrap;
+}
+
+.lease-room-card h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.9;
+}
+
+.lease-room-card p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.45;
+}
+
+.lease-room-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+}
+
+.lease-room-card-actions .button {
+  min-height: 2.65rem;
+  justify-content: center;
+  padding-inline: 0.7rem;
+}
+
+.lease-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+.lease-modal {
+  width: min(58rem, 100%);
+  max-height: min(90vh, 58rem);
+  overflow: auto;
+  padding: clamp(1rem, 2vw, 1.4rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(247, 214, 124, 0.08), rgba(255, 255, 255, 0.02)),
+    var(--panel-strong);
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.55);
+}
+
+.lease-modal-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.lease-modal-header h2 {
+  margin: 0.35rem 0 0;
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 0.9;
+}
+
+.lease-modal-header p {
+  margin: 0.65rem 0 0;
+  color: var(--text-soft);
+}
+
+.lease-modal-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.lease-modal-tab {
+  min-height: 2.45rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text-soft);
+  font: inherit;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.lease-modal-tab.is-active {
+  color: #1d160b;
+  border-color: transparent;
+  background: linear-gradient(135deg, #d99b19, #f3da8a);
+}
+
+.lease-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.lease-gallery-photo,
+.lease-gallery-empty figure {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #050505;
+}
+
+.lease-gallery-photo img,
+.lease-gallery-empty img {
+  width: 100%;
+  max-height: 28rem;
+  object-fit: contain;
+  background: #050505;
+}
+
+.lease-gallery-photo figcaption,
+.lease-gallery-empty figcaption {
+  padding: 0.75rem 0.9rem;
+  color: var(--text-soft);
+  border-top: 1px solid var(--line);
+}
+
+.lease-gallery-empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(14rem, 0.75fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.lease-gallery-empty h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.35rem, 3vw, 2rem);
+}
+
+.lease-gallery-empty p,
+.lease-inquiry-form > p {
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.lease-inquiry-success-card {
+  margin-top: 0.25rem;
+}
+
 .lease-table-shell {
   overflow-x: auto;
   border: 1px solid var(--line);
@@ -1458,6 +1636,14 @@ img {
     justify-items: stretch;
   }
 
+  .lease-room-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lease-gallery-empty {
+    grid-template-columns: 1fr;
+  }
+
   .evaluation-preview-header {
     flex-direction: column;
     align-items: flex-start;
@@ -1531,6 +1717,27 @@ img {
   }
 
   .lease-table-shell {
+    border-radius: var(--radius-md);
+  }
+
+  .lease-room-card-grid,
+  .lease-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lease-room-card-actions,
+  .lease-modal-header {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .lease-modal-backdrop {
+    align-items: end;
+    padding: 0.5rem;
+  }
+
+  .lease-modal {
+    max-height: 92vh;
     border-radius: var(--radius-md);
   }
 

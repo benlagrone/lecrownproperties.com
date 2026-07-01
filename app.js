@@ -21,6 +21,7 @@ const PROPERTY_EVALUATION_LEGACY_ROUTE = "/property-evaluation-preview"
 const SHORT_TERM_LEASE_ROUTE = "/short-term-office-lease"
 const PROPERTY_EVALUATION_MARKETS_PATH = "/api/gridscope/markets"
 const PROPERTY_EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
+const LEASE_INQUIRY_PATH = "/api/lease-inquiries"
 const PROPERTY_EVALUATION_SUPPORTED_MARKETS = [
   {
     slug: "tx-statewide",
@@ -305,6 +306,13 @@ const propertyEvaluationPreviewState = {
   marketCatalog: clonePreviewValue(PROPERTY_EVALUATION_SUPPORTED_MARKETS),
 }
 
+const leaseInquiryState = {
+  activeRoom: "",
+  mode: "gallery",
+  inquiryError: "",
+  inquiryResult: null,
+}
+
 const cache = new Map()
 const state = {
   lang: getLangFromUrl(),
@@ -556,6 +564,13 @@ function renderShortTermLeasePage() {
       </div>
     </section>
 
+    <section class="section-block lease-room-catalog-section" id="rooms" data-reveal>
+      ${renderSectionHeading(page.roomGalleryHeading)}
+      <div class="lease-room-card-grid">
+        ${page.rooms.map((room) => renderLeaseRoomCard(room, shortTermLease.leadCapture)).join("")}
+      </div>
+    </section>
+
     <section class="section-block lease-table-section" id="rent-table" data-reveal>
       ${renderSectionHeading(page.tableHeading)}
       <div class="lease-table-shell">
@@ -604,7 +619,326 @@ function renderShortTermLeasePage() {
     </section>
 
     ${renderBanner(page.ctaBanner, site.contact.email)}
+    ${renderLeaseRoomModal(page, shortTermLease.leadCapture)}
   `
+}
+
+function renderLeaseRoomCard(room, leadCapture) {
+  return `
+    <article class="lease-room-card">
+      <div class="lease-room-card-topline">
+        <span>${escapeHtml(room.type)}</span>
+        <strong>${escapeHtml(room.rent)}</strong>
+      </div>
+      <h3>${escapeHtml(room.room)}</h3>
+      <p>${escapeHtml(room.squareFeet)} SF · ${escapeHtml(room.status)}</p>
+      <div class="lease-room-card-actions">
+        <button class="button button-secondary" type="button" data-lease-gallery-room="${escapeHtml(room.room)}">
+          ${escapeHtml(leadCapture.galleryOpenLabel)}
+        </button>
+        <button class="button button-primary" type="button" data-lease-inquiry-room="${escapeHtml(room.room)}">
+          ${escapeHtml(leadCapture.inquiryOpenLabel)}
+        </button>
+      </div>
+    </article>
+  `
+}
+
+function renderLeaseRoomModal(page, leadCapture) {
+  const room = getLeaseRoomById(leaseInquiryState.activeRoom)
+  if (!room) {
+    return ""
+  }
+
+  const isInquiry = leaseInquiryState.mode === "inquiry"
+  const title = isInquiry
+    ? `${leadCapture.inquiryHeadingPrefix} ${room.room}`
+    : `${room.room} · ${room.rent}`
+
+  return `
+    <div class="lease-modal-backdrop" data-lease-modal-close>
+      <section
+        class="lease-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lease-modal-title"
+        data-lease-modal
+      >
+        <div class="lease-modal-header">
+          <div>
+            <span class="eyebrow">${escapeHtml(room.type)}</span>
+            <h2 id="lease-modal-title">${escapeHtml(title)}</h2>
+            <p>${escapeHtml(room.squareFeet)} SF · ${escapeHtml(room.status)}</p>
+          </div>
+          <button class="button button-secondary" type="button" data-lease-modal-close>
+            ${escapeHtml(leadCapture.galleryCloseLabel)}
+          </button>
+        </div>
+        <div class="lease-modal-tabs" role="tablist" aria-label="Room actions">
+          <button
+            class="lease-modal-tab${isInquiry ? "" : " is-active"}"
+            type="button"
+            data-lease-modal-mode="gallery"
+          >
+            ${escapeHtml(leadCapture.galleryTabLabel)}
+          </button>
+          <button
+            class="lease-modal-tab${isInquiry ? " is-active" : ""}"
+            type="button"
+            data-lease-modal-mode="inquiry"
+          >
+            ${escapeHtml(leadCapture.inquiryTabLabel)}
+          </button>
+        </div>
+        ${isInquiry ? renderLeaseInquiryPanel(room, leadCapture) : renderLeaseGalleryPanel(room, page, leadCapture)}
+      </section>
+    </div>
+  `
+}
+
+function renderLeaseGalleryPanel(room, page, leadCapture) {
+  const photos = Array.isArray(room.photos) ? room.photos : []
+  if (photos.length) {
+    return `
+      <div class="lease-gallery-grid">
+        ${photos
+          .map(
+            (photo) => `
+              <figure class="lease-gallery-photo">
+                <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt || `Room ${room.room}`)}" loading="lazy" decoding="async" />
+                ${photo.caption ? `<figcaption>${escapeHtml(photo.caption)}</figcaption>` : ""}
+              </figure>
+            `,
+          )
+          .join("")}
+      </div>
+    `
+  }
+
+  return `
+    <div class="lease-gallery-empty">
+      <figure>
+        <img src="${escapeHtml(page.map.src)}" alt="${escapeHtml(page.map.alt)}" loading="lazy" decoding="async" />
+        <figcaption>${escapeHtml(leadCapture.galleryMapLabel)}</figcaption>
+      </figure>
+      <div>
+        <h3>${escapeHtml(leadCapture.galleryEmptyTitle)}</h3>
+        <p>${escapeHtml(leadCapture.galleryEmptyText)}</p>
+      </div>
+    </div>
+  `
+}
+
+function renderLeaseInquiryPanel(room, leadCapture) {
+  if (leaseInquiryState.inquiryResult) {
+    return renderLeaseInquirySuccess(room, leadCapture)
+  }
+
+  return `
+    <form class="intake-form lease-inquiry-form" data-lease-inquiry-form data-room="${escapeHtml(room.room)}">
+      <p>${escapeHtml(leadCapture.inquiryText)}</p>
+      <div class="form-grid">
+        <label>
+          <span>${escapeHtml(leadCapture.fields.name)}</span>
+          <input name="name" type="text" required />
+        </label>
+        <label>
+          <span>${escapeHtml(leadCapture.fields.email)}</span>
+          <input name="email" type="email" required />
+        </label>
+        <label>
+          <span>${escapeHtml(leadCapture.fields.phone)}</span>
+          <input name="phone" type="tel" />
+        </label>
+        <label>
+          <span>${escapeHtml(leadCapture.fields.timeline)}</span>
+          <select name="timeline">
+            ${leadCapture.timelineOptions
+              .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+              .join("")}
+          </select>
+        </label>
+        <label class="span-2">
+          <span>${escapeHtml(leadCapture.fields.notes)}</span>
+          <textarea name="notes" rows="4"></textarea>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button class="button button-primary" type="submit">${escapeHtml(leadCapture.submitLabel)}</button>
+        <a class="button button-secondary" href="${escapeHtml(buildLeaseMailtoHref(room, leadCapture))}">
+          ${escapeHtml(leadCapture.fallbackLabel)}
+        </a>
+        <p>${escapeHtml(leadCapture.helper)}</p>
+      </div>
+      <p class="evaluation-form-error" data-lease-inquiry-error>
+        ${escapeHtml(leaseInquiryState.inquiryError)}
+      </p>
+    </form>
+  `
+}
+
+function renderLeaseInquirySuccess(room, leadCapture) {
+  const result = leaseInquiryState.inquiryResult || {}
+  return `
+    <article class="card lease-inquiry-success-card">
+      <div class="card-topline">
+        <span class="badge">${escapeHtml(leadCapture.successTitle)}</span>
+        ${result.request_id ? `<span class="card-highlight">${escapeHtml(result.request_id)}</span>` : ""}
+      </div>
+      <h3>${escapeHtml(room.room)} · ${escapeHtml(room.rent)}</h3>
+      <p>${escapeHtml(leadCapture.successText)}</p>
+      <ul class="detail-list evaluation-detail-list">
+        ${result.recipient ? `<li>Recipient: ${escapeHtml(result.recipient)}</li>` : ""}
+        ${result.crm_status ? `<li>CRM: ${escapeHtml(result.crm_status)}</li>` : ""}
+      </ul>
+      <div class="form-actions">
+        <button class="button button-secondary" type="button" data-lease-inquiry-reset>
+          ${escapeHtml(leadCapture.resetLabel)}
+        </button>
+        <a class="button button-secondary" href="${escapeHtml(buildLeaseMailtoHref(room, leadCapture))}">
+          ${escapeHtml(leadCapture.fallbackLabel)}
+        </a>
+      </div>
+    </article>
+  `
+}
+
+function openLeaseRoomModal(roomId, mode) {
+  const room = getLeaseRoomById(roomId)
+  if (!room) {
+    return
+  }
+
+  leaseInquiryState.activeRoom = room.room
+  leaseInquiryState.mode = mode || "gallery"
+  leaseInquiryState.inquiryError = ""
+  leaseInquiryState.inquiryResult = null
+  render()
+}
+
+function closeLeaseRoomModal() {
+  leaseInquiryState.activeRoom = ""
+  leaseInquiryState.mode = "gallery"
+  leaseInquiryState.inquiryError = ""
+  leaseInquiryState.inquiryResult = null
+  render()
+}
+
+function getLeaseRoomById(roomId) {
+  const rooms = state.data?.shortTermLease?.page?.rooms || []
+  return rooms.find((room) => room.room === String(roomId || ""))
+}
+
+function getLeaseLeadCapture() {
+  return state.data?.shortTermLease?.leadCapture || {}
+}
+
+function buildLeaseMailtoHref(room, leadCapture = getLeaseLeadCapture()) {
+  const recipient = leadCapture.recipientEmail || "jessica@lecrownproperties.com"
+  const subject = encodeURIComponent(`Suite 700 Room ${room.room} inquiry`)
+  const body = encodeURIComponent(
+    [
+      `Room: ${room.room}`,
+      `Square feet: ${room.squareFeet}`,
+      `Rent: ${room.rent}`,
+      `Type: ${room.type}`,
+      `Page: ${window.location.href}`,
+      "",
+      "Name:",
+      "Email:",
+      "Phone:",
+      "Move-in timing:",
+      "Notes:",
+    ].join("\n"),
+  )
+  return `mailto:${recipient}?subject=${subject}&body=${body}`
+}
+
+function buildLeaseInquiryPayload(form) {
+  const room = getLeaseRoomById(form.dataset.room)
+  const formData = new FormData(form)
+  const leadCapture = getLeaseLeadCapture()
+  const photos = Array.isArray(room?.photos) ? room.photos : []
+
+  return {
+    source: leadCapture.source || "suite_700_short_term_office",
+    crm: {
+      target: leadCapture.crmTarget || "espcrm",
+      status: "pending_integration",
+    },
+    recipient: {
+      email: leadCapture.recipientEmail || "jessica@lecrownproperties.com",
+      name: "Jessica",
+    },
+    room: {
+      room: room?.room || "",
+      square_feet: room?.squareFeet || "",
+      rent: room?.rent || "",
+      type: room?.type || "",
+      status: room?.status || "",
+      photo_count: photos.length,
+    },
+    contact: {
+      name: formData.get("name")?.toString().trim() || "",
+      email: formData.get("email")?.toString().trim() || "",
+      phone: formData.get("phone")?.toString().trim() || "",
+    },
+    leasing: {
+      timeline: formData.get("timeline")?.toString().trim() || "",
+      notes: formData.get("notes")?.toString().trim() || "",
+    },
+    page: {
+      path: window.location.pathname,
+      referrer: document.referrer || "",
+      url: window.location.href,
+    },
+  }
+}
+
+async function submitLeaseInquiry(form) {
+  const leadCapture = getLeaseLeadCapture()
+  const submitButton = form.querySelector('button[type="submit"]')
+  const errorNode = form.querySelector("[data-lease-inquiry-error]")
+
+  leaseInquiryState.inquiryError = ""
+  if (errorNode) {
+    errorNode.textContent = ""
+  }
+  if (submitButton) {
+    submitButton.disabled = true
+    submitButton.textContent = leadCapture.submittingLabel || "Sending..."
+  }
+
+  try {
+    const endpoint = leadCapture.endpoint || LEASE_INQUIRY_PATH
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(buildLeaseInquiryPayload(form)),
+    })
+
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(body.message || `lease inquiry status ${response.status}`)
+    }
+
+    leaseInquiryState.inquiryError = ""
+    leaseInquiryState.inquiryResult = body
+    render()
+  } catch (error) {
+    leaseInquiryState.inquiryError =
+      error?.message || leadCapture.errorFallback || "The lease inquiry could not be submitted."
+    if (errorNode) {
+      errorNode.textContent = leaseInquiryState.inquiryError
+    }
+    if (submitButton) {
+      submitButton.disabled = false
+      submitButton.textContent = leadCapture.submitLabel || "Send inquiry"
+    }
+  }
 }
 
 function renderClientsPage() {
@@ -1313,6 +1647,47 @@ function renderPropertyEvaluationRequestSuccess() {
 }
 
 function handleClick(event) {
+  const leaseGalleryButton = event.target.closest("[data-lease-gallery-room]")
+  if (leaseGalleryButton) {
+    openLeaseRoomModal(leaseGalleryButton.dataset.leaseGalleryRoom, "gallery")
+    return
+  }
+
+  const leaseInquiryButton = event.target.closest("[data-lease-inquiry-room]")
+  if (leaseInquiryButton) {
+    openLeaseRoomModal(leaseInquiryButton.dataset.leaseInquiryRoom, "inquiry")
+    return
+  }
+
+  const leaseModeButton = event.target.closest("[data-lease-modal-mode]")
+  if (leaseModeButton) {
+    leaseInquiryState.mode = leaseModeButton.dataset.leaseModalMode || "gallery"
+    leaseInquiryState.inquiryError = ""
+    leaseInquiryState.inquiryResult = null
+    render()
+    return
+  }
+
+  const leaseResetButton = event.target.closest("[data-lease-inquiry-reset]")
+  if (leaseResetButton) {
+    leaseInquiryState.inquiryError = ""
+    leaseInquiryState.inquiryResult = null
+    render()
+    return
+  }
+
+  const leaseCloseTarget = event.target.closest("[data-lease-modal-close]")
+  if (leaseCloseTarget && !event.target.closest("[data-lease-modal]")) {
+    closeLeaseRoomModal()
+    return
+  }
+
+  const leaseCloseButton = event.target.closest("button[data-lease-modal-close]")
+  if (leaseCloseButton) {
+    closeLeaseRoomModal()
+    return
+  }
+
   const toggle = event.target.closest("[data-nav-toggle]")
   if (toggle) {
     state.navOpen = !state.navOpen
@@ -1363,6 +1738,13 @@ function handleClick(event) {
 }
 
 async function handleSubmit(event) {
+  const leaseInquiryForm = event.target.closest("[data-lease-inquiry-form]")
+  if (leaseInquiryForm) {
+    event.preventDefault()
+    await submitLeaseInquiry(leaseInquiryForm)
+    return
+  }
+
   const previewForm = event.target.closest("[data-property-evaluation-form]")
   if (previewForm) {
     event.preventDefault()
