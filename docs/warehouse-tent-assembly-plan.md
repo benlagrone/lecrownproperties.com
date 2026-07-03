@@ -126,12 +126,13 @@ Use this plan when the goal is to finish in one workday.
 
 ### Roles
 
-- Worker 1: lead runner and quality control
+- Worker 1: lead runner, bottleneck relief, and quality control
   - marks layout
   - counts parts
   - stages next tent
   - pre-sorts bungees, pegs, hooks, and anchors
   - checks screws, anchors, zipper orientation, and trip hazards
+  - joins the active build task whenever staging is ahead of the crew
 - Worker 2: frame and roof builder
   - assembles roof pipes and connectors
   - installs roof reinforcement triangles
@@ -156,6 +157,26 @@ Use this plan when the goal is to finish in one workday.
 7. Worker 3 starts walls on the anchored tents while Worker 2 keeps the frame
    line moving and Worker 1 performs quality checks.
 8. The whole crew finishes with a final anchor, zipper, and clearance check.
+
+### Worker 1 Phase Duties
+
+Worker 1 should stay about one step ahead of Workers 2 and 3, then help the
+current bottleneck. The role changes by phase:
+
+| Phase | Worker 1 Primary Duty | If Finished Early |
+| --- | --- | --- |
+| Layout | mark grid, door direction, aisle, and clearances | start unloading hardware containers |
+| Staging | build eight labeled hardware and anchor piles | pre-place legs at each connector point |
+| Frame build | check completed joints and hand parts to Workers 2 and 3 | assemble reinforcement triangles or join frame assembly |
+| Roof covers | control bungee sequence and balance cover tension | hold the cover edge or feed bungees |
+| Raising | verify anchor stations are ready before lift | become the third lift person |
+| Anchoring | anchor the tent just raised | help Workers 2 and 3 start the next lift only after anchors are secure |
+| Walls | inspect zippers, hems, and wall direction | attach walls and lower bungees |
+| Final check | walk every tent for screws, anchors, ropes, and trip hazards | correct issues immediately |
+
+Worker 1 is not a supervisor-only role. After layout and staging, Worker 1 is
+the floating third hand that removes delays from frame assembly, lifting,
+anchoring, and wall installation.
 
 ### Three-Worker Schedule
 
