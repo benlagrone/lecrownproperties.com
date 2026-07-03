@@ -112,9 +112,18 @@ materials are ready.
 
 | Crew Size | Operating Model | Clock Time | Labor-Hours | Recommendation |
 | --- | --- | ---: | ---: | --- |
-| 3 workers | Specialized production line | 5.5 to 7.5 hr | 16.5 to 22.5 | Best plan |
+| 3 workers | Active specialized production line | 6 to 7.5 hr | 18 to 22.5 | Best plan |
 | 2 workers | Paired build cell | 9 to 12 hr | 18 to 24 | Practical with calm weather |
 | 1 worker | Solo prep plus one-tent-at-a-time finish | 24 to 32 hr | 24 to 32 | Fallback only |
+
+The three-worker estimate assumes Worker 1 is an active floating hand after
+layout and staging. If Worker 1 only supervises, checks work, and prepares the
+next tent, the crew loses the main benefit of having a third person.
+
+| Three-Worker Style | Clock Time | Labor-Hours | Effect |
+| --- | ---: | ---: | --- |
+| Active Worker 1 | 6 to 7.5 hr | 18 to 22.5 | fastest practical plan |
+| Passive lead/checker | 7.5 to 9.5 hr | 22.5 to 28.5 | adds about 1.5 to 2 hr onsite |
 
 The one-worker plan is slower in both clock time and labor-hours because the
 same person repeatedly switches between layout, parts, frame assembly, roof
@@ -181,20 +190,21 @@ anchoring, and wall installation.
 ### Three-Worker Schedule
 
 ```text
-08:00 - 08:35  Worker 1 marks layout; Workers 2-3 unload and sort frame parts
-08:35 - 09:15  Build eight hardware piles and stage all footprints
-09:15 - 11:45  Build roof frames and reinforcement triangles
-11:45 - 12:30  Pull roof covers and attach initial balanced bungees
-12:30 - 13:00  Break and weather check
-13:00 - 14:30  Raise each tent and anchor immediately
-14:30 - 15:45  Attach walls, zippered ends, and remaining bungees
-15:45 - 16:30  Final inspection, cleanup, and correction pass
+08:00 - 08:30  Worker 1 marks layout; Workers 2-3 unload and sort frame parts
+08:30 - 09:05  Build eight hardware piles and stage all footprints
+09:05 - 11:15  Build roof frames and reinforcement triangles
+11:15 - 12:00  Pull roof covers and attach initial balanced bungees
+12:00 - 12:30  Break and weather check
+12:30 - 13:45  Raise each tent and anchor immediately
+13:45 - 14:45  Attach walls, zippered ends, and remaining bungees
+14:45 - 15:15  Final inspection, cleanup, and correction pass
 ```
 
 Expected result:
 
-- 5.5 to 7.5 clock hours
-- 16.5 to 22.5 total labor-hours
+- 6 to 7.5 clock hours
+- 18 to 22.5 total labor-hours
+- about 1.5 to 2 clock hours faster than using Worker 1 as a passive lead
 - best balance of speed, safety, and quality
 
 ## Two-Worker Paired Build Cell
