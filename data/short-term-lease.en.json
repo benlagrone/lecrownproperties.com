@@ -1,0 +1,544 @@
+{
+  "feature": {
+    "eyebrow": "Now leasing",
+    "title": "Suite 700 short-term office map is online.",
+    "text": "View the corrected 7th-floor room map for private offices and dedicated co-work at 9800 Richmond Ave, Suite 700.",
+    "primaryCta": {
+      "label": "View office map",
+      "to": "/short-term-office-lease"
+    },
+    "highlights": [
+      "Private offices",
+      "Dedicated co-work",
+      "Marked rents from $300/mo"
+    ]
+  },
+  "leadCapture": {
+    "endpoint": "/api/lease-inquiries",
+    "source": "suite_700_short_term_office",
+    "crmTarget": "espcrm",
+    "recipientEmail": "jessica@lecrownproperties.com",
+    "galleryOpenLabel": "View gallery",
+    "inquiryOpenLabel": "Inquire",
+    "galleryCloseLabel": "Close",
+    "galleryTabLabel": "Gallery",
+    "inquiryTabLabel": "Inquire",
+    "galleryEmptyTitle": "Room photos can be added here.",
+    "galleryEmptyText": "Interior photos are not online yet. The corrected floor map stays available as the reference until room photos are attached.",
+    "galleryMapLabel": "Suite 700 map reference",
+    "inquiryHeadingPrefix": "Inquire about Room",
+    "inquiryText": "Send the room number, rent, and contact details into the lease inquiry queue. Jessica can follow up directly, and the record is shaped for ESPCRM forwarding.",
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "timeline": "Move-in timing",
+      "notes": "Notes"
+    },
+    "timelineOptions": [
+      "Immediate",
+      "This month",
+      "Next 30 days",
+      "Exploring"
+    ],
+    "submitLabel": "Send inquiry",
+    "submittingLabel": "Sending...",
+    "helper": "The site stores a structured lease lead now; ESPCRM forwarding can use the same payload when the integration is connected.",
+    "successTitle": "Inquiry captured",
+    "successText": "The room details and contact request are stored for Jessica and ESPCRM routing.",
+    "resetLabel": "Send another inquiry",
+    "fallbackLabel": "Email Jessica directly",
+    "errorFallback": "The inquiry could not be submitted. Email Jessica directly from the fallback link.",
+    "galleryRepresentativeTitle": "Representative Suite 700 photos",
+    "galleryRepresentativeText": "These photos come from the Dropbox MLS set for Suite 700. They show the building, shared areas, and sample furnished offices; they are not assigned to this exact room yet."
+  },
+  "page": {
+    "hero": {
+      "eyebrow": "Short-term office lease",
+      "title": "Suite 700 private offices ready for short-term occupancy.",
+      "summary": "Corrected 7th-floor map for private offices and dedicated co-work at 9800 Richmond Ave, Suite 700, Houston, TX 77042.",
+      "primaryCta": {
+        "label": "Ask about availability",
+        "to": "/contact"
+      },
+      "secondaryCta": {
+        "label": "View rent table",
+        "to": "/short-term-office-lease#rent-table"
+      },
+      "visual": {
+        "src": "/assets/lease-maps/suite-700-clean-map.svg",
+        "alt": "Clean rendered Suite 700 seventh floor office lease map with room numbers, square footage, and rent-band colors.",
+        "kicker": "Rendered map",
+        "title": "Clean room map with clickable rent bands.",
+        "text": "The crumpled email photo is retained below as a source reference; this rendered plan is the leasing view."
+      },
+      "brief": {
+        "eyebrow": "Listing notes",
+        "title": "Private offices, co-work desks, and shared amenities.",
+        "text": "Use the map and table below to identify room numbers, square footage, and the rents visible on the source plan.",
+        "points": [
+          "Most exterior private offices are marked $499/month",
+          "Small 125 SF offices are marked $300/month",
+          "Dedicated co-work is marked $250/desk"
+        ]
+      },
+      "metrics": [
+        {
+          "value": "Suite 700",
+          "label": "9800 Richmond Ave, Houston"
+        },
+        {
+          "value": "7th floor",
+          "label": "Corporate office map"
+        },
+        {
+          "value": "$300+",
+          "label": "Marked monthly office rents"
+        }
+      ]
+    },
+    "summary": [
+      {
+        "value": "9800 Richmond Ave",
+        "label": "Suite 700, Houston, TX 77042"
+      },
+      {
+        "value": "From $300/mo",
+        "label": "Private offices marked on the map"
+      },
+      {
+        "value": "$250/desk",
+        "label": "Dedicated co-work note"
+      }
+    ],
+    "mapHeading": {
+      "eyebrow": "Rendered lease map",
+      "title": "Clean 7th-floor leasing plan.",
+      "text": "This interactive map is redrawn from the source photo, with room numbers and rent bands made readable for online advertising."
+    },
+    "map": {
+      "src": "/assets/lease-maps/7th-floor-lease-map-web.jpg",
+      "alt": "Suite 700 seventh floor room-number plan for short-term office leasing.",
+      "caption": "Source: latest email from Jie Huang on July 1, 2026 UTC. Rents are transcribed from the handwritten annotations."
+    },
+    "rentHeading": {
+      "eyebrow": "Rent bands",
+      "title": "Marked rent patterns.",
+      "text": "Only clearly marked rents are shown as prices. Rooms without a visible rent arrow are listed separately for confirmation."
+    },
+    "rentBands": [
+      {
+        "price": "$300/mo",
+        "label": "Small private offices",
+        "rooms": "Rooms 740 and 708, each 125 SF"
+      },
+      {
+        "price": "$399/mo",
+        "label": "Interior private offices",
+        "rooms": "Rooms 734, 735, 736, 737, 717, 715, and 716"
+      },
+      {
+        "price": "$499/mo",
+        "label": "Most exterior private offices",
+        "rooms": "Rooms 732, 731, 730, 729, 727, 723, 722, 721, 720, 719, 713, 738, 739, 741, 742, 743, 744, 711, 710, 707, 706, 705, 704, and 701"
+      },
+      {
+        "price": "$599/mo",
+        "label": "Larger corner offices",
+        "rooms": "Rooms 733 and 703, each 264 SF"
+      },
+      {
+        "price": "$250/desk",
+        "label": "Dedicated co-work",
+        "rooms": "Room 714, 383 SF"
+      }
+    ],
+    "roomGalleryHeading": {
+      "eyebrow": "Room catalog",
+      "title": "Click a room to view photos or inquire.",
+      "text": "Each priced room opens a gallery and inquiry action. Current photos are representative Suite 700 shots from the Dropbox MLS set until exact office-to-photo labels are confirmed."
+    },
+    "tableHeading": {
+      "eyebrow": "Room rent table",
+      "title": "Transcribed rooms and visible rents.",
+      "text": "This table is built from the readable source map. Final availability and lease terms should be confirmed before publishing off-site ads."
+    },
+    "tableLabels": {
+      "room": "Room",
+      "squareFeet": "Sq ft",
+      "rent": "Rent",
+      "type": "Type",
+      "status": "Status"
+    },
+    "rooms": [
+      {
+        "room": "708",
+        "squareFeet": "125",
+        "rent": "$300/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "740",
+        "squareFeet": "125",
+        "rent": "$300/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "715",
+        "squareFeet": "150",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "716",
+        "squareFeet": "136",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "717",
+        "squareFeet": "151",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "734",
+        "squareFeet": "131",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "735",
+        "squareFeet": "128",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "736",
+        "squareFeet": "115",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "737",
+        "squareFeet": "115",
+        "rent": "$399/mo",
+        "type": "Interior office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "701",
+        "squareFeet": "172",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "704",
+        "squareFeet": "188",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "705",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "706",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "707",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "710",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "711",
+        "squareFeet": "188",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "713",
+        "squareFeet": "240",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "719",
+        "squareFeet": "191",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "720",
+        "squareFeet": "191",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "721",
+        "squareFeet": "191",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "722",
+        "squareFeet": "191",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "723",
+        "squareFeet": "192",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "727",
+        "squareFeet": "192",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "729",
+        "squareFeet": "187",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "730",
+        "squareFeet": "187",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "731",
+        "squareFeet": "189",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "732",
+        "squareFeet": "176",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "738",
+        "squareFeet": "188",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "739",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "741",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "742",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "743",
+        "squareFeet": "190",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "744",
+        "squareFeet": "192",
+        "rent": "$499/mo",
+        "type": "Private office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "703",
+        "squareFeet": "264",
+        "rent": "$599/mo",
+        "type": "Corner office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "733",
+        "squareFeet": "264",
+        "rent": "$599/mo",
+        "type": "Corner office",
+        "status": "Marked on map"
+      },
+      {
+        "room": "714",
+        "squareFeet": "383",
+        "rent": "$250/desk",
+        "type": "Dedicated co-work",
+        "status": "Marked on map"
+      }
+    ],
+    "notesHeading": {
+      "eyebrow": "Important notes",
+      "title": "Confirm final terms before external advertising.",
+      "text": "The page uses the source map as the starting point, not a signed lease schedule."
+    },
+    "notes": [
+      "The original email requested room number, room square footage, and room rent.",
+      "Office 745, Office 724, and one 26 SF office appear crossed out on the source plan. Rooms 709, 712, 726, 728, 728A, 746, 746A, 747, 747A, and 747B do not have a clearly attached rent in the visible handwriting.",
+      "The source plan includes handwritten notes for setup, key/access card, mail room or business address, meeting room, printing, and no parking. Exact service fees should be confirmed before quoting."
+    ],
+    "unpricedHeading": {
+      "eyebrow": "Needs confirmation",
+      "title": "Visible rooms without a confirmed rent.",
+      "text": "These rooms are visible on the plan but are not priced clearly enough to publish as fixed monthly rent."
+    },
+    "unpricedRooms": [
+      "709 - 113 SF",
+      "712 - 264 SF",
+      "726 - 157 SF",
+      "728 - 127 SF",
+      "728A - 125 SF",
+      "746 - 245 SF",
+      "746A - 288 SF",
+      "747 - 177 SF",
+      "747A - 119 SF",
+      "747B - 115 SF"
+    ],
+    "ctaBanner": {
+      "eyebrow": "Interested in Suite 700?",
+      "title": "Ask LeCrown which rooms are still available.",
+      "text": "Send the room number you want, your move-in timing, and whether you need a private office or dedicated co-work desk.",
+      "primaryLabel": "Request availability",
+      "secondaryLabel": "Email Benjamin"
+    },
+    "galleryPhotos": [
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-01-building-exterior.jpg",
+        "alt": "9800 Richmond Avenue building exterior.",
+        "caption": "Building exterior"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-04-lobby-reception.jpg",
+        "alt": "Lobby reception area at 9800 Richmond Avenue.",
+        "caption": "Lobby and reception"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-08-beyond-reception.jpg",
+        "alt": "Beyond Flexspace reception area.",
+        "caption": "Beyond Flexspace reception"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-10-cafe.jpg",
+        "alt": "Suite 700 cafe and kitchenette area.",
+        "caption": "Cafe and kitchenette"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-18-lounge.jpg",
+        "alt": "Suite 700 lounge seating with window views.",
+        "caption": "Lounge seating"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-26-private-office.jpg",
+        "alt": "Furnished private office in Suite 700.",
+        "caption": "Furnished private office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-28-window-office.jpg",
+        "alt": "Window private office in Suite 700.",
+        "caption": "Window private office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-36-desk-office.jpg",
+        "alt": "Desk-ready office in Suite 700.",
+        "caption": "Desk-ready office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-44-blue-accent-office.jpg",
+        "alt": "Blue accent private office in Suite 700.",
+        "caption": "Blue-accent private office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-58-compact-office.jpg",
+        "alt": "Compact private office in Suite 700.",
+        "caption": "Compact private office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-62-skyline-office.jpg",
+        "alt": "Private office with skyline view in Suite 700.",
+        "caption": "Skyline-view office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-69-green-accent-office.jpg",
+        "alt": "Green accent private office in Suite 700.",
+        "caption": "Green-accent private office"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-33-cowork-desks.jpg",
+        "alt": "Co-work desks in Suite 700.",
+        "caption": "Co-work desks"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-59-open-cowork.jpg",
+        "alt": "Open co-work area in Suite 700.",
+        "caption": "Open co-work area"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-75-meeting-room.jpg",
+        "alt": "Meeting room setup in Suite 700.",
+        "caption": "Meeting room setup"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-76-training-room.jpg",
+        "alt": "Training room setup in Suite 700.",
+        "caption": "Training room setup"
+      }
+    ]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "contact": {
+    "name": "Jessica",
+    "email": "jessica@lecrownproperties.com",
+    "phone": "832-798-3991",
+    "phoneHref": "tel:+18327983991"
+  },
+  "page": {
+    "hero": {
+      "eyebrow": "Current listings",
+      "title": "Jessica's lease listings in one place.",
+      "summary": "Suite 700 short-term offices, the 2223 Dorrington medical office, and the next-door 2227 Dorrington commercial lot are grouped here so the main menu stays clean.",
+      "primaryCta": {
+        "label": "View listings",
+        "to": "/listings#current-listings"
+      },
+      "secondaryCta": {
+        "label": "Ask Jessica",
+        "to": "/listings#inquire"
+      },
+      "visual": {
+        "src": "/assets/dorrington/2223-exterior.jpg",
+        "alt": "Exterior of 2223 Dorrington Street medical office in Houston",
+        "kicker": "LeCrown listings",
+        "title": "One directory for active lease opportunities",
+        "text": "Use this page as the starting point for every current office, medical, and land listing."
+      },
+      "brief": {
+        "eyebrow": "How this page works",
+        "title": "One menu link, multiple listing details.",
+        "text": "The detail pages remain available for photos, maps, and room-level information, but the main navigation now points to this single listing directory.",
+        "points": [
+          "Suite 700 private offices and co-work desks",
+          "2223 Dorrington medical office",
+          "2227 Dorrington adjacent commercial lot"
+        ]
+      },
+      "metrics": [
+        { "value": "Suite 700", "label": "Short-term office rooms" },
+        { "value": "2223", "label": "Medical office building" },
+        { "value": "2227", "label": "Adjacent commercial lot" }
+      ]
+    },
+    "summary": [
+      { "value": "$250+", "label": "Suite 700 desk and room options" },
+      { "value": "5,464 SF", "label": "2223 Dorrington office" },
+      { "value": "0.30 AC", "label": "2227 Dorrington lot" }
+    ],
+    "gridHeading": {
+      "eyebrow": "Listing directory",
+      "title": "All current leasing opportunities.",
+      "text": "Start here, then open a detail page only when you need the Suite 700 map, room gallery, or Dorrington listing details."
+    },
+    "cards": [
+      {
+        "category": "Short-term offices",
+        "status": "Suite 700",
+        "title": "Suite 700 private offices and co-work",
+        "summary": "Private offices and dedicated co-work options at 9800 Richmond Ave, Suite 700, Houston, TX 77042.",
+        "image": {
+          "src": "/assets/lease-maps/suite-700-clean-map.svg",
+          "alt": "Rendered Suite 700 leasing map"
+        },
+        "facts": [
+          { "value": "$300-$599/mo", "label": "Private office bands" },
+          { "value": "$250/desk", "label": "Dedicated co-work" },
+          { "value": "Room map", "label": "Interactive details" }
+        ],
+        "details": [
+          "Rendered 7th-floor map with room numbers, rent bands, and room-level inquiry buttons.",
+          "Room galleries and inquiry actions are available on the detail page.",
+          "Best for short-term office occupancy and flexible private-office needs."
+        ],
+        "actions": [
+          { "label": "Open Suite 700 details", "to": "/short-term-office-lease" },
+          { "label": "Ask Jessica", "to": "mailto:jessica@lecrownproperties.com?subject=Suite%20700%20leasing%20inquiry", "variant": "secondary" }
+        ]
+      },
+      {
+        "category": "Office / Medical",
+        "status": "2223 Dorrington",
+        "title": "2223 Dorrington medical office",
+        "summary": "A 5,464 SF one-story medical office in the Texas Medical Center area with reception, private rooms, restrooms, and shared work areas.",
+        "image": {
+          "src": "/assets/dorrington/2223-front-entry.jpg",
+          "alt": "Front entry at 2223 Dorrington Street"
+        },
+        "facts": [
+          { "value": "$27/SF/YR", "label": "Public listed office rate" },
+          { "value": "15", "label": "Exam rooms or offices" },
+          { "value": "3", "label": "Restrooms" }
+        ],
+        "details": [
+          "Suited for medical, professional office, daycare, wellness, counseling, education, or similar professional uses.",
+          "Photos and detailed facts are available on the Dorrington detail page.",
+          "Current terms and showing access should be confirmed with Jessica."
+        ],
+        "actions": [
+          { "label": "Open 2223 details", "to": "/medical-center-office-lease#2223-office" },
+          { "label": "Ask Jessica", "to": "mailto:jessica@lecrownproperties.com?subject=2223%20Dorrington%20leasing%20inquiry", "variant": "secondary" }
+        ]
+      },
+      {
+        "category": "Commercial land",
+        "status": "2227 Dorrington",
+        "title": "2227 Dorrington adjacent lot",
+        "summary": "The next-door 0.30-acre commercial lot beside 2223 Dorrington, positioned for Medical Center-area users and ground-lease conversations.",
+        "image": {
+          "src": "/assets/dorrington/2223-front-parking.jpg",
+          "alt": "Dorrington frontage and parking approach near the adjacent lot"
+        },
+        "facts": [
+          { "value": "$15/SF/YR", "label": "Public listed lot rate" },
+          { "value": "13,040 SF", "label": "Approximate land area" },
+          { "value": "29K", "label": "Vehicles per day nearby" }
+        ],
+        "details": [
+          "Public proposed uses include retail, office, mixed use, multifamily, and medical.",
+          "The Dorrington detail page shows the adjacent-lot context next to the office building.",
+          "Confirm permitted use, expenses, access, and current terms with Jessica."
+        ],
+        "actions": [
+          { "label": "Open 2227 details", "to": "/medical-center-office-lease#2227-lot" },
+          { "label": "Ask Jessica", "to": "mailto:jessica@lecrownproperties.com?subject=2227%20Dorrington%20lot%20inquiry", "variant": "secondary" }
+        ]
+      }
+    ],
+    "contact": {
+      "heading": {
+        "eyebrow": "Leasing contact",
+        "title": "Use one contact for all listings.",
+        "text": "Jessica can confirm current rent, availability, showing times, and which detail page best fits the prospect's need."
+      },
+      "eyebrow": "Jessica Huang",
+      "text": "Email or call Jessica for Suite 700, 2223 Dorrington, or 2227 Dorrington inquiries.",
+      "emailLabel": "Email Jessica"
+    },
+    "notesHeading": {
+      "eyebrow": "Main menu cleanup",
+      "title": "Listings are grouped here.",
+      "text": "The main navigation now stays focused, while each listing still has a dedicated detail page when a prospect needs photos, maps, or room-level information."
+    },
+    "notes": [
+      "The main menu uses one Listings link instead of separate Suite 700 and Medical Center links.",
+      "Detail pages remain shareable and searchable.",
+      "Use this page as the public index for Jessica's active leasing inventory."
+    ]
+  }
+}

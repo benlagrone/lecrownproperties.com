@@ -29,12 +29,16 @@ HEALTH_PATH = "/health"
 EVALUATE_PATH = "/api/gridscope/evaluate"
 MARKETS_PATH = "/api/gridscope/markets"
 EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
+LEASE_INQUIRY_PATH = "/api/lease-inquiries"
 DEFAULT_TIMEOUT_MS = 15_000
 DEFAULT_CACHE_TTL_SECONDS = 300
 DEFAULT_MAX_BODY_BYTES = 64 * 1024
 DEFAULT_MAX_RESPONSE_BYTES = 2 * 1024 * 1024
 DEFAULT_EVALUATION_REQUEST_STORAGE_FILE = (
     Path(os.getenv("TMPDIR", "/tmp")) / "lecrownproperties_property_evaluation_requests.ndjson"
+)
+DEFAULT_LEASE_INQUIRY_STORAGE_FILE = (
+    Path(os.getenv("TMPDIR", "/tmp")) / "lecrownproperties_lease_inquiries.ndjson"
 )
 ALLOWED_RESPONSE_FIELDS = (
     "normalized_parcel",
@@ -171,6 +175,30 @@ def validate_property_evaluation_request(payload: Any) -> str:
     return ""
 
 
+def validate_lease_inquiry(payload: Any) -> str:
+    if not isinstance(payload, dict):
+        return "Request body must be a JSON object."
+
+    room = payload.get("room")
+    if not isinstance(room, dict) or not clean_string(room.get("room"), 80):
+        return "Room selection is required."
+
+    contact = payload.get("contact")
+    if not isinstance(contact, dict):
+        return "Contact details are required."
+
+    name = clean_string(contact.get("name"), 120)
+    email = clean_string(contact.get("email"), 240)
+    if not name:
+        return "Name is required."
+    if not email:
+        return "Email is required."
+    if not is_valid_email(email):
+        return "Email must look valid."
+
+    return ""
+
+
 def build_property_evaluation_request_record(
     request_handler: BaseHTTPRequestHandler,
     payload: dict[str, Any],
@@ -223,6 +251,58 @@ def build_property_evaluation_request_record(
                 "evaluation_id": clean_string(summary.get("evaluation_id"), 160),
                 "report_id": clean_string(summary.get("report_id"), 160),
             },
+        },
+        "page": {
+            "path": clean_string(page.get("path"), 200),
+            "referrer": clean_string(page.get("referrer"), 500),
+            "url": clean_string(page.get("url"), 500),
+        },
+        "source_ip": request_handler.headers.get("x-forwarded-for")
+        or request_handler.client_address[0],
+        "user_agent": request_handler.headers.get("user-agent", ""),
+    }
+    return record
+
+
+def build_lease_inquiry_record(
+    request_handler: BaseHTTPRequestHandler,
+    payload: dict[str, Any],
+) -> dict[str, Any]:
+    room = payload.get("room", {})
+    contact = payload.get("contact", {})
+    leasing = payload.get("leasing", {})
+    crm = payload.get("crm", {})
+    recipient = payload.get("recipient", {})
+    page = payload.get("page", {})
+
+    record = {
+        "request_id": f"leaseinq_{uuid4().hex[:12]}",
+        "submitted_at": datetime.now(timezone.utc).isoformat(),
+        "source": clean_string(payload.get("source"), 120) or "suite_700_short_term_office",
+        "crm": {
+            "target": clean_string(crm.get("target"), 80) or "espcrm",
+            "status": clean_string(crm.get("status"), 80) or "pending_integration",
+        },
+        "recipient": {
+            "name": clean_string(recipient.get("name"), 120) or "Jessica",
+            "email": clean_string(recipient.get("email"), 240) or "jessica@lecrownproperties.com",
+        },
+        "room": {
+            "room": clean_string(room.get("room"), 80),
+            "square_feet": clean_string(room.get("square_feet"), 80),
+            "rent": clean_string(room.get("rent"), 80),
+            "type": clean_string(room.get("type"), 120),
+            "status": clean_string(room.get("status"), 120),
+            "photo_count": room.get("photo_count") if isinstance(room.get("photo_count"), int) else 0,
+        },
+        "contact": {
+            "name": clean_string(contact.get("name"), 120),
+            "email": clean_string(contact.get("email"), 240),
+            "phone": clean_string(contact.get("phone"), 80),
+        },
+        "leasing": {
+            "timeline": clean_string(leasing.get("timeline"), 120),
+            "notes": clean_string(leasing.get("notes"), 4000),
         },
         "page": {
             "path": clean_string(page.get("path"), 200),
@@ -338,11 +418,31 @@ class PropertyEvaluationRequestStore:
                 handle.write(f"{line}\n")
 
 
+class LeaseInquiryStore:
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self._lock = threading.Lock()
+
+    @classmethod
+    def from_env(cls) -> "LeaseInquiryStore":
+        raw_path = os.getenv("LEASE_INQUIRY_STORAGE_FILE", "").strip()
+        path = Path(raw_path) if raw_path else DEFAULT_LEASE_INQUIRY_STORAGE_FILE
+        return cls(path)
+
+    def append(self, record: dict[str, Any]) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        line = json.dumps(record, separators=(",", ":"), ensure_ascii=True)
+        with self._lock:
+            with self.path.open("a", encoding="utf-8") as handle:
+                handle.write(f"{line}\n")
+
+
 @dataclass
 class AppState:
     gridscope: GridScopeConfig
     cache: ResponseCache
     evaluation_requests: PropertyEvaluationRequestStore
+    lease_inquiries: LeaseInquiryStore
 
 
 class AppRequestHandler(BaseHTTPRequestHandler):
@@ -362,7 +462,7 @@ class AppRequestHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
-        if path in {EVALUATE_PATH, MARKETS_PATH, EVALUATION_REQUEST_PATH}:
+        if path in {EVALUATE_PATH, MARKETS_PATH, EVALUATION_REQUEST_PATH, LEASE_INQUIRY_PATH}:
             self.send_response(204)
             self.send_common_headers()
             allow_value = "OPTIONS, GET" if path == MARKETS_PATH else "OPTIONS, POST"
@@ -385,6 +485,10 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             self.handle_property_evaluation_request()
             return
 
+        if path == LEASE_INQUIRY_PATH:
+            self.handle_lease_inquiry()
+            return
+
         self.send_error_json(404, "not_found", "Route not found.")
 
     def handle_read_request(self, *, include_body: bool) -> None:
@@ -397,6 +501,7 @@ class AppRequestHandler(BaseHTTPRequestHandler):
                     "status": "ok",
                     "gridscope_configured": self.app_state.gridscope.configured,
                     "evaluation_request_intake": True,
+                    "lease_inquiry_intake": True,
                 },
                 include_body=include_body,
                 extra_headers={"Cache-Control": "no-store"},
@@ -428,6 +533,16 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             return
 
         if path == EVALUATION_REQUEST_PATH:
+            self.send_error_json(
+                405,
+                "method_not_allowed",
+                "Use POST for this route.",
+                include_body=include_body,
+                extra_headers={"Allow": "OPTIONS, POST"},
+            )
+            return
+
+        if path == LEASE_INQUIRY_PATH:
             self.send_error_json(
                 405,
                 "method_not_allowed",
@@ -602,6 +717,56 @@ class AppRequestHandler(BaseHTTPRequestHandler):
                 "next_step": "LeCrown can now review the parcel screen and scope the selected package.",
                 "offer": record["offer"],
                 "screening": record["screening"]["summary"],
+            },
+            extra_headers={"Cache-Control": "no-store"},
+        )
+
+    def handle_lease_inquiry(self) -> None:
+        content_type = self.headers.get("Content-Type", "")
+        if "application/json" not in content_type:
+            self.send_error_json(
+                415,
+                "unsupported_media_type",
+                "Content-Type must be application/json.",
+            )
+            return
+
+        raw_body = self.read_request_body(DEFAULT_MAX_BODY_BYTES)
+        if raw_body is None:
+            return
+
+        try:
+            payload = json.loads(raw_body.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            self.send_error_json(400, "invalid_json", "Request body must be valid JSON.")
+            return
+
+        validation_error = validate_lease_inquiry(payload)
+        if validation_error:
+            self.send_error_json(400, "invalid_request", validation_error)
+            return
+
+        record = build_lease_inquiry_record(self, payload)
+
+        try:
+            self.app_state.lease_inquiries.append(record)
+        except OSError:
+            self.send_error_json(
+                500,
+                "request_storage_failed",
+                "The lease inquiry could not be stored.",
+            )
+            return
+
+        self.send_json(
+            201,
+            {
+                "request_id": record["request_id"],
+                "reply": "Lease inquiry received.",
+                "recipient": record["recipient"]["email"],
+                "crm_target": record["crm"]["target"],
+                "crm_status": "stored_for_espcrm_forwarding",
+                "room": record["room"],
             },
             extra_headers={"Cache-Control": "no-store"},
         )
@@ -1173,6 +1338,7 @@ def build_server(host: str, port: int) -> ThreadingHTTPServer:
         gridscope=GridScopeConfig.from_env(),
         cache=ResponseCache(),
         evaluation_requests=PropertyEvaluationRequestStore.from_env(),
+        lease_inquiries=LeaseInquiryStore.from_env(),
     )
     return server
 

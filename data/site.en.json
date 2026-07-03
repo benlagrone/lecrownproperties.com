@@ -11,6 +11,7 @@
     { "label": "Home", "to": "/" },
     { "label": "Services", "to": "/services" },
     { "label": "Properties", "to": "/properties" },
+    { "label": "Listings", "to": "/listings" },
     { "label": "Evaluate", "to": "/property-evaluation" },
     { "label": "Clients", "to": "/clients" },
     { "label": "Case Studies", "to": "/case-studies" },
@@ -28,6 +29,9 @@
   },
   "contact": {
     "email": "benjamin@lecrowndevelopment.com",
+    "phone": "832-798-3991",
+    "phoneHref": "tel:+18327983991",
+    "phoneLabel": "Jessica Huang",
     "location": "Houston, Texas",
     "wechat": "English and Mandarin communication available for owners, tenants, and partners.",
     "hours": [
