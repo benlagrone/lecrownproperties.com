@@ -1,0 +1,238 @@
+{
+  "contact": {
+    "name": "Jessica",
+    "email": "jessica@lecrownproperties.com",
+    "phone": "832-798-3991",
+    "phoneHref": "tel:+18327983991",
+    "phoneLabel": "Call Jessica"
+  },
+  "feature": {
+    "eyebrow": "Medical Center leases",
+    "title": "2223 Dorrington office and the next-door 2227 lot are available.",
+    "text": "A paired Texas Medical Center opportunity: a built-out one-story medical office at 2223 Dorrington and an adjacent commercial lot at 2227 Dorrington.",
+    "highlights": [
+      "5,464 SF office",
+      "0.30 AC lot",
+      "Texas Medical Center"
+    ],
+    "primaryCta": {
+      "label": "View Dorrington listings",
+      "to": "/medical-center-office-lease"
+    }
+  },
+  "page": {
+    "hero": {
+      "eyebrow": "Medical Center leasing",
+      "title": "Dorrington medical office and adjacent lot for lease.",
+      "summary": "A 5,464 SF one-story medical office at 2223 Dorrington Street, paired with the next-door 0.30-acre commercial lot at 2227 Dorrington Street in Houston's Texas Medical Center area.",
+      "primaryCta": {
+        "label": "Ask Jessica",
+        "to": "/medical-center-office-lease#inquire"
+      },
+      "secondaryCta": {
+        "label": "Compare listings",
+        "to": "/medical-center-office-lease#2223-office"
+      },
+      "visual": {
+        "src": "/assets/dorrington/2223-exterior.jpg",
+        "alt": "Exterior of 2223 Dorrington Street medical office in Houston",
+        "kicker": "2223 Dorrington",
+        "title": "Built-out medical office",
+        "text": "Existing reception, exam rooms, private offices, restrooms, and common work areas near the Texas Medical Center."
+      },
+      "brief": {
+        "eyebrow": "Available listings",
+        "title": "Two adjacent Medical Center opportunities.",
+        "text": "The office and lot can be discussed separately or as a paired location strategy depending on the tenant's use.",
+        "points": [
+          "2223 Dorrington: one-story medical office",
+          "2227 Dorrington: adjacent commercial land lease",
+          "Inquiries route to Jessica at LeCrown Properties"
+        ]
+      },
+      "metrics": [
+        { "value": "5,464 SF", "label": "2223 medical office" },
+        { "value": "0.30 AC", "label": "2227 commercial lot" },
+        { "value": "TMC", "label": "Texas Medical Center area" }
+      ]
+    },
+    "summary": [
+      { "value": "$27/SF/YR", "label": "2223 Dorrington public office rate" },
+      { "value": "$15/SF/YR", "label": "2227 Dorrington public lot rate" },
+      { "value": "832-798-3991", "label": "Call Jessica for current terms" }
+    ],
+    "listingsHeading": {
+      "eyebrow": "Current opportunities",
+      "title": "Office building and next-door ground lease.",
+      "text": "Each listing has its own use case, rate, and inquiry path. Current availability and final lease terms should be confirmed directly with Jessica."
+    },
+    "listings": [
+      {
+        "id": "2223-office",
+        "category": "Office / Medical",
+        "status": "Available now",
+        "address": "2223 Dorrington St, Houston, TX 77030",
+        "title": "2223 Dorrington medical office lease",
+        "summary": "One-story commercial building in the Texas Medical Center area, suited for medical, professional office, daycare, wellness, counseling, education, or similar professional uses.",
+        "price": "$27.00/SF/YR",
+        "priceNote": "$12,294/mo listed estimate; utilities, property expenses, and building services are not included.",
+        "image": {
+          "src": "/assets/dorrington/2223-front-entry.jpg",
+          "alt": "Front entry and parking approach for 2223 Dorrington Street"
+        },
+        "stats": [
+          { "value": "5,464 SF", "label": "Rentable building area" },
+          { "value": "15", "label": "Exam rooms or private offices" },
+          { "value": "3", "label": "Restrooms" }
+        ],
+        "details": [
+          "Main reception area with existing medical-office layout.",
+          "Three shared hallway workstations plus additional rear common space.",
+          "Full medical build-out noted publicly; renovation condition should be reviewed during showing.",
+          "Near major hospitals, medical facilities, Rice University, and Baylor College of Medicine."
+        ],
+        "uses": [
+          "Medical",
+          "Professional office",
+          "Daycare",
+          "Wellness",
+          "Counseling",
+          "Education"
+        ],
+        "primaryCta": "Ask about 2223"
+      },
+      {
+        "id": "2227-lot",
+        "category": "Commercial land",
+        "status": "Available now",
+        "address": "2227 Dorrington St, Houston, TX 77030",
+        "title": "2227 Dorrington adjacent lot lease",
+        "summary": "Next-door 0.30-acre commercial land opportunity positioned for Medical Center-area users that need land, frontage, parking support, or a ground-lease site.",
+        "price": "$15.00/SF/YR",
+        "priceNote": "$16,300/mo listed estimate for approximately 13,040 SF of land.",
+        "diagram": {
+          "alt": "Not-to-scale diagram showing 2223 Dorrington medical office beside the 2227 Dorrington lot",
+          "topRoad": "Holcombe / Greenbriar traffic",
+          "leftRoad": "Dorrington St",
+          "officeLabel": "2223",
+          "officeText": "Medical office",
+          "lotLabel": "2227",
+          "lotText": "0.30 AC lot",
+          "caption": "Not-to-scale adjacency view for the paired listings"
+        },
+        "stats": [
+          { "value": "0.30 AC", "label": "Total lot size" },
+          { "value": "13,040 SF", "label": "Approximate land area" },
+          { "value": "29K", "label": "Vehicles per day nearby" }
+        ],
+        "details": [
+          "Public listing notes traffic exposure at Holcombe and Greenbriar.",
+          "Proposed uses include retail, office, mixed use, multifamily, and medical.",
+          "Offsite improvements are listed as water, sewer, electricity, gas, streets, curb, gutter, sidewalk, and telephone.",
+          "Walkable Medical Center location close to hospitals, Rice University, and Baylor College of Medicine."
+        ],
+        "uses": [
+          "Ground lease",
+          "Retail",
+          "Office",
+          "Mixed use",
+          "Multifamily",
+          "Medical"
+        ],
+        "primaryCta": "Ask about 2227"
+      }
+    ],
+    "sourceNote": "Rates, size, and availability reflect public listing information gathered for this page. Confirm current terms, expenses, permitted use, and showing access with Jessica before relying on them.",
+    "galleryHeading": {
+      "eyebrow": "2223 photo gallery",
+      "title": "Existing medical office condition and layout.",
+      "text": "These photos show the office building, entry sequence, reception, work areas, kitchenette, restroom, and private room conditions."
+    },
+    "gallery": [
+      {
+        "src": "/assets/dorrington/2223-exterior.jpg",
+        "alt": "Exterior frontage of 2223 Dorrington Street",
+        "label": "Building frontage"
+      },
+      {
+        "src": "/assets/dorrington/2223-front-parking.jpg",
+        "alt": "Parking and approach area at 2223 Dorrington Street",
+        "label": "Front parking"
+      },
+      {
+        "src": "/assets/dorrington/2223-reception.jpg",
+        "alt": "Reception area inside 2223 Dorrington Street",
+        "label": "Reception"
+      },
+      {
+        "src": "/assets/dorrington/2223-work-area.jpg",
+        "alt": "Shared work area inside 2223 Dorrington Street",
+        "label": "Work area"
+      },
+      {
+        "src": "/assets/dorrington/2223-private-room.jpg",
+        "alt": "Private room or exam room inside 2223 Dorrington Street",
+        "label": "Private room"
+      },
+      {
+        "src": "/assets/dorrington/2223-kitchen.jpg",
+        "alt": "Kitchenette inside 2223 Dorrington Street",
+        "label": "Kitchenette"
+      },
+      {
+        "src": "/assets/dorrington/2223-restroom.jpg",
+        "alt": "Restroom inside 2223 Dorrington Street",
+        "label": "Restroom"
+      }
+    ],
+    "location": {
+      "heading": {
+        "eyebrow": "Location",
+        "title": "Texas Medical Center adjacency with flexible use potential.",
+        "text": "The Dorrington properties sit in a dense Medical Center corridor with strong hospital, university, and professional-service demand drivers."
+      },
+      "points": [
+        "Close to major hospitals and medical facilities.",
+        "Near Rice University, Baylor College of Medicine, the Museum District, and surrounding professional offices.",
+        "High-walkability Medical Center context with public transit nearby.",
+        "Office and land can be discussed separately or together depending on the tenant's plan."
+      ],
+      "contactEyebrow": "Leasing contact",
+      "contactTitle": "Jessica Huang",
+      "contactText": "Email Jessica for current rent, showing availability, use questions, and next steps.",
+      "emailLabel": "Email Jessica"
+    },
+    "comparisonHeading": {
+      "eyebrow": "At a glance",
+      "title": "Pick the right Dorrington fit.",
+      "text": "The office is ready for users who need rooms and interior layout. The lot is a land-use opportunity for a tenant or operator with a separate site plan."
+    },
+    "tableLabels": [
+      "Property",
+      "Size",
+      "Listed rate",
+      "Best fit"
+    ],
+    "comparisonRows": [
+      {
+        "property": "2223 Dorrington office",
+        "size": "5,464 SF",
+        "rate": "$27.00/SF/YR",
+        "bestFor": "Medical, professional office, wellness, daycare, counseling, education"
+      },
+      {
+        "property": "2227 Dorrington lot",
+        "size": "0.30 AC / 13,040 SF",
+        "rate": "$15.00/SF/YR",
+        "bestFor": "Ground lease, retail, office, mixed use, multifamily, medical"
+      }
+    ],
+    "ctaBanner": {
+      "eyebrow": "Tour or confirm terms",
+      "title": "Ask Jessica about the Dorrington listings.",
+      "text": "Use the inquiry button for 2223, 2227, or the combined opportunity. Jessica can confirm current pricing, access, expenses, and showing times.",
+      "primaryLabel": "Email Jessica",
+      "secondaryLabel": "Call 832-798-3991"
+    }
+  }
+}

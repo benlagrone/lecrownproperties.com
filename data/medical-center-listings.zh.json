@@ -1,0 +1,238 @@
+{
+  "contact": {
+    "name": "Jessica",
+    "email": "jessica@lecrownproperties.com",
+    "phone": "832-798-3991",
+    "phoneHref": "tel:+18327983991",
+    "phoneLabel": "致电 Jessica"
+  },
+  "feature": {
+    "eyebrow": "医学中心租赁",
+    "title": "2223 Dorrington 办公楼与隔壁 2227 地块现可洽谈。",
+    "text": "位于休斯敦 Texas Medical Center 区域的组合机会：2223 Dorrington 是已建成的一层医疗办公楼，2227 Dorrington 是相邻商业地块。",
+    "highlights": [
+      "5,464 SF 办公楼",
+      "0.30 AC 地块",
+      "Texas Medical Center"
+    ],
+    "primaryCta": {
+      "label": "查看 Dorrington 房源",
+      "to": "/medical-center-office-lease"
+    }
+  },
+  "page": {
+    "hero": {
+      "eyebrow": "医学中心租赁",
+      "title": "Dorrington 医疗办公楼与相邻地块出租。",
+      "summary": "2223 Dorrington Street 为 5,464 SF 一层医疗办公楼，隔壁 2227 Dorrington Street 为 0.30 英亩商业地块，均位于休斯敦 Texas Medical Center 区域。",
+      "primaryCta": {
+        "label": "联系 Jessica",
+        "to": "/medical-center-office-lease#inquire"
+      },
+      "secondaryCta": {
+        "label": "对比房源",
+        "to": "/medical-center-office-lease#2223-office"
+      },
+      "visual": {
+        "src": "/assets/dorrington/2223-exterior.jpg",
+        "alt": "休斯敦 2223 Dorrington Street 医疗办公楼外观",
+        "kicker": "2223 Dorrington",
+        "title": "现有医疗办公空间",
+        "text": "已有前台、诊室或独立办公室、卫生间与共享工作区，靠近 Texas Medical Center。"
+      },
+      "brief": {
+        "eyebrow": "可租机会",
+        "title": "两个相邻的医学中心物业。",
+        "text": "办公楼与地块可分别洽谈，也可根据租户用途作为组合机会沟通。",
+        "points": [
+          "2223 Dorrington：一层医疗办公楼",
+          "2227 Dorrington：相邻商业地块租赁",
+          "咨询将发送给 LeCrown Properties 的 Jessica"
+        ]
+      },
+      "metrics": [
+        { "value": "5,464 SF", "label": "2223 医疗办公楼" },
+        { "value": "0.30 AC", "label": "2227 商业地块" },
+        { "value": "TMC", "label": "Texas Medical Center 区域" }
+      ]
+    },
+    "summary": [
+      { "value": "$27/SF/YR", "label": "2223 Dorrington 公开办公租金" },
+      { "value": "$15/SF/YR", "label": "2227 Dorrington 公开地块租金" },
+      { "value": "832-798-3991", "label": "致电 Jessica 确认现行条件" }
+    ],
+    "listingsHeading": {
+      "eyebrow": "当前机会",
+      "title": "办公楼与隔壁地块租赁。",
+      "text": "每个房源的用途、租金和咨询路径不同。实际可用状态和最终租赁条件请直接与 Jessica 确认。"
+    },
+    "listings": [
+      {
+        "id": "2223-office",
+        "category": "办公 / 医疗",
+        "status": "现可洽谈",
+        "address": "2223 Dorrington St, Houston, TX 77030",
+        "title": "2223 Dorrington 医疗办公楼出租",
+        "summary": "位于 Texas Medical Center 区域的一层商业物业，适合医疗、专业办公室、日托、健康管理、咨询、教育等专业用途。",
+        "price": "$27.00/SF/YR",
+        "priceNote": "公开挂牌约 $12,294/月；不含水电、物业费用和楼宇服务。",
+        "image": {
+          "src": "/assets/dorrington/2223-front-entry.jpg",
+          "alt": "2223 Dorrington Street 前入口与停车区域"
+        },
+        "stats": [
+          { "value": "5,464 SF", "label": "可租建筑面积" },
+          { "value": "15", "label": "诊室或独立办公室" },
+          { "value": "3", "label": "卫生间" }
+        ],
+        "details": [
+          "设有主接待区，并保留医疗办公布局。",
+          "三处共享走廊工作站，后方另有公共空间。",
+          "公开信息显示为完整医疗装修；实际翻新需求应在看房时确认。",
+          "靠近主要医院、医疗设施、Rice University 与 Baylor College of Medicine。"
+        ],
+        "uses": [
+          "医疗",
+          "专业办公室",
+          "日托",
+          "健康管理",
+          "咨询",
+          "教育"
+        ],
+        "primaryCta": "咨询 2223"
+      },
+      {
+        "id": "2227-lot",
+        "category": "商业地块",
+        "status": "现可洽谈",
+        "address": "2227 Dorrington St, Houston, TX 77030",
+        "title": "2227 Dorrington 相邻地块租赁",
+        "summary": "隔壁 0.30 英亩商业地块，适合需要土地、临街展示、停车支持或独立地块方案的医学中心区域租户。",
+        "price": "$15.00/SF/YR",
+        "priceNote": "约 13,040 SF 土地，公开挂牌约 $16,300/月。",
+        "diagram": {
+          "alt": "2223 Dorrington 医疗办公楼与 2227 Dorrington 地块相邻示意图",
+          "topRoad": "Holcombe / Greenbriar 车流",
+          "leftRoad": "Dorrington St",
+          "officeLabel": "2223",
+          "officeText": "医疗办公楼",
+          "lotLabel": "2227",
+          "lotText": "0.30 AC 地块",
+          "caption": "相邻关系示意图，非精确测绘图"
+        },
+        "stats": [
+          { "value": "0.30 AC", "label": "总地块面积" },
+          { "value": "13,040 SF", "label": "约合土地面积" },
+          { "value": "29K", "label": "附近每日车流" }
+        ],
+        "details": [
+          "公开信息显示 Holcombe 与 Greenbriar 附近有较强车流曝光。",
+          "可讨论用途包括零售、办公、混合用途、多户住宅和医疗。",
+          "公开资料列出周边基础设施包括水、下水道、电、天然气、道路、路缘、人行道和电话线。",
+          "位于可步行的医学中心区域，靠近医院、Rice University 与 Baylor College of Medicine。"
+        ],
+        "uses": [
+          "土地租赁",
+          "零售",
+          "办公",
+          "混合用途",
+          "多户住宅",
+          "医疗"
+        ],
+        "primaryCta": "咨询 2227"
+      }
+    ],
+    "sourceNote": "租金、面积与可用状态基于本页整理时的公开挂牌信息。依赖这些信息前，请与 Jessica 确认现行条款、费用、允许用途和看房安排。",
+    "galleryHeading": {
+      "eyebrow": "2223 图片",
+      "title": "现有医疗办公空间状态与布局。",
+      "text": "图片展示办公楼外观、入口、接待区、工作区、小厨房、卫生间和独立房间。"
+    },
+    "gallery": [
+      {
+        "src": "/assets/dorrington/2223-exterior.jpg",
+        "alt": "2223 Dorrington Street 建筑外观",
+        "label": "建筑外观"
+      },
+      {
+        "src": "/assets/dorrington/2223-front-parking.jpg",
+        "alt": "2223 Dorrington Street 停车与入口区域",
+        "label": "前方停车"
+      },
+      {
+        "src": "/assets/dorrington/2223-reception.jpg",
+        "alt": "2223 Dorrington Street 室内接待区",
+        "label": "接待区"
+      },
+      {
+        "src": "/assets/dorrington/2223-work-area.jpg",
+        "alt": "2223 Dorrington Street 共享工作区",
+        "label": "工作区"
+      },
+      {
+        "src": "/assets/dorrington/2223-private-room.jpg",
+        "alt": "2223 Dorrington Street 独立房间或诊室",
+        "label": "独立房间"
+      },
+      {
+        "src": "/assets/dorrington/2223-kitchen.jpg",
+        "alt": "2223 Dorrington Street 小厨房",
+        "label": "小厨房"
+      },
+      {
+        "src": "/assets/dorrington/2223-restroom.jpg",
+        "alt": "2223 Dorrington Street 卫生间",
+        "label": "卫生间"
+      }
+    ],
+    "location": {
+      "heading": {
+        "eyebrow": "位置",
+        "title": "靠近 Texas Medical Center，适合多种用途。",
+        "text": "Dorrington 物业位于医学中心走廊，周边有医院、大学和专业服务需求。"
+      },
+      "points": [
+        "靠近主要医院与医疗设施。",
+        "临近 Rice University、Baylor College of Medicine、Museum District 及周边专业办公区。",
+        "医学中心区域步行条件较好，附近有公共交通。",
+        "办公楼与地块可分别洽谈，也可作为组合机会沟通。"
+      ],
+      "contactEyebrow": "租赁联系",
+      "contactTitle": "Jessica Huang",
+      "contactText": "请联系 Jessica 确认当前租金、看房时间、用途问题和下一步。",
+      "emailLabel": "邮件联系 Jessica"
+    },
+    "comparisonHeading": {
+      "eyebrow": "快速对比",
+      "title": "选择合适的 Dorrington 机会。",
+      "text": "办公楼适合需要房间和现有室内布局的用户。地块适合有独立场地方案的租户或运营方。"
+    },
+    "tableLabels": [
+      "物业",
+      "面积",
+      "公开租金",
+      "适合用途"
+    ],
+    "comparisonRows": [
+      {
+        "property": "2223 Dorrington 办公楼",
+        "size": "5,464 SF",
+        "rate": "$27.00/SF/YR",
+        "bestFor": "医疗、专业办公、健康管理、日托、咨询、教育"
+      },
+      {
+        "property": "2227 Dorrington 地块",
+        "size": "0.30 AC / 13,040 SF",
+        "rate": "$15.00/SF/YR",
+        "bestFor": "土地租赁、零售、办公、混合用途、多户住宅、医疗"
+      }
+    ],
+    "ctaBanner": {
+      "eyebrow": "看房或确认条款",
+      "title": "联系 Jessica 洽谈 Dorrington 房源。",
+      "text": "可单独咨询 2223、2227，或咨询组合机会。Jessica 可确认当前价格、进入方式、费用和看房时间。",
+      "primaryLabel": "邮件联系 Jessica",
+      "secondaryLabel": "致电 832-798-3991"
+    }
+  }
+}

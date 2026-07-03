@@ -12,6 +12,7 @@
     { "label": "Services", "to": "/services" },
     { "label": "Properties", "to": "/properties" },
     { "label": "Leases", "to": "/short-term-office-lease" },
+    { "label": "Medical Center", "to": "/medical-center-office-lease" },
     { "label": "Evaluate", "to": "/property-evaluation" },
     { "label": "Clients", "to": "/clients" },
     { "label": "Case Studies", "to": "/case-studies" },

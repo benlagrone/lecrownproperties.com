@@ -894,6 +894,282 @@ img {
   gap: 1rem;
 }
 
+.medical-listings-feature {
+  background:
+    linear-gradient(135deg, rgba(247, 214, 124, 0.12), rgba(74, 119, 105, 0.14)),
+    var(--panel-strong);
+}
+
+.dorrington-summary-grid .metric-card strong {
+  font-size: clamp(1rem, 1.8vw, 1.32rem);
+}
+
+.dorrington-listing-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.dorrington-listing-card {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.86fr) minmax(0, 1.14fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 236, 177, 0.04), transparent 35%),
+    var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.dorrington-listing-visual {
+  min-height: 100%;
+  margin: 0;
+  background: #080808;
+}
+
+.dorrington-listing-visual img {
+  width: 100%;
+  height: 100%;
+  min-height: 27rem;
+  object-fit: cover;
+}
+
+.dorrington-listing-body {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  padding: clamp(1.2rem, 2.5vw, 1.65rem);
+}
+
+.dorrington-listing-body h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(2.05rem, 4vw, 3.25rem);
+  line-height: 0.98;
+}
+
+.dorrington-listing-body p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+.dorrington-price-row {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.dorrington-price-row strong {
+  color: var(--gold-strong);
+  font-size: clamp(1.55rem, 3vw, 2.15rem);
+  line-height: 1;
+}
+
+.dorrington-price-row span {
+  color: var(--text-soft);
+  line-height: 1.55;
+}
+
+.dorrington-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.dorrington-stat {
+  min-height: 6.25rem;
+  padding: 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dorrington-stat strong,
+.dorrington-stat span {
+  display: block;
+}
+
+.dorrington-stat strong {
+  color: var(--gold-strong);
+  font-size: 1.2rem;
+  line-height: 1.1;
+}
+
+.dorrington-stat span {
+  margin-top: 0.4rem;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.dorrington-use-cloud {
+  padding-top: 0.1rem;
+}
+
+.dorrington-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.dorrington-parcel-diagram {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  min-height: 100%;
+  margin: 0;
+  padding: 4rem 1.2rem 3.4rem 4.2rem;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(66, 110, 96, 0.34), rgba(12, 10, 7, 0.98));
+  background-size: 38px 38px, 38px 38px, auto;
+}
+
+.diagram-road {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(248, 239, 223, 0.82);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.diagram-road-top {
+  inset: 0 0 auto 0;
+  height: 2.8rem;
+}
+
+.diagram-road-left {
+  inset: 0 auto 0 0;
+  width: 3rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.diagram-parcel {
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  min-height: 18rem;
+  padding: 1rem;
+  border: 2px solid rgba(247, 214, 124, 0.76);
+  border-radius: var(--radius-md);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.diagram-parcel-office {
+  background: rgba(247, 214, 124, 0.13);
+}
+
+.diagram-parcel-lot {
+  background:
+    linear-gradient(135deg, rgba(74, 119, 105, 0.44), rgba(247, 214, 124, 0.08));
+}
+
+.diagram-parcel strong {
+  color: var(--gold-strong);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+}
+
+.diagram-parcel span {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.dorrington-parcel-diagram figcaption {
+  position: absolute;
+  inset: auto 1rem 1rem 4.1rem;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.dorrington-source-note {
+  max-width: 70rem;
+  margin: 1rem auto 0;
+  color: var(--text-soft);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.dorrington-gallery-section {
+  align-items: start;
+}
+
+.dorrington-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.dorrington-gallery-photo {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: #080808;
+}
+
+.dorrington-gallery-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dorrington-gallery-photo figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.65rem 0.75rem;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 800;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.78));
+}
+
+.dorrington-location-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.dorrington-contact-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.dorrington-contact-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.dorrington-contact-card p {
+  margin: 0;
+}
+
+.dorrington-table td:first-child {
+  color: var(--gold-strong);
+  font-weight: 800;
+}
+
 .lease-summary-grid .metric-card strong {
   font-size: clamp(1rem, 1.8vw, 1.35rem);
 }
@@ -2031,8 +2307,17 @@ img {
   .split-grid,
   .cta-banner,
   .lease-feature,
+  .dorrington-listing-card,
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .dorrington-listing-visual img {
+    min-height: 22rem;
+  }
+
+  .dorrington-parcel-diagram {
+    min-height: 24rem;
   }
 
   .lease-feature-actions {
@@ -2117,9 +2402,72 @@ img {
   .metrics-grid,
   .mini-grid,
   .form-grid,
+  .dorrington-stat-grid,
+  .dorrington-gallery-grid,
   .hero-metrics,
   .evaluation-highlight-grid {
     grid-template-columns: 1fr;
+  }
+
+  .dorrington-listing-body h2 {
+    font-size: clamp(2rem, 10vw, 2.8rem);
+  }
+
+  .dorrington-card-actions .button {
+    width: 100%;
+  }
+
+  .dorrington-parcel-diagram {
+    grid-template-columns: 1fr;
+    padding: 3.6rem 1rem 3.4rem 3.8rem;
+  }
+
+  .diagram-parcel {
+    min-height: 10rem;
+  }
+
+  .dorrington-table,
+  .dorrington-table tbody,
+  .dorrington-table tr,
+  .dorrington-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dorrington-table {
+    min-width: 0;
+  }
+
+  .dorrington-table thead {
+    display: none;
+  }
+
+  .dorrington-table tr {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(231, 177, 29, 0.18);
+  }
+
+  .dorrington-table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .dorrington-table td {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, 0.45fr) minmax(0, 1fr);
+    gap: 0.8rem;
+    padding: 0.45rem 1rem;
+    border-bottom: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .dorrington-table td::before {
+    content: attr(data-label);
+    color: var(--gold-strong);
+    font-size: 0.74rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
 
   .hero-mark-frame {

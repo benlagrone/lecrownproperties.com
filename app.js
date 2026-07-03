@@ -19,6 +19,7 @@ const GA_TRACKING_ID = "G-M5058P5ZVQ"
 const PROPERTY_EVALUATION_ROUTE = "/property-evaluation"
 const PROPERTY_EVALUATION_LEGACY_ROUTE = "/property-evaluation-preview"
 const SHORT_TERM_LEASE_ROUTE = "/short-term-office-lease"
+const MEDICAL_CENTER_LISTINGS_ROUTE = "/medical-center-office-lease"
 const PROPERTY_EVALUATION_MARKETS_PATH = "/api/gridscope/markets"
 const PROPERTY_EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 const LEASE_INQUIRY_PATH = "/api/lease-inquiries"
@@ -52,6 +53,7 @@ const DATASETS = [
   "services",
   "properties",
   "short-term-lease",
+  "medical-center-listings",
   "property-evaluation",
   "clients",
   "case-studies",
@@ -63,6 +65,7 @@ const ROUTES = new Set([
   "/services",
   "/properties",
   SHORT_TERM_LEASE_ROUTE,
+  MEDICAL_CENTER_LISTINGS_ROUTE,
   PROPERTY_EVALUATION_ROUTE,
   "/clients",
   "/case-studies",
@@ -373,6 +376,8 @@ function renderPage(path) {
       return renderPropertiesPage()
     case SHORT_TERM_LEASE_ROUTE:
       return renderShortTermLeasePage()
+    case MEDICAL_CENTER_LISTINGS_ROUTE:
+      return renderMedicalCenterListingsPage()
     case PROPERTY_EVALUATION_ROUTE:
       return renderPropertyEvaluationPreviewPage()
     case "/clients":
@@ -477,6 +482,7 @@ function renderPropertiesPage() {
     ${renderHero(page.hero, { hrefFor })}
 
     ${state.data.shortTermLease?.feature ? renderLeaseFeature(state.data.shortTermLease.feature) : ""}
+    ${state.data.medicalCenterListings?.feature ? renderMedicalCenterListingsFeature(state.data.medicalCenterListings.feature) : ""}
 
     <section class="section-block" data-reveal>
       ${renderSectionHeading(page.gridHeading)}
@@ -524,6 +530,234 @@ function renderLeaseFeature(feature) {
       </div>
     </section>
   `
+}
+
+function renderMedicalCenterListingsFeature(feature) {
+  return `
+    <section class="section-block lease-feature medical-listings-feature" data-reveal>
+      <div>
+        <span class="eyebrow">${feature.eyebrow}</span>
+        <h2>${feature.title}</h2>
+        <p>${feature.text}</p>
+      </div>
+      <div class="lease-feature-actions">
+        <div class="pill-cloud">
+          ${feature.highlights.map((item) => `<span class="pill">${item}</span>`).join("")}
+        </div>
+        <a class="button button-primary" href="${hrefFor(feature.primaryCta.to)}" data-link>
+          ${feature.primaryCta.label}
+        </a>
+      </div>
+    </section>
+  `
+}
+
+function renderMedicalCenterListingsPage() {
+  const { medicalCenterListings } = state.data
+  const { contact, page } = medicalCenterListings
+
+  return `
+    ${renderHero(page.hero, { hrefFor })}
+
+    <section class="section-block" data-reveal>
+      <div class="metrics-grid dorrington-summary-grid">
+        ${page.summary.map(renderMetricCard).join("")}
+      </div>
+    </section>
+
+    <section class="section-block" data-reveal>
+      ${renderSectionHeading(page.listingsHeading)}
+      <div class="dorrington-listing-grid">
+        ${page.listings.map((listing) => renderDorringtonListingCard(listing, contact)).join("")}
+      </div>
+      ${page.sourceNote ? `<p class="dorrington-source-note">${page.sourceNote}</p>` : ""}
+    </section>
+
+    <section class="section-block split-grid dorrington-gallery-section" data-reveal>
+      <div>
+        ${renderSectionHeading(page.galleryHeading, "left")}
+        <div class="dorrington-gallery-grid">
+          ${page.gallery.map(renderDorringtonGalleryPhoto).join("")}
+        </div>
+      </div>
+      ${renderDorringtonLocationPanel(page.location, contact)}
+    </section>
+
+    <section class="section-block" data-reveal>
+      ${renderSectionHeading(page.comparisonHeading)}
+      <div class="lease-table-shell">
+        <table class="lease-room-table dorrington-table">
+          <thead>
+            <tr>
+              ${page.tableLabels.map((label) => `<th>${label}</th>`).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${page.comparisonRows
+              .map(
+                (row) => `
+                  <tr>
+                    <td data-label="${escapeHtml(page.tableLabels[0])}">${row.property}</td>
+                    <td data-label="${escapeHtml(page.tableLabels[1])}">${row.size}</td>
+                    <td data-label="${escapeHtml(page.tableLabels[2])}">${row.rate}</td>
+                    <td data-label="${escapeHtml(page.tableLabels[3])}">${row.bestFor}</td>
+                  </tr>
+                `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    ${renderDorringtonContactBanner(page.ctaBanner, contact)}
+  `
+}
+
+function renderDorringtonListingCard(listing, contact) {
+  const inquiryHref = buildDorringtonInquiryHref(listing, contact)
+  const visual = listing.image
+    ? `
+        <figure class="dorrington-listing-visual">
+          <img src="${escapeHtml(listing.image.src)}" alt="${escapeHtml(listing.image.alt)}" loading="lazy" decoding="async" />
+        </figure>
+      `
+    : renderDorringtonParcelDiagram(listing.diagram)
+
+  return `
+    <article class="dorrington-listing-card" id="${escapeHtml(listing.id)}">
+      ${visual}
+      <div class="dorrington-listing-body">
+        <div class="card-topline">
+          <span class="badge">${escapeHtml(listing.category)}</span>
+          <span class="card-highlight">${escapeHtml(listing.status)}</span>
+        </div>
+        <h2>${escapeHtml(listing.title)}</h2>
+        <p>${escapeHtml(listing.summary)}</p>
+        <div class="dorrington-price-row">
+          <strong>${escapeHtml(listing.price)}</strong>
+          <span>${escapeHtml(listing.priceNote)}</span>
+        </div>
+        <div class="dorrington-stat-grid">
+          ${listing.stats
+            .map(
+              (stat) => `
+                <article class="dorrington-stat">
+                  <strong>${escapeHtml(stat.value)}</strong>
+                  <span>${escapeHtml(stat.label)}</span>
+                </article>
+              `,
+            )
+            .join("")}
+        </div>
+        <ul class="detail-list">
+          ${listing.details.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+        <div class="pill-cloud dorrington-use-cloud">
+          ${listing.uses.map((item) => `<span class="pill">${escapeHtml(item)}</span>`).join("")}
+        </div>
+        <div class="dorrington-card-actions">
+          <a class="button button-primary" href="${escapeHtml(inquiryHref)}">${escapeHtml(listing.primaryCta)}</a>
+          <a class="button button-secondary" href="${escapeHtml(contact.phoneHref)}">${escapeHtml(contact.phoneLabel)}</a>
+        </div>
+      </div>
+    </article>
+  `
+}
+
+function renderDorringtonParcelDiagram(diagram = {}) {
+  return `
+    <figure class="dorrington-parcel-diagram" role="img" aria-label="${escapeHtml(diagram.alt || "Not-to-scale adjacency diagram for 2223 and 2227 Dorrington")}">
+      <div class="diagram-road diagram-road-top">${escapeHtml(diagram.topRoad || "Holcombe Blvd")}</div>
+      <div class="diagram-road diagram-road-left">${escapeHtml(diagram.leftRoad || "Dorrington St")}</div>
+      <div class="diagram-parcel diagram-parcel-office">
+        <strong>${escapeHtml(diagram.officeLabel || "2223")}</strong>
+        <span>${escapeHtml(diagram.officeText || "Medical office")}</span>
+      </div>
+      <div class="diagram-parcel diagram-parcel-lot">
+        <strong>${escapeHtml(diagram.lotLabel || "2227")}</strong>
+        <span>${escapeHtml(diagram.lotText || "Adjacent lot")}</span>
+      </div>
+      <figcaption>${escapeHtml(diagram.caption || "Not-to-scale adjacency view")}</figcaption>
+    </figure>
+  `
+}
+
+function renderDorringtonGalleryPhoto(photo) {
+  return `
+    <figure class="dorrington-gallery-photo">
+      <img src="${escapeHtml(photo.src)}" alt="${escapeHtml(photo.alt)}" loading="lazy" decoding="async" />
+      <figcaption>${escapeHtml(photo.label)}</figcaption>
+    </figure>
+  `
+}
+
+function renderDorringtonLocationPanel(location, contact) {
+  return `
+    <aside class="panel panel-rich dorrington-location-panel">
+      ${renderSectionHeading(location.heading, "left")}
+      <ul class="detail-list">
+        ${location.points.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+      </ul>
+      <div class="dorrington-contact-card">
+        <span class="eyebrow">${escapeHtml(location.contactEyebrow)}</span>
+        <h3>${escapeHtml(location.contactTitle)}</h3>
+        <p>${escapeHtml(location.contactText)}</p>
+        <div class="dorrington-card-actions">
+          <a class="button button-primary" href="${escapeHtml(buildDorringtonInquiryHref(null, contact))}">
+            ${escapeHtml(location.emailLabel)}
+          </a>
+          <a class="button button-secondary" href="${escapeHtml(contact.phoneHref)}">
+            ${escapeHtml(contact.phone)}
+          </a>
+        </div>
+      </div>
+    </aside>
+  `
+}
+
+function renderDorringtonContactBanner(banner, contact) {
+  return `
+    <section class="section-block" id="inquire" data-reveal>
+      <div class="cta-banner dorrington-cta-banner">
+        <div>
+          <span class="eyebrow">${banner.eyebrow}</span>
+          <h2>${banner.title}</h2>
+          <p>${banner.text}</p>
+        </div>
+        <div class="cta-banner-actions">
+          <a class="button button-primary" href="${escapeHtml(buildDorringtonInquiryHref(null, contact))}">
+            ${banner.primaryLabel}
+          </a>
+          <a class="button button-secondary" href="${escapeHtml(contact.phoneHref)}">
+            ${banner.secondaryLabel}
+          </a>
+        </div>
+      </div>
+    </section>
+  `
+}
+
+function buildDorringtonInquiryHref(listing, contact) {
+  const subject = encodeURIComponent(
+    listing ? `Inquiry: ${listing.address}` : "Medical Center Dorrington leasing inquiry",
+  )
+  const body = encodeURIComponent(
+    [
+      `Hello ${contact.name},`,
+      "",
+      listing
+        ? `I am interested in ${listing.address} (${listing.title}).`
+        : "I am interested in the Dorrington Medical Center leasing opportunities.",
+      "Please send current availability, showing times, and next steps.",
+      "",
+      "Name:",
+      "Phone:",
+      "Company:",
+    ].join("\n"),
+  )
+
+  return `mailto:${contact.email}?subject=${subject}&body=${body}`
 }
 
 function renderShortTermLeasePage() {
