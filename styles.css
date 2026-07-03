@@ -159,6 +159,40 @@ img {
   white-space: nowrap;
 }
 
+.header-phone {
+  display: inline-grid;
+  flex: 0 0 auto;
+  gap: 0.1rem;
+  min-height: 2.85rem;
+  margin-left: auto;
+  padding: 0.48rem 0.82rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.header-phone span {
+  color: var(--text-soft);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.header-phone strong {
+  color: var(--gold-strong);
+  font-size: 0.98rem;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.header-phone:hover {
+  border-color: var(--line-strong);
+  background: rgba(247, 214, 124, 0.08);
+}
+
 .nav-group {
   display: flex;
   align-items: center;
@@ -312,7 +346,8 @@ img {
 }
 
 .hero h1 {
-  max-width: 9.6ch;
+  width: 90%;
+  max-width: 90%;
   font-size: clamp(3.9rem, 6.7vw, 6.2rem);
   line-height: 0.9;
   color: transparent;
@@ -322,7 +357,8 @@ img {
 }
 
 .hero-compact h1 {
-  max-width: 13.5ch;
+  width: 90%;
+  max-width: 90%;
   font-size: clamp(2.9rem, 4.9vw, 4.8rem);
   line-height: 0.93;
 }
@@ -1857,9 +1893,16 @@ img {
   align-items: start;
 }
 
-.footer-email {
-  display: inline-flex;
+.footer-contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
   margin-top: 0.75rem;
+}
+
+.footer-email,
+.footer-phone {
+  display: inline-flex;
   color: var(--gold);
 }
 
@@ -1868,7 +1911,9 @@ img {
 }
 
 .footer-links a:hover,
-.footer-email:hover {
+.footer-email:hover,
+.footer-phone:hover,
+.detail-list a:hover {
   color: var(--text);
 }
 
@@ -2030,14 +2075,36 @@ img {
     padding: 1rem;
   }
 
+  .brand-lockup {
+    order: 1;
+  }
+
+  .nav-toggle {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .header-phone {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+    justify-items: center;
+  }
+
+  .nav-group {
+    order: 4;
+  }
+
   .hero h1 {
     font-size: clamp(3.1rem, 14vw, 4.5rem);
-    max-width: 9.3ch;
+    width: 90%;
+    max-width: 90%;
   }
 
   .hero-compact h1 {
     font-size: clamp(2.8rem, 12vw, 4.1rem);
-    max-width: 11.5ch;
+    width: 90%;
+    max-width: 90%;
   }
 
   .hero-visual,

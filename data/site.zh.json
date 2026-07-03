@@ -29,6 +29,9 @@
   },
   "contact": {
     "email": "benjamin@lecrowndevelopment.com",
+    "phone": "832-798-3991",
+    "phoneHref": "tel:+18327983991",
+    "phoneLabel": "Jessica Huang",
     "location": "美国德州大休斯敦地区",
     "wechat": "合作沟通期间可提供微信与中英双语支持。",
     "hours": [

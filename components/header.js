@@ -16,6 +16,11 @@ export function renderHeader(site, { currentPath, currentLang, navOpen, hrefFor 
           </span>
         </a>
 
+        <a class="header-phone" href="${site.contact.phoneHref}" aria-label="${site.contact.phoneLabel}: ${site.contact.phone}">
+          <span>${site.contact.phoneLabel}</span>
+          <strong>${site.contact.phone}</strong>
+        </a>
+
         <button
           class="nav-toggle"
           type="button"

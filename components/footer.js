@@ -6,9 +6,14 @@ export function renderFooter(site, { currentLang, hrefFor }) {
           <span class="eyebrow">${site.footer.eyebrow}</span>
           <h2>${site.footer.title}</h2>
           <p>${site.footer.text}</p>
-          <a class="footer-email" href="mailto:${site.contact.email}">
-            ${site.contact.email}
-          </a>
+          <div class="footer-contact-links">
+            <a class="footer-email" href="mailto:${site.contact.email}">
+              ${site.contact.email}
+            </a>
+            <a class="footer-phone" href="${site.contact.phoneHref}">
+              ${site.contact.phoneLabel}: ${site.contact.phone}
+            </a>
+          </div>
         </div>
 
         <div class="footer-column">
@@ -30,6 +35,7 @@ export function renderFooter(site, { currentLang, hrefFor }) {
           <h3>${site.footer.contactTitle}</h3>
           <ul class="detail-list">
             <li>${site.contact.location}</li>
+            <li><a href="${site.contact.phoneHref}">${site.contact.phoneLabel}: ${site.contact.phone}</a></li>
             <li>${site.contact.wechat}</li>
             <li>${site.footer.supportNote}</li>
           </ul>
