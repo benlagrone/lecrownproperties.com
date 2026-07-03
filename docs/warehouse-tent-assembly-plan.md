@@ -98,118 +98,172 @@ For all eight tents combined, expect approximately:
 Count parts before raising any frames. Missing anchors or bungees should be
 resolved before assembly continues.
 
-## Factory-Style Build Sequence
+## Time Model
 
-Do the same stage across all tents before moving to the next stage. This keeps
-tools, parts, and worker rhythm consistent.
+Separate clock time from labor-hours.
 
-1. Mark all footprints.
-   Mark the four corners, door direction, and center aisle before unpacking
-   frames.
-
-2. Stage all kits.
-   Place one complete kit at each footprint. Keep bungees and small hardware in
-   separate containers so they are not lost in grass or gravel.
-
-3. Build all roof frames flat.
-   Assemble the roof structure for T1 through T8 while each frame is on the
-   ground. Install finger screws snugly, but do not force them.
-
-4. Add roof reinforcement triangles.
-   Install the reinforcement pipes on all eight roof frames before any tent is
-   raised.
-
-5. Pull roof covers while frames are low.
-   Unfold roof covers over the frames. Use a clean tarp or plastic sheet if the
-   ground is dirty. Attach long bungees loosely, alternating sides to balance
-   tension.
-
-6. Raise one long side.
-   Install legs along one long side of each tent. With two or three workers,
-   raise and support the side together. With one worker, do not raise tents in
-   wind.
-
-7. Raise the second long side.
-   Install the remaining legs, level the frame, and tighten all connections.
-
-8. Anchor immediately.
-   Anchor each tent as soon as it is standing. Do not raise multiple tents and
-   leave them unsecured.
-
-9. Attach walls.
-   Install sidewalls and zippered endwalls after the frame and roof are stable.
-   Keep seams and hems facing inside.
-
-10. Final inspection.
-    Check screws, bungees, wall tension, zipper operation, leg seating,
-    anchors, ropes, trip hazards, and clearance around warehouse operations.
-
-## Crew Roles
-
-### Three Workers
-
-Best crew size for a one-day install.
-
-- Worker 1: lead, layout, parts verification, quality check, anchor check
-- Worker 2: frame assembly, roof cover handling, leg raising
-- Worker 3: frame assembly, roof cover handling, wall and anchor support
-
-The lead should stay ahead of the builders by staging the next tent and
-checking completed work instead of becoming the bottleneck on one frame.
-
-### Two Workers
-
-Practical crew size if the site is organized and weather is calm.
-
-- Worker 1: layout, part staging, frame assembly
-- Worker 2: frame assembly, bungees, walls, anchors
-
-Both workers should handle roof covers and raising together.
-
-### One Worker
-
-Use one worker for layout, staging, and flat roof-frame assembly only.
-
-One worker should not be expected to raise and secure all tents efficiently or
-safely, especially outdoors. If one worker starts the job, schedule a second
-person for the raising and anchoring stage.
-
-## Time Estimates By Crew Size
+- Clock time is how long the job takes on the site.
+- Labor-hours are clock time multiplied by worker count.
+- More workers should reduce clock time and can reduce labor-hours when each
+  worker has a specialized job and avoids repeated setup.
 
 These estimates assume all parts are onsite, the site is clear, and anchoring
 materials are ready.
 
-| Crew Size | Estimated Total Time | Practical Schedule |
-| --- | ---: | --- |
-| 3 workers | 6 to 8 hours | One full workday |
-| 2 workers | 8 to 11 hours | One long workday or split over two days |
-| 1 worker | 16 to 22 hours | Prep-only recommended; do not solo the raising stage |
+| Crew Size | Operating Model | Clock Time | Labor-Hours | Recommendation |
+| --- | --- | ---: | ---: | --- |
+| 3 workers | Specialized production line | 5.5 to 7.5 hr | 16.5 to 22.5 | Best plan |
+| 2 workers | Paired build cell | 9 to 12 hr | 18 to 24 | Practical with calm weather |
+| 1 worker | Solo prep plus one-tent-at-a-time finish | 24 to 32 hr | 24 to 32 | Fallback only |
 
-## Stage Estimates
+The one-worker plan is slower in both clock time and labor-hours because the
+same person repeatedly switches between layout, parts, frame assembly, roof
+cover handling, anchoring, wall work, and inspection.
 
-| Stage | 1 Worker | 2 Workers | 3 Workers |
-| --- | ---: | ---: | ---: |
-| Layout and marking | 1.0 to 1.5 hr | 0.75 to 1.0 hr | 0.5 to 0.75 hr |
-| Unpack and stage 8 kits | 1.5 to 2.0 hr | 1.0 to 1.5 hr | 0.75 to 1.0 hr |
-| Build 8 roof frames flat | 4.0 to 5.5 hr | 2.5 to 3.5 hr | 2.0 to 2.75 hr |
-| Add roof reinforcements | 1.5 to 2.0 hr | 1.0 to 1.25 hr | 0.75 to 1.0 hr |
-| Install roof covers | 2.0 to 3.0 hr | 1.25 to 2.0 hr | 1.0 to 1.5 hr |
-| Raise frames and legs | 3.0 to 4.0 hr | 1.5 to 2.5 hr | 1.0 to 1.75 hr |
-| Attach walls and zipper ends | 2.5 to 3.5 hr | 1.5 to 2.25 hr | 1.25 to 1.75 hr |
-| Anchor and final check | 2.0 to 3.0 hr | 1.5 to 2.0 hr | 1.0 to 1.5 hr |
+## Three-Worker Specialized Production Line
 
-## Recommended Three-Worker Day Plan
+Use this plan when the goal is to finish in one workday.
+
+### Roles
+
+- Worker 1: lead runner and quality control
+  - marks layout
+  - counts parts
+  - stages next tent
+  - pre-sorts bungees, pegs, hooks, and anchors
+  - checks screws, anchors, zipper orientation, and trip hazards
+- Worker 2: frame and roof builder
+  - assembles roof pipes and connectors
+  - installs roof reinforcement triangles
+  - handles one side of roof covers
+  - leads one side of the lift
+- Worker 3: frame, wall, and anchor builder
+  - mirrors Worker 2 on frame assembly
+  - handles the opposite side of roof covers
+  - prepares legs and anchors
+  - starts walls while Worker 1 checks the previous tent
+
+### Workflow
+
+1. Worker 1 marks the full 2 x 4 grid and door orientation.
+2. Workers 2 and 3 unpack frames while Worker 1 creates eight hardware piles.
+3. Workers 2 and 3 build roof frames in pairs while Worker 1 stages the next
+   footprint and checks completed connections.
+4. Workers 2 and 3 pull each roof cover together while Worker 1 alternates
+   bungees side to side so the cover tension stays balanced.
+5. The crew raises one tent at a time.
+6. Worker 1 anchors immediately while Workers 2 and 3 move to the next lift.
+7. Worker 3 starts walls on the anchored tents while Worker 2 keeps the frame
+   line moving and Worker 1 performs quality checks.
+8. The whole crew finishes with a final anchor, zipper, and clearance check.
+
+### Three-Worker Schedule
 
 ```text
-08:00 - 08:45  Layout and mark all footprints
-08:45 - 09:45  Unpack and stage all eight kits
-09:45 - 12:15  Build roof frames and reinforcement triangles
-12:15 - 12:45  Break and safety/weather check
-12:45 - 14:15  Pull roof covers and attach initial bungees
-14:15 - 15:45  Raise frames, install legs, anchor each tent immediately
-15:45 - 17:15  Install walls, zippered ends, and remaining bungees
-17:15 - 17:45  Final inspection and cleanup
+08:00 - 08:35  Worker 1 marks layout; Workers 2-3 unload and sort frame parts
+08:35 - 09:15  Build eight hardware piles and stage all footprints
+09:15 - 11:45  Build roof frames and reinforcement triangles
+11:45 - 12:30  Pull roof covers and attach initial balanced bungees
+12:30 - 13:00  Break and weather check
+13:00 - 14:30  Raise each tent and anchor immediately
+14:30 - 15:45  Attach walls, zippered ends, and remaining bungees
+15:45 - 16:30  Final inspection, cleanup, and correction pass
 ```
+
+Expected result:
+
+- 5.5 to 7.5 clock hours
+- 16.5 to 22.5 total labor-hours
+- best balance of speed, safety, and quality
+
+## Two-Worker Paired Build Cell
+
+Use this plan when two people must complete the installation without a dedicated
+runner.
+
+### Roles
+
+- Worker 1: layout, left-side frame assembly, roof-cover lead, final checklist
+- Worker 2: hardware staging, right-side frame assembly, legs, anchors, walls
+
+Both workers must help with roof covers and raising. Neither worker should be
+solo during lift, cover tensioning, or anchoring.
+
+### Workflow
+
+1. Mark the full grid together, then split tasks.
+2. Worker 1 starts frame layout while Worker 2 stages hardware piles.
+3. Build four roof frames in Row 1, then four roof frames in Row 2.
+4. Stop after every two frames for a connection and parts-count check.
+5. Pull covers onto Row 1, attach balanced bungees, then repeat for Row 2.
+6. Raise and anchor one tent at a time. Do not raise a second tent until the
+   first is anchored.
+7. After every two raised tents, attach walls before moving too far ahead.
+8. Finish with a full walk-around inspection.
+
+### Two-Worker Schedule
+
+```text
+08:00 - 09:00  Mark layout and stage all eight kits
+09:00 - 12:30  Build all roof frames and reinforcement triangles
+12:30 - 13:00  Break and weather check
+13:00 - 15:00  Pull roof covers and attach initial balanced bungees
+15:00 - 17:30  Raise and anchor each tent one at a time
+17:30 - 19:00  Attach walls, zippered ends, and remaining bungees
+19:00 - 19:30  Final inspection and cleanup
+```
+
+Expected result:
+
+- 9 to 12 clock hours
+- 18 to 24 total labor-hours
+- can fit one long day, but a two-day split is safer if weather or anchoring
+  slows the job
+
+## One-Worker Solo Fallback Plan
+
+Use this only if the site is calm, time pressure is low, and the worker is not
+expected to raise loose tents in wind. A second person is strongly recommended
+for the lift and anchoring window.
+
+### Role
+
+- Worker 1 handles layout, staging, subassembly, inspection, and cleanup.
+- If no helper is available, the worker must complete and anchor one tent at a
+  time instead of building all eight tents to the same stage.
+
+### Workflow
+
+1. Mark all eight footprints and door orientation.
+2. Count parts and build eight hardware piles.
+3. Preassemble roof-frame sections and reinforcement triangles while flat.
+4. Prepare anchor stations before any roof cover is lifted.
+5. Finish T1 completely before starting the raising stage on T2.
+6. For each tent:
+   - assemble frame flat
+   - pull the roof cover while the frame is low
+   - attach balanced bungees
+   - raise the frame only in calm conditions
+   - anchor immediately
+   - attach walls
+   - inspect before moving to the next tent
+7. Stop work if wind makes the roof cover or frame unstable.
+
+### One-Worker Schedule
+
+```text
+Day 1, 4-6 hr     Layout, part count, staging, hardware piles, anchor prep
+Day 2, 8-10 hr    Build and finish T1-T3 or T1-T4, depending on conditions
+Day 3, 8-10 hr    Build and finish the next three or four tents
+Day 4, 4-6 hr     Finish remaining tents, corrections, cleanup, final check
+```
+
+Expected result:
+
+- 24 to 32 clock hours
+- 24 to 32 total labor-hours
+- not recommended as the primary plan because one person loses time switching
+  tasks and has higher risk during roof-cover and frame-raising stages
 
 ## Anchoring Plan
 
