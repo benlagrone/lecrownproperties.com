@@ -48,7 +48,9 @@
     "successText": "房间信息和联系请求已保存，可供 Jessica 跟进并用于 ESPCRM 路由。",
     "resetLabel": "继续提交",
     "fallbackLabel": "直接邮件联系 Jessica",
-    "errorFallback": "咨询暂时无法提交。可使用备用链接直接邮件联系 Jessica。"
+    "errorFallback": "咨询暂时无法提交。可使用备用链接直接邮件联系 Jessica。",
+    "galleryRepresentativeTitle": "Suite 700 代表照片",
+    "galleryRepresentativeText": "这些照片来自 Dropbox MLS 图片包，展示 9800 Richmond Ave 的楼体、共享区域和部分带家具办公室；目前尚未逐一确认到具体房号。"
   },
   "page": {
     "hero": {
@@ -64,11 +66,11 @@
         "to": "/short-term-office-lease#rent-table"
       },
       "visual": {
-        "src": "/assets/lease-maps/7th-floor-lease-map-web.jpg",
-        "alt": "Suite 700 第 7 层办公室租赁图，包含房号、面积和手写租金。",
-        "kicker": "校正后地图",
-        "title": "房号、面积与图上可见租金。",
-        "text": "原邮件图片带有错误的方向信息。此版本去除了 EXIF 旋转问题，使平面图在网页上保持正向。"
+        "src": "/assets/lease-maps/suite-700-clean-map.svg",
+        "alt": "Suite 700 第 7 层办公室清晰重绘租赁图，包含房号、面积和租金颜色分区。",
+        "kicker": "重绘地图",
+        "title": "清晰房间图与可点击租金分区。",
+        "text": "原邮件纸质照片保留在下方作为来源参考；线上招租优先展示此重绘版本。"
       },
       "brief": {
         "eyebrow": "招租说明",
@@ -110,9 +112,9 @@
       }
     ],
     "mapHeading": {
-      "eyebrow": "校正后来源图",
-      "title": "可阅读的第 7 层办公室图。",
-      "text": "此图片保留原照片中的正向像素，并去除了会导致网页翻转的 EXIF 方向标签。"
+      "eyebrow": "重绘租赁图",
+      "title": "清晰的第 7 层招租平面图。",
+      "text": "此互动地图根据来源照片重绘，将房号与租金分区整理为适合线上广告展示的版本。"
     },
     "map": {
       "src": "/assets/lease-maps/7th-floor-lease-map-web.jpg",
@@ -154,7 +156,7 @@
     "roomGalleryHeading": {
       "eyebrow": "房间目录",
       "title": "点击房间查看图片或提交咨询。",
-      "text": "每一个已标价房间现在都有图片入口和咨询操作。收集到房间照片后可以直接添加。"
+      "text": "每一个已标价房间都有图片入口和咨询操作。目前图片为 Dropbox MLS 图片包中的 Suite 700 代表照片；具体办公室与照片的逐一对应仍需确认。"
     },
     "tableHeading": {
       "eyebrow": "房间租金表",
@@ -455,6 +457,88 @@
       "text": "发送想看的房号、入驻时间，以及需要独立办公室还是固定工位。",
       "primaryLabel": "咨询可用房间",
       "secondaryLabel": "邮件联系 Benjamin"
-    }
+    },
+    "galleryPhotos": [
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-01-building-exterior.jpg",
+        "alt": "9800 Richmond Avenue 楼体外观。",
+        "caption": "楼体外观"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-04-lobby-reception.jpg",
+        "alt": "9800 Richmond Avenue 大堂接待区。",
+        "caption": "大堂与接待区"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-08-beyond-reception.jpg",
+        "alt": "Beyond Flexspace 接待区。",
+        "caption": "Beyond Flexspace 接待区"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-10-cafe.jpg",
+        "alt": "Suite 700 咖啡区和简餐区。",
+        "caption": "咖啡区和简餐区"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-18-lounge.jpg",
+        "alt": "Suite 700 靠窗休息座位区。",
+        "caption": "休息座位区"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-26-private-office.jpg",
+        "alt": "Suite 700 带家具独立办公室。",
+        "caption": "带家具独立办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-28-window-office.jpg",
+        "alt": "Suite 700 靠窗独立办公室。",
+        "caption": "靠窗独立办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-36-desk-office.jpg",
+        "alt": "Suite 700 可直接使用的办公桌办公室。",
+        "caption": "可直接使用的办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-44-blue-accent-office.jpg",
+        "alt": "Suite 700 蓝色背景墙独立办公室。",
+        "caption": "蓝色背景墙办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-58-compact-office.jpg",
+        "alt": "Suite 700 小型独立办公室。",
+        "caption": "小型独立办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-62-skyline-office.jpg",
+        "alt": "Suite 700 可看城市景观的独立办公室。",
+        "caption": "城市景观办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-69-green-accent-office.jpg",
+        "alt": "Suite 700 绿色背景墙独立办公室。",
+        "caption": "绿色背景墙办公室"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-33-cowork-desks.jpg",
+        "alt": "Suite 700 固定工位区。",
+        "caption": "固定工位区"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-59-open-cowork.jpg",
+        "alt": "Suite 700 开放办公区。",
+        "caption": "开放办公区"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-75-meeting-room.jpg",
+        "alt": "Suite 700 会议室布置。",
+        "caption": "会议室布置"
+      },
+      {
+        "src": "/assets/lease-maps/suite-700-photos/gk-76-training-room.jpg",
+        "alt": "Suite 700 培训室布置。",
+        "caption": "培训室布置"
+      }
+    ]
   }
 }

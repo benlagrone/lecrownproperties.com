@@ -324,6 +324,7 @@ const app = document.querySelector("#app")
 let lastTrackedPage = ""
 
 document.addEventListener("click", handleClick)
+document.addEventListener("keydown", handleKeydown)
 document.addEventListener("submit", handleSubmit)
 window.addEventListener("popstate", () => {
   state.navOpen = false
@@ -541,25 +542,12 @@ function renderShortTermLeasePage() {
     <section class="section-block split-grid lease-map-section" data-reveal>
       <div class="panel panel-rich lease-map-panel">
         ${renderSectionHeading(page.mapHeading, "left")}
-        <figure class="lease-map-frame">
-          <img src="${page.map.src}" alt="${page.map.alt}" loading="eager" decoding="async" />
-          <figcaption>${page.map.caption}</figcaption>
-        </figure>
+        ${renderCleanLeaseMap(page, shortTermLease.leadCapture)}
       </div>
       <div class="stack-panel">
         ${renderSectionHeading(page.rentHeading, "left")}
         <div class="lease-rent-grid">
-          ${page.rentBands
-            .map(
-              (band) => `
-                <article class="lease-rent-band">
-                  <strong>${band.price}</strong>
-                  <span>${band.label}</span>
-                  <p>${band.rooms}</p>
-                </article>
-              `,
-            )
-            .join("")}
+          ${page.rentBands.map((band) => renderLeaseRentBand(band, page.rooms)).join("")}
         </div>
       </div>
     </section>
@@ -621,6 +609,276 @@ function renderShortTermLeasePage() {
     ${renderBanner(page.ctaBanner, site.contact.email)}
     ${renderLeaseRoomModal(page, shortTermLease.leadCapture)}
   `
+}
+
+function renderLeaseRentBand(band, rooms) {
+  const matchingRooms = getLeaseRoomsForRentBand(band, rooms)
+  const countLabel = formatLeaseRoomCount(matchingRooms.length)
+
+  return `
+    <article class="lease-rent-band ${getLeaseRentBandClass(band.price)}" id="${escapeHtml(getLeaseRentBandId(band.price))}">
+      <div class="lease-rent-band-header">
+        <div>
+          <strong>${escapeHtml(band.price)}</strong>
+          <span>${escapeHtml(band.label)}</span>
+        </div>
+        ${countLabel ? `<em>${escapeHtml(countLabel)}</em>` : ""}
+      </div>
+      ${
+        matchingRooms.length
+          ? `
+            <div class="lease-rent-room-grid" aria-label="${escapeHtml(`${band.price} rooms`)}">
+              ${matchingRooms.map(renderLeaseRentRoomChip).join("")}
+            </div>
+          `
+          : `<p>${escapeHtml(band.rooms)}</p>`
+      }
+    </article>
+  `
+}
+
+function getLeaseRoomsForRentBand(band, rooms) {
+  const normalizedPrice = normalizeLeaseRent(band.price)
+  const matchingRooms = rooms.filter((room) => normalizeLeaseRent(room.rent) === normalizedPrice)
+  if (matchingRooms.length) {
+    return matchingRooms
+  }
+
+  const roomNumbers = extractLeaseRoomNumbers(band.rooms)
+  return roomNumbers
+    .map((roomNumber) => rooms.find((room) => room.room === roomNumber))
+    .filter(Boolean)
+}
+
+function renderLeaseRentRoomChip(room) {
+  return `
+    <button
+      class="lease-rent-room-chip"
+      type="button"
+      data-lease-gallery-room="${escapeHtml(room.room)}"
+      aria-label="${escapeHtml(`Open gallery for Room ${room.room}, ${room.squareFeet} square feet`)}"
+    >
+      <b>${escapeHtml(room.room)}</b>
+      <small>${escapeHtml(room.squareFeet)} SF</small>
+    </button>
+  `
+}
+
+function formatLeaseRoomCount(count) {
+  if (!count) {
+    return ""
+  }
+  const suffix = state.lang === "zh" ? "间" : count === 1 ? "room" : "rooms"
+  return state.lang === "zh" ? `${count}${suffix}` : `${count} ${suffix}`
+}
+
+function getLeaseRentBandClass(price) {
+  return `is-${getLeaseMapRentClass(normalizeLeaseRent(price))}`
+}
+
+function getLeaseRentBandId(price) {
+  const normalizedPrice = normalizeLeaseRent(price)
+  const digits = normalizedPrice.match(/\d+/)?.[0]
+  return digits ? `rent-band-${digits}` : "rent-band-confirm"
+}
+
+function normalizeLeaseRent(value) {
+  return String(value || "")
+    .replace("/月", "/mo")
+    .replace(/\s+/g, "")
+    .toLowerCase()
+}
+
+function extractLeaseRoomNumbers(value) {
+  return [...new Set(String(value || "").match(/\b(?:BY)?\d{3}[A-Z]?\b/g) || [])]
+}
+
+function renderCleanLeaseMap(page, leadCapture) {
+  const pricedRooms = new Map(page.rooms.map((room) => [room.room, room]))
+  const mapRooms = buildLeaseMapRooms(pricedRooms)
+  const legend = [
+    { className: "rent-300", label: "$300/mo" },
+    { className: "rent-399", label: "$399/mo" },
+    { className: "rent-499", label: "$499/mo" },
+    { className: "rent-599", label: "$599/mo" },
+    { className: "rent-cowork", label: "$250/desk" },
+    { className: "rent-confirm", label: "Confirm" },
+  ]
+
+  return `
+    <div class="lease-clean-map">
+      <div class="lease-clean-map-toolbar">
+        <div>
+          <strong>Suite 700 rendered leasing map</strong>
+          <span>Click a priced room to open its gallery and inquiry form.</span>
+        </div>
+        <div class="lease-map-legend" aria-label="Rent legend">
+          ${legend
+            .map(
+              (item) => `
+                <span><i class="${item.className}"></i>${escapeHtml(item.label)}</span>
+              `,
+            )
+            .join("")}
+        </div>
+      </div>
+      <svg
+        class="lease-map-svg"
+        viewBox="0 0 1400 900"
+        role="img"
+        aria-label="Rendered Suite 700 office leasing map with room numbers, sizes, and rent bands"
+      >
+        <defs>
+          <filter id="leaseMapShadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000000" flood-opacity="0.28" />
+          </filter>
+        </defs>
+        <rect class="lease-map-floor" x="22" y="22" width="1356" height="856" rx="30" />
+        <path
+          class="lease-map-corridor"
+          d="M165 182 H1220 V742 H1020 V790 H260 V742 H165 Z"
+        />
+        <rect class="lease-map-core" x="505" y="360" width="310" height="250" rx="18" />
+        <rect class="lease-map-amenity amenity-training" x="318" y="348" width="205" height="210" rx="14" />
+        <rect class="lease-map-amenity amenity-lounge" x="535" y="642" width="345" height="110" rx="16" />
+        <rect class="lease-map-amenity amenity-cowork" x="900" y="585" width="260" height="154" rx="16" />
+        <text class="lease-map-amenity-label" x="420" y="445">TRAINING CENTER</text>
+        <text class="lease-map-amenity-label" x="708" y="700">RECEPTION / LOUNGE</text>
+        <text class="lease-map-amenity-label" x="1030" y="665">OPEN CO-WORK</text>
+        ${mapRooms.map((room) => renderLeaseMapRoom(room, leadCapture)).join("")}
+      </svg>
+      <details class="lease-map-source-reference">
+        <summary>Source photo reference</summary>
+        <figure class="lease-map-frame">
+          <img src="${escapeHtml(page.map.src)}" alt="${escapeHtml(page.map.alt)}" loading="lazy" decoding="async" />
+          <figcaption>${escapeHtml(page.map.caption)}</figcaption>
+        </figure>
+      </details>
+    </div>
+  `
+}
+
+function buildLeaseMapRooms(pricedRooms) {
+  const rooms = [
+    ["733", 142, 68, 86, 94],
+    ["732", 234, 68, 76, 94],
+    ["731", 316, 68, 76, 94],
+    ["730", 398, 68, 76, 94],
+    ["729", 480, 68, 76, 94],
+    ["727", 562, 68, 76, 94],
+    ["723", 644, 68, 76, 94],
+    ["722", 726, 68, 76, 94],
+    ["721", 808, 68, 76, 94],
+    ["720", 890, 68, 76, 94],
+    ["719", 972, 68, 76, 94],
+    ["714", 1054, 68, 108, 94, { type: "Dedicated co-work" }],
+    ["713", 1170, 68, 88, 94],
+    ["738", 76, 204, 86, 82],
+    ["739", 76, 292, 86, 82],
+    ["740", 76, 380, 86, 82],
+    ["741", 76, 468, 86, 82],
+    ["742", 76, 556, 86, 82],
+    ["743", 76, 644, 86, 92],
+    ["746", 272, 785, 76, 78],
+    ["745", 354, 785, 76, 78, { rent: "Crossed out", status: "Crossed out", disabled: true, squareFeet: "230" }],
+    ["746A", 436, 785, 88, 78, { rent: "Confirm", status: "Needs rent", squareFeet: "288" }],
+    ["747A", 530, 785, 76, 78, { rent: "Confirm", status: "Needs rent", squareFeet: "119" }],
+    ["747B", 612, 785, 76, 78, { rent: "Confirm", status: "Needs rent", squareFeet: "115" }],
+    ["747", 694, 785, 80, 78, { rent: "Confirm", status: "Needs rent", squareFeet: "177" }],
+    ["734", 245, 247, 88, 76],
+    ["735", 245, 329, 88, 74],
+    ["736", 245, 409, 88, 74],
+    ["737", 245, 489, 88, 74],
+    ["BY07", 360, 250, 132, 126, { rent: "Confirm", status: "Open co-work", squareFeet: "370", type: "Open co-work" }],
+    ["728", 566, 276, 70, 82, { rent: "Confirm", status: "Needs rent", squareFeet: "127" }],
+    ["728A", 642, 276, 70, 82, { rent: "Confirm", status: "Needs rent", squareFeet: "125" }],
+    ["725", 718, 276, 70, 82, { rent: "Crossed out", status: "Crossed out", disabled: true, squareFeet: "26" }],
+    ["726", 794, 276, 70, 82, { rent: "Confirm", status: "Needs rent", squareFeet: "157" }],
+    ["BY04", 930, 252, 112, 78, { rent: "Confirm", status: "Meeting room", squareFeet: "151", type: "Meeting room" }],
+    ["BY06", 1054, 252, 104, 78, { rent: "Confirm", status: "Open co-work", squareFeet: "143", type: "Open co-work" }],
+    ["717", 926, 370, 84, 82],
+    ["715", 1024, 370, 84, 82],
+    ["716", 1024, 462, 84, 82],
+    ["709", 1168, 500, 84, 82, { rent: "Confirm", status: "Needs rent", squareFeet: "113" }],
+    ["711", 1232, 206, 86, 82],
+    ["710", 1232, 294, 86, 82],
+    ["708", 1232, 382, 86, 82],
+    ["707", 1232, 470, 86, 82],
+    ["706", 1232, 558, 86, 82],
+    ["705", 1232, 646, 86, 82],
+    ["704", 1232, 734, 86, 82],
+    ["703", 1212, 814, 106, 52],
+    ["701", 914, 790, 94, 76],
+    ["702", 1096, 790, 96, 76, { rent: "Confirm", status: "Needs rent", squareFeet: "249" }],
+  ]
+
+  return rooms.map(([room, x, y, width, height, fallback = {}]) => {
+    const priced = pricedRooms.get(room)
+    return {
+      room,
+      x,
+      y,
+      width,
+      height,
+      squareFeet: priced?.squareFeet || fallback.squareFeet || "",
+      rent: priced?.rent || fallback.rent || "Confirm",
+      type: priced?.type || fallback.type || "Private office",
+      status: priced?.status || fallback.status || "Needs confirmation",
+      disabled: Boolean(fallback.disabled),
+    }
+  })
+}
+
+function renderLeaseMapRoom(room) {
+  const rentClass = getLeaseMapRentClass(room.rent, room.disabled)
+  const canOpenGallery = !room.disabled && /^\d/.test(room.room)
+  const dataAttribute = canOpenGallery ? ` data-lease-gallery-room="${escapeHtml(room.room)}"` : ""
+  const tabIndex = canOpenGallery ? ' tabindex="0" role="button"' : ""
+  const label = room.rent === "Confirm" ? "Confirm" : room.rent
+  const roomLabel = room.room.startsWith("BY") ? room.room : `Room ${room.room}`
+  const ariaLabel = `${roomLabel}, ${room.squareFeet ? `${room.squareFeet} square feet, ` : ""}${label}`
+  const compact = room.width < 82 || room.height < 72
+
+  return `
+    <g
+      class="lease-map-room ${rentClass}${room.disabled ? " is-disabled" : ""}"
+      aria-label="${escapeHtml(ariaLabel)}"
+      ${dataAttribute}
+      ${tabIndex}
+    >
+      <rect x="${room.x}" y="${room.y}" width="${room.width}" height="${room.height}" rx="10" />
+      <text class="lease-map-room-number" x="${room.x + room.width / 2}" y="${room.y + (compact ? 27 : 29)}">${escapeHtml(room.room)}</text>
+      ${
+        room.squareFeet
+          ? `<text class="lease-map-room-sf" x="${room.x + room.width / 2}" y="${room.y + (compact ? 45 : 50)}">${escapeHtml(room.squareFeet)} SF</text>`
+          : ""
+      }
+      <text class="lease-map-room-rent" x="${room.x + room.width / 2}" y="${room.y + room.height - 13}">${escapeHtml(label)}</text>
+      ${room.disabled ? `<line class="lease-map-room-cross" x1="${room.x + 10}" y1="${room.y + 10}" x2="${room.x + room.width - 10}" y2="${room.y + room.height - 10}" />` : ""}
+    </g>
+  `
+}
+
+function getLeaseMapRentClass(rent, disabled = false) {
+  if (disabled || rent === "Crossed out") {
+    return "rent-disabled"
+  }
+  if (rent === "$300/mo" || rent === "$300/月") {
+    return "rent-300"
+  }
+  if (rent === "$399/mo" || rent === "$399/月") {
+    return "rent-399"
+  }
+  if (rent === "$499/mo" || rent === "$499/月") {
+    return "rent-499"
+  }
+  if (rent === "$599/mo" || rent === "$599/月") {
+    return "rent-599"
+  }
+  if (rent === "$250/desk") {
+    return "rent-cowork"
+  }
+  return "rent-confirm"
 }
 
 function renderLeaseRoomCard(room, leadCapture) {
@@ -697,9 +955,23 @@ function renderLeaseRoomModal(page, leadCapture) {
 }
 
 function renderLeaseGalleryPanel(room, page, leadCapture) {
-  const photos = Array.isArray(room.photos) ? room.photos : []
+  const roomPhotos = Array.isArray(room.photos) ? room.photos : []
+  const representativePhotos = Array.isArray(page.galleryPhotos) ? page.galleryPhotos : []
+  const photos = roomPhotos.length ? roomPhotos : representativePhotos
+  const isRepresentativeGallery = !roomPhotos.length && representativePhotos.length
+
   if (photos.length) {
     return `
+      ${
+        isRepresentativeGallery
+          ? `
+            <div class="lease-gallery-note">
+              <h3>${escapeHtml(leadCapture.galleryRepresentativeTitle)}</h3>
+              <p>${escapeHtml(leadCapture.galleryRepresentativeText)}</p>
+            </div>
+          `
+          : ""
+      }
       <div class="lease-gallery-grid">
         ${photos
           .map(
@@ -858,7 +1130,11 @@ function buildLeaseInquiryPayload(form) {
   const room = getLeaseRoomById(form.dataset.room)
   const formData = new FormData(form)
   const leadCapture = getLeaseLeadCapture()
-  const photos = Array.isArray(room?.photos) ? room.photos : []
+  const roomPhotos = Array.isArray(room?.photos) ? room.photos : []
+  const representativePhotos = Array.isArray(state.data?.shortTermLease?.page?.galleryPhotos)
+    ? state.data.shortTermLease.page.galleryPhotos
+    : []
+  const photos = roomPhotos.length ? roomPhotos : representativePhotos
 
   return {
     source: leadCapture.source || "suite_700_short_term_office",
@@ -877,6 +1153,7 @@ function buildLeaseInquiryPayload(form) {
       type: room?.type || "",
       status: room?.status || "",
       photo_count: photos.length,
+      photo_scope: roomPhotos.length ? "room_specific" : photos.length ? "representative_suite_700" : "map_only",
     },
     contact: {
       name: formData.get("name")?.toString().trim() || "",
@@ -1735,6 +2012,25 @@ function handleClick(event) {
   state.navOpen = false
   history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`)
   render()
+}
+
+function handleKeydown(event) {
+  if (event.key === "Escape" && leaseInquiryState.activeRoom) {
+    closeLeaseRoomModal()
+    return
+  }
+
+  if (event.key !== "Enter" && event.key !== " ") {
+    return
+  }
+
+  const leaseGalleryButton = event.target.closest?.("[data-lease-gallery-room]")
+  if (!leaseGalleryButton) {
+    return
+  }
+
+  event.preventDefault()
+  openLeaseRoomModal(leaseGalleryButton.dataset.leaseGalleryRoom, "gallery")
 }
 
 async function handleSubmit(event) {

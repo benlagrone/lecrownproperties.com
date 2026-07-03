@@ -446,6 +446,18 @@ img {
   object-fit: cover;
 }
 
+.hero-visual img[src$="suite-700-clean-map.svg"] {
+  padding: clamp(0.45rem, 1.5vw, 0.9rem);
+  filter: saturate(1.15) brightness(1.12);
+  object-fit: contain;
+  background: #0b0d0d;
+}
+
+.hero-visual:has(img[src$="suite-700-clean-map.svg"])::after {
+  background:
+    linear-gradient(180deg, transparent 55%, rgba(5, 5, 5, 0.72) 100%);
+}
+
 .hero-visual-copy {
   position: absolute;
   inset: auto 0 0 0;
@@ -859,6 +871,233 @@ img {
   gap: 1rem;
 }
 
+.lease-clean-map {
+  display: grid;
+  gap: 1rem;
+}
+
+.lease-clean-map-toolbar {
+  display: grid;
+  gap: 0.85rem;
+  padding: clamp(0.9rem, 2vw, 1.1rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(247, 214, 124, 0.08), rgba(255, 255, 255, 0.02)),
+    rgba(8, 8, 8, 0.9);
+}
+
+.lease-clean-map-toolbar strong,
+.lease-clean-map-toolbar span {
+  display: block;
+}
+
+.lease-clean-map-toolbar strong {
+  color: var(--gold-strong);
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+}
+
+.lease-clean-map-toolbar span {
+  margin-top: 0.25rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.lease-map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.8rem;
+}
+
+.lease-map-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.lease-map-legend i {
+  width: 0.85rem;
+  height: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.25rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.lease-map-svg {
+  width: 100%;
+  height: auto;
+  min-height: 28rem;
+  overflow: visible;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 32%),
+    #0b0d0d;
+  box-shadow: var(--shadow);
+}
+
+.lease-map-floor {
+  fill: #17130d;
+  stroke: rgba(247, 214, 124, 0.52);
+  stroke-width: 3;
+  filter: url("#leaseMapShadow");
+}
+
+.lease-map-corridor {
+  fill: #28241a;
+  stroke: rgba(247, 214, 124, 0.24);
+  stroke-width: 2;
+}
+
+.lease-map-core {
+  fill: #101111;
+  stroke: rgba(255, 255, 255, 0.12);
+  stroke-width: 2;
+}
+
+.lease-map-amenity {
+  fill: #2c2318;
+  stroke: rgba(247, 214, 124, 0.3);
+  stroke-width: 2;
+}
+
+.lease-map-amenity.amenity-training {
+  fill: #3d292c;
+}
+
+.lease-map-amenity.amenity-lounge {
+  fill: #2d3429;
+}
+
+.lease-map-amenity.amenity-cowork {
+  fill: #22313a;
+}
+
+.lease-map-amenity-label {
+  fill: rgba(248, 239, 223, 0.72);
+  font-family: var(--body);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-anchor: middle;
+}
+
+.lease-map-room {
+  cursor: pointer;
+  outline: none;
+}
+
+.lease-map-room rect {
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 2;
+  transition:
+    filter 180ms ease,
+    stroke 180ms ease,
+    stroke-width 180ms ease,
+    transform 180ms ease;
+}
+
+.lease-map-room:hover rect,
+.lease-map-room:focus rect {
+  stroke: var(--gold-strong);
+  stroke-width: 3;
+  filter: brightness(1.16);
+}
+
+.lease-map-room text {
+  pointer-events: none;
+  text-anchor: middle;
+  font-family: var(--body);
+}
+
+.lease-map-room-number {
+  fill: #fffaf0;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.lease-map-room-sf {
+  fill: rgba(255, 250, 240, 0.84);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.lease-map-room-rent {
+  fill: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.lease-map-room.rent-300 rect,
+.lease-map-legend .rent-300 {
+  fill: #0f857a;
+}
+
+.lease-map-room.rent-399 rect,
+.lease-map-legend .rent-399 {
+  fill: #2f61b5;
+}
+
+.lease-map-room.rent-499 rect,
+.lease-map-legend .rent-499 {
+  fill: #b26e15;
+}
+
+.lease-map-room.rent-599 rect,
+.lease-map-legend .rent-599 {
+  fill: #8c4aa0;
+}
+
+.lease-map-room.rent-cowork rect,
+.lease-map-legend .rent-cowork {
+  fill: #3e8a50;
+}
+
+.lease-map-room.rent-confirm rect,
+.lease-map-legend .rent-confirm {
+  fill: #545b66;
+}
+
+.lease-map-room.rent-disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.lease-map-room.rent-disabled rect {
+  fill: #282828;
+}
+
+.lease-map-room-cross {
+  pointer-events: none;
+  stroke: #fff1d2;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.lease-map-source-reference {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.lease-map-source-reference summary {
+  padding: 0.9rem 1rem;
+  color: var(--gold-strong);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.lease-map-source-reference .lease-map-frame {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+}
+
 .lease-map-frame {
   margin: 0;
   overflow: hidden;
@@ -889,12 +1128,44 @@ img {
 }
 
 .lease-rent-band {
+  --rent-band-color: var(--gold);
+  display: grid;
+  gap: 0.85rem;
+  scroll-margin-top: 7rem;
   padding: 1rem;
   border: 1px solid var(--line);
+  border-top: 3px solid var(--rent-band-color);
   border-radius: var(--radius-md);
   background:
     linear-gradient(180deg, rgba(247, 214, 124, 0.06), transparent 34%),
     rgba(8, 8, 8, 0.92);
+}
+
+.lease-rent-band.is-rent-300 {
+  --rent-band-color: #0f857a;
+}
+
+.lease-rent-band.is-rent-399 {
+  --rent-band-color: #2f61b5;
+}
+
+.lease-rent-band.is-rent-499 {
+  --rent-band-color: #b26e15;
+}
+
+.lease-rent-band.is-rent-599 {
+  --rent-band-color: #8c4aa0;
+}
+
+.lease-rent-band.is-rent-cowork {
+  --rent-band-color: #3e8a50;
+}
+
+.lease-rent-band-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .lease-rent-band strong {
@@ -904,17 +1175,84 @@ img {
   line-height: 1;
 }
 
-.lease-rent-band span {
+.lease-rent-band-header span {
   display: block;
   margin-top: 0.4rem;
   color: var(--text);
   font-weight: 800;
 }
 
+.lease-rent-band-header em {
+  flex: 0 0 auto;
+  min-width: 4.4rem;
+  padding: 0.38rem 0.62rem;
+  border-radius: 999px;
+  color: #fffaf0;
+  font-size: 0.78rem;
+  font-style: normal;
+  font-weight: 900;
+  text-align: center;
+  background: var(--rent-band-color);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
 .lease-rent-band p {
   margin: 0.55rem 0 0;
   color: var(--text-soft);
   line-height: 1.55;
+}
+
+.lease-rent-room-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.lease-rent-room-chip {
+  display: grid;
+  flex: 0 0 5.05rem;
+  justify-items: center;
+  align-content: center;
+  width: 5.05rem;
+  min-height: 3.55rem;
+  padding: 0.5rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 3px solid var(--rent-band-color);
+  border-radius: 0.75rem;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.018)),
+    rgba(255, 255, 255, 0.025);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+.lease-rent-room-chip:hover,
+.lease-rent-room-chip:focus {
+  border-color: var(--rent-band-color);
+  background: rgba(255, 255, 255, 0.075);
+  transform: translateY(-1px);
+}
+
+.lease-rent-room-chip b,
+.lease-rent-room-chip small {
+  display: block;
+}
+
+.lease-rent-room-chip b {
+  font-size: 0.98rem;
+  line-height: 1.05;
+}
+
+.lease-rent-room-chip small {
+  margin-top: 0.15rem;
+  color: var(--text-soft);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
 .lease-room-card-grid {
@@ -1046,6 +1384,26 @@ img {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.8rem;
+}
+
+.lease-gallery-note {
+  margin-bottom: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.lease-gallery-note h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+}
+
+.lease-gallery-note p {
+  margin: 0.45rem 0 0;
+  color: var(--text-soft);
+  line-height: 1.6;
 }
 
 .lease-gallery-photo,
@@ -1714,6 +2072,23 @@ img {
 
   .lease-map-frame img {
     max-height: 58vh;
+  }
+
+  .lease-map-svg {
+    min-height: 18rem;
+  }
+
+  .lease-map-amenity-label {
+    font-size: 15px;
+  }
+
+  .lease-map-room-number {
+    font-size: 17px;
+  }
+
+  .lease-map-room-sf,
+  .lease-map-room-rent {
+    font-size: 11px;
   }
 
   .lease-table-shell {

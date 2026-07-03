@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Suite 700 clean rendered leasing map</title>
+  <desc id="desc">Rendered seventh floor office leasing map with room numbers and color coded rent bands.</desc>
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000" flood-opacity=".32"/>
+    </filter>
+    <style>
+      svg{background:#0b0d0d;font-family:Manrope,Avenir Next,Segoe UI,sans-serif}
+      .floor{fill:#17130d;stroke:#f7d67c;stroke-opacity:.55;stroke-width:3;filter:url(#shadow)}
+      .corridor{fill:#28241a;stroke:#f7d67c;stroke-opacity:.25;stroke-width:2}
+      .core{fill:#101111;stroke:#fff;stroke-opacity:.12;stroke-width:2}
+      .amenity{fill:#2c2318;stroke:#f7d67c;stroke-opacity:.32;stroke-width:2}
+      .training{fill:#3d292c}.lounge{fill:#2d3429}.cowork{fill:#22313a}
+      .amenity-label{fill:#f8efdf;fill-opacity:.72;font-size:18px;font-weight:900;letter-spacing:.08em;text-anchor:middle}
+      .room rect{stroke:#fff;stroke-opacity:.3;stroke-width:2}
+      .room text{text-anchor:middle;fill:#fffaf0;font-weight:900;pointer-events:none}
+      .num{font-size:20px}.rent{font-size:12px}.sf{font-size:12px;fill-opacity:.82}
+      .rent300 rect,.legend .rent300{fill:#0f857a}
+      .rent399 rect,.legend .rent399{fill:#2f61b5}
+      .rent499 rect,.legend .rent499{fill:#b26e15}
+      .rent599 rect,.legend .rent599{fill:#8c4aa0}
+      .rentcowork rect,.legend .rentcowork{fill:#3e8a50}
+      .confirm rect,.legend .confirm{fill:#545b66}
+      .off rect{fill:#282828}.off{opacity:.58}.cross{stroke:#fff1d2;stroke-width:4;stroke-linecap:round}
+      .title{fill:#f7de8e;font-size:34px;font-weight:900}
+      .subtitle{fill:#d8c8a7;font-size:17px;font-weight:800}
+      .legend text{fill:#f8efdf;font-size:14px;font-weight:800}
+    </style>
+  </defs>
+  <rect class="floor" x="22" y="22" width="1356" height="856" rx="30"/>
+  <text class="title" x="58" y="58">Suite 700 Leasing Map</text>
+  <text class="subtitle" x="58" y="84">9800 Richmond Ave, 7th floor</text>
+  <g class="legend" transform="translate(870 42)">
+    <rect class="rent300" x="0" y="0" width="18" height="18" rx="4"/><text x="25" y="14">$300</text>
+    <rect class="rent399" x="92" y="0" width="18" height="18" rx="4"/><text x="117" y="14">$399</text>
+    <rect class="rent499" x="184" y="0" width="18" height="18" rx="4"/><text x="209" y="14">$499</text>
+    <rect class="rent599" x="276" y="0" width="18" height="18" rx="4"/><text x="301" y="14">$599</text>
+    <rect class="rentcowork" x="368" y="0" width="18" height="18" rx="4"/><text x="393" y="14">co-work</text>
+  </g>
+  <path class="corridor" d="M165 182 H1220 V742 H1020 V790 H260 V742 H165 Z"/>
+  <rect class="core" x="505" y="360" width="310" height="250" rx="18"/>
+  <rect class="amenity training" x="318" y="348" width="205" height="210" rx="14"/>
+  <rect class="amenity lounge" x="535" y="642" width="345" height="110" rx="16"/>
+  <rect class="amenity cowork" x="900" y="585" width="260" height="154" rx="16"/>
+  <text class="amenity-label" x="420" y="445">TRAINING CENTER</text>
+  <text class="amenity-label" x="708" y="700">RECEPTION / LOUNGE</text>
+  <text class="amenity-label" x="1030" y="665">OPEN CO-WORK</text>
+  <g class="room rent599"><rect x="142" y="98" width="86" height="70" rx="10"/><text class="num" x="185" y="126">733</text><text class="sf" x="185" y="146">264 SF</text><text class="rent" x="185" y="160">$599</text></g>
+  <g class="room rent499"><rect x="234" y="98" width="76" height="70" rx="10"/><text class="num" x="272" y="126">732</text><text class="sf" x="272" y="146">194 SF</text><text class="rent" x="272" y="160">$499</text></g>
+  <g class="room rent499"><rect x="316" y="98" width="76" height="70" rx="10"/><text class="num" x="354" y="126">731</text><text class="sf" x="354" y="146">181 SF</text><text class="rent" x="354" y="160">$499</text></g>
+  <g class="room rent499"><rect x="398" y="98" width="76" height="70" rx="10"/><text class="num" x="436" y="126">730</text><text class="sf" x="436" y="146">167 SF</text><text class="rent" x="436" y="160">$499</text></g>
+  <g class="room rent499"><rect x="480" y="98" width="76" height="70" rx="10"/><text class="num" x="518" y="126">729</text><text class="sf" x="518" y="146">140 SF</text><text class="rent" x="518" y="160">$499</text></g>
+  <g class="room rent499"><rect x="562" y="98" width="76" height="70" rx="10"/><text class="num" x="600" y="126">727</text><text class="sf" x="600" y="146">126 SF</text><text class="rent" x="600" y="160">$499</text></g>
+  <g class="room rent499"><rect x="644" y="98" width="76" height="70" rx="10"/><text class="num" x="682" y="126">723</text><text class="sf" x="682" y="146">131 SF</text><text class="rent" x="682" y="160">$499</text></g>
+  <g class="room rent499"><rect x="726" y="98" width="76" height="70" rx="10"/><text class="num" x="764" y="126">722</text><text class="sf" x="764" y="146">135 SF</text><text class="rent" x="764" y="160">$499</text></g>
+  <g class="room rent499"><rect x="808" y="98" width="76" height="70" rx="10"/><text class="num" x="846" y="126">721</text><text class="sf" x="846" y="146">115 SF</text><text class="rent" x="846" y="160">$499</text></g>
+  <g class="room rent499"><rect x="890" y="98" width="76" height="70" rx="10"/><text class="num" x="928" y="126">720</text><text class="sf" x="928" y="146">133 SF</text><text class="rent" x="928" y="160">$499</text></g>
+  <g class="room rent499"><rect x="972" y="98" width="76" height="70" rx="10"/><text class="num" x="1010" y="126">719</text><text class="sf" x="1010" y="146">164 SF</text><text class="rent" x="1010" y="160">$499</text></g>
+  <g class="room rentcowork"><rect x="1054" y="98" width="108" height="70" rx="10"/><text class="num" x="1108" y="126">714</text><text class="sf" x="1108" y="146">383 SF</text><text class="rent" x="1108" y="160">$250/desk</text></g>
+  <g class="room rent499"><rect x="1170" y="98" width="88" height="70" rx="10"/><text class="num" x="1214" y="126">713</text><text class="sf" x="1214" y="146">236 SF</text><text class="rent" x="1214" y="160">$499</text></g>
+  <g class="room rent499"><rect x="76" y="204" width="86" height="82" rx="10"/><text class="num" x="119" y="234">738</text><text class="sf" x="119" y="254">150 SF</text><text class="rent" x="119" y="273">$499</text></g>
+  <g class="room rent499"><rect x="76" y="292" width="86" height="82" rx="10"/><text class="num" x="119" y="322">739</text><text class="sf" x="119" y="342">125 SF</text><text class="rent" x="119" y="361">$499</text></g>
+  <g class="room rent300"><rect x="76" y="380" width="86" height="82" rx="10"/><text class="num" x="119" y="410">740</text><text class="sf" x="119" y="430">125 SF</text><text class="rent" x="119" y="449">$300</text></g>
+  <g class="room rent499"><rect x="76" y="468" width="86" height="82" rx="10"/><text class="num" x="119" y="498">741</text><text class="sf" x="119" y="518">139 SF</text><text class="rent" x="119" y="537">$499</text></g>
+  <g class="room rent499"><rect x="76" y="556" width="86" height="82" rx="10"/><text class="num" x="119" y="586">742</text><text class="sf" x="119" y="606">125 SF</text><text class="rent" x="119" y="625">$499</text></g>
+  <g class="room rent499"><rect x="76" y="644" width="86" height="92" rx="10"/><text class="num" x="119" y="677">743</text><text class="sf" x="119" y="697">172 SF</text><text class="rent" x="119" y="720">$499</text></g>
+  <g class="room rent399"><rect x="245" y="247" width="88" height="76" rx="10"/><text class="num" x="289" y="276">734</text><text class="sf" x="289" y="296">134 SF</text><text class="rent" x="289" y="310">$399</text></g>
+  <g class="room rent399"><rect x="245" y="329" width="88" height="74" rx="10"/><text class="num" x="289" y="357">735</text><text class="sf" x="289" y="377">104 SF</text><text class="rent" x="289" y="391">$399</text></g>
+  <g class="room rent399"><rect x="245" y="409" width="88" height="74" rx="10"/><text class="num" x="289" y="437">736</text><text class="sf" x="289" y="457">125 SF</text><text class="rent" x="289" y="471">$399</text></g>
+  <g class="room rent399"><rect x="245" y="489" width="88" height="74" rx="10"/><text class="num" x="289" y="517">737</text><text class="sf" x="289" y="537">118 SF</text><text class="rent" x="289" y="551">$399</text></g>
+  <g class="room confirm"><rect x="566" y="276" width="70" height="82" rx="10"/><text class="num" x="601" y="306">728</text><text class="sf" x="601" y="326">127 SF</text><text class="rent" x="601" y="345">Confirm</text></g>
+  <g class="room confirm"><rect x="642" y="276" width="70" height="82" rx="10"/><text class="num" x="677" y="306">728A</text><text class="sf" x="677" y="326">125 SF</text><text class="rent" x="677" y="345">Confirm</text></g>
+  <g class="room off"><rect x="718" y="276" width="70" height="82" rx="10"/><text class="num" x="753" y="306">725</text><text class="sf" x="753" y="326">26 SF</text><text class="rent" x="753" y="345">Off</text><line class="cross" x1="728" y1="286" x2="778" y2="348"/></g>
+  <g class="room confirm"><rect x="794" y="276" width="70" height="82" rx="10"/><text class="num" x="829" y="306">726</text><text class="sf" x="829" y="326">157 SF</text><text class="rent" x="829" y="345">Confirm</text></g>
+  <g class="room confirm"><rect x="930" y="252" width="112" height="78" rx="10"/><text class="num" x="986" y="281">BY04</text><text class="sf" x="986" y="301">151 SF</text><text class="rent" x="986" y="316">Meeting</text></g>
+  <g class="room confirm"><rect x="1054" y="252" width="104" height="78" rx="10"/><text class="num" x="1106" y="281">BY06</text><text class="sf" x="1106" y="301">143 SF</text><text class="rent" x="1106" y="316">Co-work</text></g>
+  <g class="room rent399"><rect x="926" y="370" width="84" height="82" rx="10"/><text class="num" x="968" y="400">717</text><text class="sf" x="968" y="420">107 SF</text><text class="rent" x="968" y="439">$399</text></g>
+  <g class="room rent399"><rect x="1024" y="370" width="84" height="82" rx="10"/><text class="num" x="1066" y="400">715</text><text class="sf" x="1066" y="420">105 SF</text><text class="rent" x="1066" y="439">$399</text></g>
+  <g class="room rent399"><rect x="1024" y="462" width="84" height="82" rx="10"/><text class="num" x="1066" y="492">716</text><text class="sf" x="1066" y="512">108 SF</text><text class="rent" x="1066" y="531">$399</text></g>
+  <g class="room confirm"><rect x="1168" y="500" width="84" height="82" rx="10"/><text class="num" x="1210" y="530">709</text><text class="sf" x="1210" y="550">113 SF</text><text class="rent" x="1210" y="569">Confirm</text></g>
+  <g class="room rent499"><rect x="1232" y="206" width="86" height="82" rx="10"/><text class="num" x="1275" y="236">711</text><text class="sf" x="1275" y="256">143 SF</text><text class="rent" x="1275" y="275">$499</text></g>
+  <g class="room rent499"><rect x="1232" y="294" width="86" height="82" rx="10"/><text class="num" x="1275" y="324">710</text><text class="sf" x="1275" y="344">121 SF</text><text class="rent" x="1275" y="363">$499</text></g>
+  <g class="room rent300"><rect x="1232" y="382" width="86" height="82" rx="10"/><text class="num" x="1275" y="412">708</text><text class="sf" x="1275" y="432">125 SF</text><text class="rent" x="1275" y="451">$300</text></g>
+  <g class="room rent499"><rect x="1232" y="470" width="86" height="82" rx="10"/><text class="num" x="1275" y="500">707</text><text class="sf" x="1275" y="520">125 SF</text><text class="rent" x="1275" y="539">$499</text></g>
+  <g class="room rent499"><rect x="1232" y="558" width="86" height="82" rx="10"/><text class="num" x="1275" y="588">706</text><text class="sf" x="1275" y="608">117 SF</text><text class="rent" x="1275" y="627">$499</text></g>
+  <g class="room rent499"><rect x="1232" y="646" width="86" height="82" rx="10"/><text class="num" x="1275" y="676">705</text><text class="sf" x="1275" y="696">126 SF</text><text class="rent" x="1275" y="715">$499</text></g>
+  <g class="room rent499"><rect x="1232" y="734" width="86" height="82" rx="10"/><text class="num" x="1275" y="764">704</text><text class="sf" x="1275" y="784">136 SF</text><text class="rent" x="1275" y="803">$499</text></g>
+  <g class="room rent599"><rect x="1212" y="814" width="106" height="52" rx="10"/><text class="num" x="1265" y="836">703</text><text class="sf" x="1265" y="854">264 SF</text><text class="rent" x="1265" y="865">$599</text></g>
+  <g class="room rent499"><rect x="914" y="790" width="94" height="76" rx="10"/><text class="num" x="961" y="819">701</text><text class="sf" x="961" y="839">179 SF</text><text class="rent" x="961" y="854">$499</text></g>
+  <g class="room confirm"><rect x="1096" y="790" width="96" height="76" rx="10"/><text class="num" x="1144" y="819">702</text><text class="sf" x="1144" y="839">249 SF</text><text class="rent" x="1144" y="854">Confirm</text></g>
+  <g class="room confirm"><rect x="360" y="250" width="132" height="126" rx="12"/><text class="num" x="426" y="302">BY07</text><text class="sf" x="426" y="326">370 SF</text><text class="rent" x="426" y="352">Co-work</text></g>
+  <g class="room confirm"><rect x="436" y="785" width="88" height="78" rx="10"/><text class="num" x="480" y="814">746A</text><text class="sf" x="480" y="834">288 SF</text><text class="rent" x="480" y="849">Confirm</text></g>
+  <g class="room confirm"><rect x="530" y="785" width="76" height="78" rx="10"/><text class="num" x="568" y="814">747A</text><text class="sf" x="568" y="834">119 SF</text><text class="rent" x="568" y="849">Confirm</text></g>
+  <g class="room confirm"><rect x="612" y="785" width="76" height="78" rx="10"/><text class="num" x="650" y="814">747B</text><text class="sf" x="650" y="834">115 SF</text><text class="rent" x="650" y="849">Confirm</text></g>
+  <g class="room confirm"><rect x="694" y="785" width="80" height="78" rx="10"/><text class="num" x="734" y="814">747</text><text class="sf" x="734" y="834">177 SF</text><text class="rent" x="734" y="849">Confirm</text></g>
+</svg>
