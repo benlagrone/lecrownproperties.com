@@ -900,6 +900,130 @@ img {
     var(--panel-strong);
 }
 
+.listings-summary-grid .metric-card strong {
+  font-size: clamp(1rem, 1.8vw, 1.32rem);
+}
+
+.listings-directory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.listing-overview-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, rgba(255, 236, 177, 0.04), transparent 35%),
+    var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.listing-overview-media {
+  margin: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background: #080808;
+}
+
+.listing-overview-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listing-overview-media img[src$="suite-700-clean-map.svg"] {
+  padding: 0.7rem;
+  object-fit: contain;
+  background: #0b0d0d;
+}
+
+.listing-overview-body {
+  display: grid;
+  gap: 0.95rem;
+  align-content: start;
+  padding: 1.2rem;
+}
+
+.listing-overview-body h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  line-height: 0.98;
+}
+
+.listing-overview-body p {
+  margin: 0;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+.listing-overview-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.listing-overview-facts span {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 5.6rem;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.listing-overview-facts strong {
+  color: var(--gold-strong);
+  font-size: 1rem;
+  line-height: 1.1;
+}
+
+.listing-overview-facts em {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.listing-overview-actions,
+.listings-contact-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.listings-contact-section {
+  align-items: start;
+}
+
+.listings-contact-panel {
+  display: grid;
+  gap: 1rem;
+}
+
+.listings-contact-card {
+  display: grid;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.listings-contact-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.listings-contact-card p {
+  margin: 0;
+}
+
 .dorrington-summary-grid .metric-card strong {
   font-size: clamp(1rem, 1.8vw, 1.32rem);
 }
@@ -2312,6 +2436,10 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .listings-directory-grid {
+    grid-template-columns: 1fr;
+  }
+
   .dorrington-listing-visual img {
     min-height: 22rem;
   }
@@ -2414,6 +2542,15 @@ img {
   }
 
   .dorrington-card-actions .button {
+    width: 100%;
+  }
+
+  .listing-overview-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .listing-overview-actions .button,
+  .listings-contact-card .button {
     width: 100%;
   }
 

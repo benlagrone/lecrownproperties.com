@@ -18,6 +18,7 @@ const DEFAULT_LANG = "en"
 const GA_TRACKING_ID = "G-M5058P5ZVQ"
 const PROPERTY_EVALUATION_ROUTE = "/property-evaluation"
 const PROPERTY_EVALUATION_LEGACY_ROUTE = "/property-evaluation-preview"
+const LISTINGS_ROUTE = "/listings"
 const SHORT_TERM_LEASE_ROUTE = "/short-term-office-lease"
 const MEDICAL_CENTER_LISTINGS_ROUTE = "/medical-center-office-lease"
 const PROPERTY_EVALUATION_MARKETS_PATH = "/api/gridscope/markets"
@@ -52,6 +53,7 @@ const DATASETS = [
   "contact",
   "services",
   "properties",
+  "listings",
   "short-term-lease",
   "medical-center-listings",
   "property-evaluation",
@@ -64,6 +66,7 @@ const ROUTES = new Set([
   "/",
   "/services",
   "/properties",
+  LISTINGS_ROUTE,
   SHORT_TERM_LEASE_ROUTE,
   MEDICAL_CENTER_LISTINGS_ROUTE,
   PROPERTY_EVALUATION_ROUTE,
@@ -374,6 +377,8 @@ function renderPage(path) {
       return renderServicesPage()
     case "/properties":
       return renderPropertiesPage()
+    case LISTINGS_ROUTE:
+      return renderListingsPage()
     case SHORT_TERM_LEASE_ROUTE:
       return renderShortTermLeasePage()
     case MEDICAL_CENTER_LISTINGS_ROUTE:
@@ -481,9 +486,6 @@ function renderPropertiesPage() {
   return `
     ${renderHero(page.hero, { hrefFor })}
 
-    ${state.data.shortTermLease?.feature ? renderLeaseFeature(state.data.shortTermLease.feature) : ""}
-    ${state.data.medicalCenterListings?.feature ? renderMedicalCenterListingsFeature(state.data.medicalCenterListings.feature) : ""}
-
     <section class="section-block" data-reveal>
       ${renderSectionHeading(page.gridHeading)}
       <div class="card-grid cols-2">
@@ -509,6 +511,120 @@ function renderPropertiesPage() {
     </section>
 
     ${renderBanner(page.ctaBanner, site.contact.email)}
+  `
+}
+
+function renderListingsPage() {
+  const { listings } = state.data
+  const { contact, page } = listings
+
+  return `
+    ${renderHero(page.hero, { hrefFor })}
+
+    <section class="section-block" data-reveal>
+      <div class="metrics-grid listings-summary-grid">
+        ${page.summary.map(renderMetricCard).join("")}
+      </div>
+    </section>
+
+    <section class="section-block" id="current-listings" data-reveal>
+      ${renderSectionHeading(page.gridHeading)}
+      <div class="listings-directory-grid">
+        ${page.cards.map((card) => renderListingOverviewCard(card)).join("")}
+      </div>
+    </section>
+
+    <section class="section-block split-grid listings-contact-section" id="inquire" data-reveal>
+      <div class="panel panel-rich listings-contact-panel">
+        ${renderSectionHeading(page.contact.heading, "left")}
+        <div class="listings-contact-card">
+          <span class="eyebrow">${escapeHtml(page.contact.eyebrow)}</span>
+          <h3>${escapeHtml(contact.name)}</h3>
+          <p>${escapeHtml(page.contact.text)}</p>
+          <div class="dorrington-card-actions">
+            <a class="button button-primary" href="${escapeHtml(buildListingsInquiryHref(contact))}">
+              ${escapeHtml(page.contact.emailLabel)}
+            </a>
+            <a class="button button-secondary" href="${escapeHtml(contact.phoneHref)}">
+              ${escapeHtml(contact.phone)}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-brief">
+        ${renderSectionHeading(page.notesHeading, "left")}
+        <ul class="detail-list">
+          ${page.notes.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+      </div>
+    </section>
+  `
+}
+
+function buildListingsInquiryHref(contact) {
+  const subject = encodeURIComponent("LeCrown listings inquiry")
+  const body = encodeURIComponent(
+    [
+      `Hello ${contact.name},`,
+      "",
+      "I am interested in the current LeCrown listings.",
+      "Please send current availability, showing times, and next steps.",
+      "",
+      "Listing of interest:",
+      "Name:",
+      "Phone:",
+      "Company:",
+    ].join("\n"),
+  )
+
+  return `mailto:${contact.email}?subject=${subject}&body=${body}`
+}
+
+function renderListingOverviewCard(card) {
+  return `
+    <article class="listing-overview-card">
+      <figure class="listing-overview-media">
+        <img src="${escapeHtml(card.image.src)}" alt="${escapeHtml(card.image.alt)}" loading="lazy" decoding="async" />
+      </figure>
+      <div class="listing-overview-body">
+        <div class="card-topline">
+          <span class="badge">${escapeHtml(card.category)}</span>
+          <span class="card-highlight">${escapeHtml(card.status)}</span>
+        </div>
+        <h2>${escapeHtml(card.title)}</h2>
+        <p>${escapeHtml(card.summary)}</p>
+        <div class="listing-overview-facts">
+          ${card.facts
+            .map(
+              (fact) => `
+                <span>
+                  <strong>${escapeHtml(fact.value)}</strong>
+                  <em>${escapeHtml(fact.label)}</em>
+                </span>
+              `,
+            )
+            .join("")}
+        </div>
+        <ul class="detail-list">
+          ${card.details.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+        </ul>
+        <div class="listing-overview-actions">
+          ${card.actions.map(renderListingAction).join("")}
+        </div>
+      </div>
+    </article>
+  `
+}
+
+function renderListingAction(action) {
+  const isRoute = action.to.startsWith("/")
+  const href = isRoute ? hrefFor(action.to) : action.to
+  const className = action.variant === "secondary" ? "button button-secondary" : "button button-primary"
+
+  return `
+    <a class="${className}" href="${escapeHtml(href)}"${isRoute ? " data-link" : ""}>
+      ${escapeHtml(action.label)}
+    </a>
   `
 }
 

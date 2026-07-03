@@ -1,0 +1,149 @@
+{
+  "contact": {
+    "name": "Jessica",
+    "email": "jessica@lecrownproperties.com",
+    "phone": "832-798-3991",
+    "phoneHref": "tel:+18327983991"
+  },
+  "page": {
+    "hero": {
+      "eyebrow": "当前房源",
+      "title": "Jessica 的租赁房源统一放在一个页面。",
+      "summary": "Suite 700 短租办公室、2223 Dorrington 医疗办公楼，以及隔壁 2227 Dorrington 商业地块统一展示在这里，主菜单不再放多个单独房源链接。",
+      "primaryCta": {
+        "label": "查看房源",
+        "to": "/listings#current-listings"
+      },
+      "secondaryCta": {
+        "label": "联系 Jessica",
+        "to": "/listings#inquire"
+      },
+      "visual": {
+        "src": "/assets/dorrington/2223-exterior.jpg",
+        "alt": "休斯敦 2223 Dorrington Street 医疗办公楼外观",
+        "kicker": "LeCrown 房源",
+        "title": "当前租赁机会统一入口",
+        "text": "所有当前办公室、医疗办公和土地租赁信息都从这个页面开始。"
+      },
+      "brief": {
+        "eyebrow": "页面结构",
+        "title": "一个菜单入口，多个房源详情。",
+        "text": "详情页仍然保留，用于展示图片、地图和房间级信息，但主导航现在只指向这个统一房源页面。",
+        "points": [
+          "Suite 700 独立办公室与 co-work 工位",
+          "2223 Dorrington 医疗办公楼",
+          "2227 Dorrington 相邻商业地块"
+        ]
+      },
+      "metrics": [
+        { "value": "Suite 700", "label": "短租办公室" },
+        { "value": "2223", "label": "医疗办公楼" },
+        { "value": "2227", "label": "相邻商业地块" }
+      ]
+    },
+    "summary": [
+      { "value": "$250+", "label": "Suite 700 工位与房间选项" },
+      { "value": "5,464 SF", "label": "2223 Dorrington 办公楼" },
+      { "value": "0.30 AC", "label": "2227 Dorrington 地块" }
+    ],
+    "gridHeading": {
+      "eyebrow": "房源目录",
+      "title": "当前所有租赁机会。",
+      "text": "先从这里查看，再根据需要打开 Suite 700 地图、房间图库或 Dorrington 详情页。"
+    },
+    "cards": [
+      {
+        "category": "短租办公室",
+        "status": "Suite 700",
+        "title": "Suite 700 独立办公室与 co-work",
+        "summary": "位于 9800 Richmond Ave, Suite 700, Houston, TX 77042 的独立办公室和固定 co-work 工位。",
+        "image": {
+          "src": "/assets/lease-maps/suite-700-clean-map.svg",
+          "alt": "Suite 700 租赁地图"
+        },
+        "facts": [
+          { "value": "$300-$599/月", "label": "独立办公室价格区间" },
+          { "value": "$250/工位", "label": "固定 co-work" },
+          { "value": "房间地图", "label": "可查看详情" }
+        ],
+        "details": [
+          "7 楼地图已重新绘制，展示房号、租金区间和房间咨询按钮。",
+          "详情页提供房间图片与咨询入口。",
+          "适合短期办公和灵活独立办公室需求。"
+        ],
+        "actions": [
+          { "label": "打开 Suite 700 详情", "to": "/short-term-office-lease" },
+          { "label": "联系 Jessica", "to": "mailto:jessica@lecrownproperties.com?subject=Suite%20700%20leasing%20inquiry", "variant": "secondary" }
+        ]
+      },
+      {
+        "category": "办公 / 医疗",
+        "status": "2223 Dorrington",
+        "title": "2223 Dorrington 医疗办公楼",
+        "summary": "Texas Medical Center 区域 5,464 SF 一层医疗办公楼，含接待区、独立房间、卫生间和共享工作区。",
+        "image": {
+          "src": "/assets/dorrington/2223-front-entry.jpg",
+          "alt": "2223 Dorrington Street 前入口"
+        },
+        "facts": [
+          { "value": "$27/SF/YR", "label": "公开办公租金" },
+          { "value": "15", "label": "诊室或办公室" },
+          { "value": "3", "label": "卫生间" }
+        ],
+        "details": [
+          "适合医疗、专业办公室、日托、健康管理、咨询、教育等专业用途。",
+          "图片和详细资料位于 Dorrington 详情页。",
+          "当前条件与看房安排请与 Jessica 确认。"
+        ],
+        "actions": [
+          { "label": "打开 2223 详情", "to": "/medical-center-office-lease#2223-office" },
+          { "label": "联系 Jessica", "to": "mailto:jessica@lecrownproperties.com?subject=2223%20Dorrington%20leasing%20inquiry", "variant": "secondary" }
+        ]
+      },
+      {
+        "category": "商业地块",
+        "status": "2227 Dorrington",
+        "title": "2227 Dorrington 相邻地块",
+        "summary": "2223 Dorrington 隔壁 0.30 英亩商业地块，适合医学中心区域用户和土地租赁洽谈。",
+        "image": {
+          "src": "/assets/dorrington/2223-front-parking.jpg",
+          "alt": "Dorrington 临街与停车入口区域"
+        },
+        "facts": [
+          { "value": "$15/SF/YR", "label": "公开地块租金" },
+          { "value": "13,040 SF", "label": "约合土地面积" },
+          { "value": "29K", "label": "附近每日车流" }
+        ],
+        "details": [
+          "公开建议用途包括零售、办公、混合用途、多户住宅和医疗。",
+          "Dorrington 详情页展示该地块与办公楼的相邻关系。",
+          "允许用途、费用、进入方式和当前条件请与 Jessica 确认。"
+        ],
+        "actions": [
+          { "label": "打开 2227 详情", "to": "/medical-center-office-lease#2227-lot" },
+          { "label": "联系 Jessica", "to": "mailto:jessica@lecrownproperties.com?subject=2227%20Dorrington%20lot%20inquiry", "variant": "secondary" }
+        ]
+      }
+    ],
+    "contact": {
+      "heading": {
+        "eyebrow": "租赁联系",
+        "title": "所有房源使用同一个联系人。",
+        "text": "Jessica 可确认当前租金、可用状态、看房时间，以及哪个详情页更适合该客户需求。"
+      },
+      "eyebrow": "Jessica Huang",
+      "text": "如需咨询 Suite 700、2223 Dorrington 或 2227 Dorrington，请邮件或电话联系 Jessica。",
+      "emailLabel": "邮件联系 Jessica"
+    },
+    "notesHeading": {
+      "eyebrow": "主菜单整理",
+      "title": "房源统一放在这里。",
+      "text": "主导航保持简洁，同时每个房源仍有专门详情页用于展示图片、地图或房间级信息。"
+    },
+    "notes": [
+      "主菜单现在只保留一个房源入口，不再分别放 Suite 700 和 Medical Center 链接。",
+      "详情页仍可单独分享，也保留搜索入口价值。",
+      "这个页面作为 Jessica 当前租赁房源的公开索引。"
+    ]
+  }
+}
