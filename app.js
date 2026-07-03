@@ -1,5 +1,5 @@
-import { renderHeader } from "./components/header.js"
-import { renderFooter } from "./components/footer.js"
+import { renderHeader } from "./components/header.js?v=phone-hero-20260703"
+import { renderFooter } from "./components/footer.js?v=phone-hero-20260703"
 import { renderHero } from "./components/hero.js"
 import {
   renderCaseStudyCard,
