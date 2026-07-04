@@ -21,9 +21,12 @@ const PROPERTY_EVALUATION_LEGACY_ROUTE = "/property-evaluation-preview"
 const LISTINGS_ROUTE = "/listings"
 const SHORT_TERM_LEASE_ROUTE = "/short-term-office-lease"
 const MEDICAL_CENTER_LISTINGS_ROUTE = "/medical-center-office-lease"
+const RENT_COLLECTION_ROUTE = "/rent-collection"
 const PROPERTY_EVALUATION_MARKETS_PATH = "/api/gridscope/markets"
 const PROPERTY_EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 const LEASE_INQUIRY_PATH = "/api/lease-inquiries"
+const RENT_COLLECTION_AUTH_SESSION_PATH = "/api/auth/session"
+const RENT_COLLECTION_STORAGE_KEY = "lecrown:rent-collection:v1"
 const PROPERTY_EVALUATION_SUPPORTED_MARKETS = [
   {
     slug: "tx-statewide",
@@ -70,6 +73,7 @@ const ROUTES = new Set([
   SHORT_TERM_LEASE_ROUTE,
   MEDICAL_CENTER_LISTINGS_ROUTE,
   PROPERTY_EVALUATION_ROUTE,
+  RENT_COLLECTION_ROUTE,
   "/clients",
   "/case-studies",
   "/insights",
@@ -319,6 +323,30 @@ const leaseInquiryState = {
   inquiryResult: null,
 }
 
+const rentCollectionState = {
+  records: null,
+  activeRecordId: "",
+  filters: {
+    month: getCurrentRentMonth(),
+    manager: "all",
+    status: "all",
+    query: "",
+  },
+  notice: "",
+  error: "",
+}
+
+const rentCollectionAuthState = {
+  status: "unknown",
+  configured: false,
+  authenticated: false,
+  user: null,
+  loginUrl: `/auth/login?next=${encodeURIComponent(RENT_COLLECTION_ROUTE)}`,
+  logoutUrl: "/auth/logout",
+  requiredRoles: [],
+  error: "",
+}
+
 const cache = new Map()
 const state = {
   lang: getLangFromUrl(),
@@ -331,6 +359,8 @@ let lastTrackedPage = ""
 
 document.addEventListener("click", handleClick)
 document.addEventListener("keydown", handleKeydown)
+document.addEventListener("input", handleInput)
+document.addEventListener("change", handleChange)
 document.addEventListener("submit", handleSubmit)
 window.addEventListener("popstate", () => {
   state.navOpen = false
@@ -344,6 +374,10 @@ async function render() {
   const lang = getLangFromUrl()
   state.lang = lang
   state.data = await loadContent(lang)
+
+  if (path === RENT_COLLECTION_ROUTE) {
+    await ensureRentCollectionAuthState()
+  }
 
   const pageContent = renderPage(path)
 
@@ -385,6 +419,8 @@ function renderPage(path) {
       return renderMedicalCenterListingsPage()
     case PROPERTY_EVALUATION_ROUTE:
       return renderPropertyEvaluationPreviewPage()
+    case RENT_COLLECTION_ROUTE:
+      return renderRentCollectionPage()
     case "/clients":
       return renderClientsPage()
     case "/case-studies":
@@ -511,6 +547,466 @@ function renderPropertiesPage() {
     </section>
 
     ${renderBanner(page.ctaBanner, site.contact.email)}
+  `
+}
+
+function renderRentCollectionPage() {
+  if (!rentCollectionAuthState.authenticated) {
+    return renderRentCollectionAuthGate()
+  }
+
+  ensureRentCollectionState()
+
+  const records = getActiveRentCollectionRecords()
+  const rows = getRentCollectionRows(records, rentCollectionState.filters.month)
+  const filteredRows = getFilteredRentCollectionRows(rows)
+  const selectedRow = getRentCollectionSelectedRow(filteredRows, rows)
+  const metrics = getRentCollectionMetrics(rows)
+  const managerSummaries = getRentCollectionManagerSummaries(rows)
+
+  return `
+    <section class="section-block rent-collection-shell" data-reveal>
+      <div class="rent-workspace-head">
+        <div class="evaluation-preview-heading rent-collection-heading">
+          <span class="eyebrow">Internal collection desk</span>
+          <h1>Rent Collection</h1>
+          <p>
+            Track expected rent, receipts, balances, and late items across LeCrown properties and Jessica-managed accounts.
+            Records are saved only in this browser until exported.
+          </p>
+        </div>
+        <div class="rent-head-actions">
+          ${renderRentCollectionSessionSummary()}
+          <div class="rent-export-actions" aria-label="Rent collection data actions">
+            <button class="button button-secondary" type="button" data-rent-export-csv>Export CSV</button>
+            <button class="button button-secondary" type="button" data-rent-export-json>Backup JSON</button>
+            <label class="button button-secondary rent-import-button">
+              Import JSON
+              <input type="file" accept="application/json,.json" data-rent-import-json />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      ${renderRentCollectionNotice()}
+
+      <div class="metrics-grid rent-metrics-grid">
+        ${renderRentCollectionMetric("Collected", formatRentCurrency(metrics.collected), `${metrics.paidCount} ${formatRentCountLabel(metrics.paidCount, "account")} paid in ${formatRentMonth(rentCollectionState.filters.month)}`)}
+        ${renderRentCollectionMetric("Outstanding", formatRentCurrency(metrics.outstanding), `${metrics.openCount} ${formatRentCountLabel(metrics.openCount, "account")} still open`)}
+        ${renderRentCollectionMetric("Late", formatRentCurrency(metrics.lateBalance), `${metrics.lateCount} ${formatRentCountLabel(metrics.lateCount, "account")} past due`)}
+        ${renderRentCollectionMetric("Due soon", formatRentCurrency(metrics.dueSoonBalance), `${metrics.dueSoonCount} ${formatRentCountLabel(metrics.dueSoonCount, "account")} due within 7 days`)}
+      </div>
+
+      ${renderRentCollectionFilters(records)}
+
+      <div class="rent-dashboard-grid">
+        <section class="rent-ledger-panel" aria-label="Rent collection ledger">
+          <div class="rent-panel-header">
+            <div>
+              <span class="eyebrow">Ledger</span>
+              <h2>${formatRentMonth(rentCollectionState.filters.month)} collection status</h2>
+            </div>
+            <p>${filteredRows.length} of ${rows.length} active accounts shown</p>
+          </div>
+          <div class="rent-ledger-table-shell">
+            ${renderRentCollectionLedger(filteredRows)}
+          </div>
+        </section>
+
+        <aside class="rent-side-stack" aria-label="Rent collection controls">
+          ${renderRentCollectionPaymentForm(records, selectedRow)}
+          ${renderRentCollectionAgingPanel(metrics, managerSummaries)}
+          ${renderRentCollectionAccountForm()}
+          ${renderRentCollectionPaymentHistory(selectedRow)}
+        </aside>
+      </div>
+    </section>
+  `
+}
+
+function renderRentCollectionAuthGate() {
+  const isLoading = rentCollectionAuthState.status === "loading"
+  const isError = rentCollectionAuthState.status === "error"
+  const title = rentCollectionAuthState.configured
+    ? "Sign in to Rent Collection"
+    : "Keycloak setup required"
+  const message = isLoading
+    ? "Checking Keycloak session..."
+    : isError
+      ? rentCollectionAuthState.error || "The Keycloak session check failed."
+      : rentCollectionAuthState.configured
+        ? "This internal rent desk is restricted to authenticated LeCrown users."
+        : "The rent collection desk is blocked until the production Keycloak settings are configured."
+  const loginUrl = rentCollectionAuthState.loginUrl || `/auth/login?next=${encodeURIComponent(RENT_COLLECTION_ROUTE)}`
+
+  return `
+    <section class="section-block rent-collection-shell rent-auth-shell" data-reveal>
+      <div class="rent-auth-card">
+        <div class="evaluation-preview-heading rent-collection-heading">
+          <span class="eyebrow">Internal collection desk</span>
+          <h1>${escapeHtml(title)}</h1>
+          <p>${escapeHtml(message)}</p>
+        </div>
+        <div class="rent-auth-actions">
+          ${
+            rentCollectionAuthState.configured
+              ? `<a class="button button-primary" href="${escapeHtml(loginUrl)}">Login with Keycloak</a>`
+              : `<span class="rent-auth-disabled">Configure KEYCLOAK_BASE_URL, KEYCLOAK_REALM, and KEYCLOAK_CLIENT_ID in the deployment environment.</span>`
+          }
+          <a class="button button-secondary" href="/" data-link>Back to site</a>
+        </div>
+      </div>
+    </section>
+  `
+}
+
+function renderRentCollectionSessionSummary() {
+  const user = rentCollectionAuthState.user || {}
+  const label = user.name || user.email || user.preferred_username || "Keycloak user"
+  const roleText = Array.isArray(user.roles) && user.roles.length
+    ? user.roles.slice(0, 2).join(", ")
+    : "Authenticated"
+  const logoutUrl = rentCollectionAuthState.logoutUrl || "/auth/logout"
+
+  return `
+    <div class="rent-session-panel">
+      <div>
+        <span>Signed in</span>
+        <strong>${escapeHtml(label)}</strong>
+        <em>${escapeHtml(roleText)}</em>
+      </div>
+      <a href="${escapeHtml(logoutUrl)}">Sign out</a>
+    </div>
+  `
+}
+
+function renderRentCollectionNotice() {
+  const notice = rentCollectionState.error || rentCollectionState.notice
+  if (!notice) {
+    return `
+      <p class="rent-local-note">
+        Local-only MVP: do not enter sensitive tenant data on a shared computer. Use JSON backup before changing devices.
+      </p>
+    `
+  }
+
+  const className = rentCollectionState.error ? "is-error" : "is-success"
+  return `<p class="rent-local-note ${className}">${escapeHtml(notice)}</p>`
+}
+
+function renderRentCollectionMetric(label, value, helper) {
+  return `
+    <article class="metric-card rent-metric-card">
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+      <em>${escapeHtml(helper)}</em>
+    </article>
+  `
+}
+
+function renderRentCollectionFilters(records) {
+  const managers = getRentCollectionManagers(records)
+
+  return `
+    <form class="rent-filter-bar" data-rent-filter-form>
+      <label>
+        <span>Month</span>
+        <input type="month" name="month" value="${escapeHtml(rentCollectionState.filters.month)}" />
+      </label>
+      <label>
+        <span>Manager</span>
+        <select name="manager">
+          <option value="all"${rentCollectionState.filters.manager === "all" ? " selected" : ""}>All managers</option>
+          ${managers
+            .map(
+              (manager) => `
+                <option value="${escapeHtml(manager)}"${rentCollectionState.filters.manager === manager ? " selected" : ""}>
+                  ${escapeHtml(manager)}
+                </option>
+              `,
+            )
+            .join("")}
+        </select>
+      </label>
+      <label>
+        <span>Status</span>
+        <select name="status">
+          ${[
+            ["all", "All statuses"],
+            ["paid", "Paid"],
+            ["partial", "Partial"],
+            ["late", "Late"],
+            ["due-soon", "Due soon"],
+            ["open", "Open"],
+          ]
+            .map(
+              ([value, label]) => `
+                <option value="${value}"${rentCollectionState.filters.status === value ? " selected" : ""}>
+                  ${label}
+                </option>
+              `,
+            )
+            .join("")}
+        </select>
+      </label>
+      <label class="rent-filter-search">
+        <span>Search</span>
+        <input
+          type="search"
+          name="query"
+          value="${escapeHtml(rentCollectionState.filters.query)}"
+          placeholder="Property, unit, or tenant"
+        />
+      </label>
+    </form>
+  `
+}
+
+function renderRentCollectionLedger(rows) {
+  return `
+    <table class="rent-ledger-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Tenant</th>
+          <th>Manager</th>
+          <th>Rent</th>
+          <th>Paid</th>
+          <th>Balance</th>
+          <th>Due</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${
+          rows.length
+            ? rows.map(renderRentCollectionLedgerRow).join("")
+            : `
+              <tr>
+                <td class="rent-empty-row" colspan="9">No rent accounts match the current filters.</td>
+              </tr>
+            `
+        }
+      </tbody>
+    </table>
+  `
+}
+
+function renderRentCollectionLedgerRow(row) {
+  const isActive = rentCollectionState.activeRecordId === row.record.id
+
+  return `
+    <tr class="${isActive ? "is-active" : ""}">
+      <td data-label="Property">
+        <strong>${escapeHtml(row.record.property)}</strong>
+        <span>${escapeHtml(row.record.unit || "No unit")} · ${escapeHtml(row.record.portfolio || "LeCrown")}</span>
+      </td>
+      <td data-label="Tenant">
+        <strong>${escapeHtml(row.record.tenant)}</strong>
+        <span>${escapeHtml(row.record.leaseStatus || "Active")}</span>
+      </td>
+      <td data-label="Manager">${escapeHtml(row.record.manager)}</td>
+      <td data-label="Rent">${escapeHtml(formatRentCurrency(row.expected))}</td>
+      <td data-label="Paid">${escapeHtml(formatRentCurrency(row.paid))}</td>
+      <td data-label="Balance">${escapeHtml(formatRentCurrency(row.balance))}</td>
+      <td data-label="Due">${escapeHtml(formatRentDueDate(row.dueDate))}</td>
+      <td data-label="Status">
+        <span class="rent-status is-${escapeHtml(row.statusKey)}">${escapeHtml(row.statusLabel)}</span>
+      </td>
+      <td data-label="Action">
+        <button class="rent-row-action" type="button" data-rent-select-record="${escapeHtml(row.record.id)}">
+          Record
+        </button>
+      </td>
+    </tr>
+  `
+}
+
+function renderRentCollectionPaymentForm(records, selectedRow) {
+  const selectedRecord = selectedRow?.record || records[0]
+  const selectedId = selectedRecord?.id || ""
+  const suggestedAmount = selectedRow ? Math.max(selectedRow.balance, 0) : selectedRecord?.monthlyRent || 0
+
+  return `
+    <form class="panel rent-control-panel" data-rent-payment-form>
+      <div class="rent-panel-header compact">
+        <div>
+          <span class="eyebrow">Payment entry</span>
+          <h2>Record rent received</h2>
+        </div>
+      </div>
+      <div class="form-grid rent-form-grid">
+        <label class="span-2">
+          <span>Account</span>
+          <select name="recordId" required>
+            ${records
+              .map(
+                (record) => `
+                  <option value="${escapeHtml(record.id)}"${record.id === selectedId ? " selected" : ""}>
+                    ${escapeHtml(record.property)} / ${escapeHtml(record.unit)} / ${escapeHtml(record.tenant)}
+                  </option>
+                `,
+              )
+              .join("")}
+          </select>
+        </label>
+        <label>
+          <span>Month</span>
+          <input type="month" name="month" value="${escapeHtml(rentCollectionState.filters.month)}" required />
+        </label>
+        <label>
+          <span>Amount</span>
+          <input type="number" name="amount" min="0" step="0.01" value="${escapeHtml(suggestedAmount.toFixed(2))}" required />
+        </label>
+        <label>
+          <span>Paid date</span>
+          <input type="date" name="paidDate" value="${escapeHtml(getTodayIsoDate())}" required />
+        </label>
+        <label>
+          <span>Method</span>
+          <select name="method">
+            ${["ACH", "Check", "Wire", "Zelle", "Cash", "Other"]
+              .map((method) => `<option value="${method}">${method}</option>`)
+              .join("")}
+          </select>
+        </label>
+        <label class="span-2">
+          <span>Notes</span>
+          <textarea name="notes" rows="3" placeholder="Reference number, payer note, or follow-up"></textarea>
+        </label>
+      </div>
+      <div class="form-actions">
+        <button class="button button-primary" type="submit">Save payment</button>
+        <p>Partial payments are allowed. The balance updates immediately for the selected month.</p>
+      </div>
+    </form>
+  `
+}
+
+function renderRentCollectionAgingPanel(metrics, managerSummaries) {
+  return `
+    <section class="panel rent-control-panel rent-aging-panel">
+      <div class="rent-panel-header compact">
+        <div>
+          <span class="eyebrow">Aging</span>
+          <h2>Collection risk</h2>
+        </div>
+      </div>
+      <div class="rent-aging-list">
+        <span><strong>${escapeHtml(formatRentCurrency(metrics.currentBalance))}</strong><em>Open, not late</em></span>
+        <span><strong>${escapeHtml(formatRentCurrency(metrics.dueSoonBalance))}</strong><em>Due within 7 days</em></span>
+        <span><strong>${escapeHtml(formatRentCurrency(metrics.lateBalance))}</strong><em>Past due</em></span>
+      </div>
+      <div class="rent-manager-summaries">
+        ${managerSummaries.map(renderRentCollectionManagerSummary).join("")}
+      </div>
+    </section>
+  `
+}
+
+function renderRentCollectionManagerSummary(summary) {
+  return `
+    <article>
+      <strong>${escapeHtml(summary.manager)}</strong>
+      <span>${escapeHtml(formatRentCurrency(summary.collected))} collected</span>
+      <em>${escapeHtml(formatRentCurrency(summary.outstanding))} outstanding</em>
+    </article>
+  `
+}
+
+function renderRentCollectionAccountForm() {
+  return `
+    <form class="panel rent-control-panel" data-rent-account-form>
+      <div class="rent-panel-header compact">
+        <div>
+          <span class="eyebrow">Accounts</span>
+          <h2>Add rent account</h2>
+        </div>
+      </div>
+      <div class="form-grid rent-form-grid">
+        <label>
+          <span>Property</span>
+          <input type="text" name="property" placeholder="Property name" required />
+        </label>
+        <label>
+          <span>Unit</span>
+          <input type="text" name="unit" placeholder="Suite, unit, or space" required />
+        </label>
+        <label class="span-2">
+          <span>Tenant</span>
+          <input type="text" name="tenant" placeholder="Tenant or account name" required />
+        </label>
+        <label>
+          <span>Manager</span>
+          <select name="manager">
+            <option value="Jessica">Jessica</option>
+            <option value="Benjamin">Benjamin</option>
+            <option value="Shared">Shared</option>
+          </select>
+        </label>
+        <label>
+          <span>Portfolio</span>
+          <input type="text" name="portfolio" placeholder="LeCrown, Jessica-managed, owner name" />
+        </label>
+        <label>
+          <span>Monthly rent</span>
+          <input type="number" name="monthlyRent" min="0" step="0.01" placeholder="0.00" required />
+        </label>
+        <label>
+          <span>Due day</span>
+          <input type="number" name="dueDay" min="1" max="28" step="1" value="1" required />
+        </label>
+      </div>
+      <div class="form-actions">
+        <button class="button button-secondary" type="submit">Add account</button>
+      </div>
+    </form>
+  `
+}
+
+function renderRentCollectionPaymentHistory(selectedRow) {
+  if (!selectedRow) {
+    return ""
+  }
+
+  const payments = [...(selectedRow.record.payments || [])].sort((a, b) => {
+    return `${b.month || ""}${b.paidDate || ""}`.localeCompare(`${a.month || ""}${a.paidDate || ""}`)
+  })
+
+  return `
+    <section class="panel rent-control-panel rent-history-panel">
+      <div class="rent-panel-header compact">
+        <div>
+          <span class="eyebrow">History</span>
+          <h2>${escapeHtml(selectedRow.record.tenant)}</h2>
+        </div>
+      </div>
+      ${
+        payments.length
+          ? `
+            <div class="rent-payment-history">
+              ${payments
+                .map(
+                  (payment) => `
+                    <article>
+                      <div>
+                        <strong>${escapeHtml(formatRentCurrency(payment.amount))}</strong>
+                        <span>${escapeHtml(formatRentMonth(payment.month))} · ${escapeHtml(payment.method || "Payment")}</span>
+                        ${payment.notes ? `<em>${escapeHtml(payment.notes)}</em>` : ""}
+                      </div>
+                      <button type="button" data-rent-delete-payment="${escapeHtml(payment.id)}" data-rent-record-id="${escapeHtml(selectedRow.record.id)}">
+                        Delete
+                      </button>
+                    </article>
+                  `,
+                )
+                .join("")}
+            </div>
+          `
+          : `<p class="rent-empty-note">No payments have been recorded for this account yet.</p>`
+      }
+    </section>
   `
 }
 
@@ -2315,6 +2811,36 @@ function handleClick(event) {
     return
   }
 
+  const rentRecordButton = event.target.closest("[data-rent-select-record]")
+  if (rentRecordButton) {
+    rentCollectionState.activeRecordId = rentRecordButton.dataset.rentSelectRecord || ""
+    rentCollectionState.notice = ""
+    rentCollectionState.error = ""
+    render()
+    return
+  }
+
+  const rentExportCsvButton = event.target.closest("[data-rent-export-csv]")
+  if (rentExportCsvButton) {
+    exportRentCollectionCsv()
+    return
+  }
+
+  const rentExportJsonButton = event.target.closest("[data-rent-export-json]")
+  if (rentExportJsonButton) {
+    exportRentCollectionJson()
+    return
+  }
+
+  const rentDeletePaymentButton = event.target.closest("[data-rent-delete-payment]")
+  if (rentDeletePaymentButton) {
+    deleteRentCollectionPayment(
+      rentDeletePaymentButton.dataset.rentRecordId || "",
+      rentDeletePaymentButton.dataset.rentDeletePayment || "",
+    )
+    return
+  }
+
   const toggle = event.target.closest("[data-nav-toggle]")
   if (toggle) {
     state.navOpen = !state.navOpen
@@ -2383,7 +2909,41 @@ function handleKeydown(event) {
   openLeaseRoomModal(leaseGalleryButton.dataset.leaseGalleryRoom, "gallery")
 }
 
+function handleInput(event) {
+  const filterForm = event.target.closest?.("[data-rent-filter-form]")
+  if (!filterForm) {
+    return
+  }
+
+  updateRentCollectionFilters(filterForm, {
+    shouldRender: event.target.name !== "query",
+  })
+}
+
+async function handleChange(event) {
+  const filterForm = event.target.closest?.("[data-rent-filter-form]")
+  if (filterForm) {
+    updateRentCollectionFilters(filterForm)
+    return
+  }
+
+  const importInput = event.target.closest?.("[data-rent-import-json]")
+  if (!importInput || !importInput.files?.length) {
+    return
+  }
+
+  await importRentCollectionJson(importInput.files[0])
+  importInput.value = ""
+}
+
 async function handleSubmit(event) {
+  const rentFilterForm = event.target.closest("[data-rent-filter-form]")
+  if (rentFilterForm) {
+    event.preventDefault()
+    updateRentCollectionFilters(rentFilterForm)
+    return
+  }
+
   const leaseInquiryForm = event.target.closest("[data-lease-inquiry-form]")
   if (leaseInquiryForm) {
     event.preventDefault()
@@ -2402,6 +2962,20 @@ async function handleSubmit(event) {
   if (requestForm) {
     event.preventDefault()
     await submitPropertyEvaluationRequest(requestForm)
+    return
+  }
+
+  const rentPaymentForm = event.target.closest("[data-rent-payment-form]")
+  if (rentPaymentForm) {
+    event.preventDefault()
+    saveRentCollectionPayment(rentPaymentForm)
+    return
+  }
+
+  const rentAccountForm = event.target.closest("[data-rent-account-form]")
+  if (rentAccountForm) {
+    event.preventDefault()
+    saveRentCollectionAccount(rentAccountForm)
     return
   }
 
@@ -2439,6 +3013,665 @@ async function handleSubmit(event) {
   window.location.href = `mailto:${state.data.site.contact.email}?subject=${subject}&body=${body}`
 }
 
+async function ensureRentCollectionAuthState({ force = false } = {}) {
+  if (!force && rentCollectionAuthState.status !== "unknown") {
+    return
+  }
+
+  rentCollectionAuthState.status = "loading"
+  rentCollectionAuthState.error = ""
+
+  try {
+    const response = await fetch(
+      `${RENT_COLLECTION_AUTH_SESSION_PATH}?next=${encodeURIComponent(RENT_COLLECTION_ROUTE)}`,
+      {
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: {
+          Accept: "application/json",
+        },
+      },
+    )
+    const body = await response.json()
+    if (!response.ok) {
+      throw new Error(body.message || `auth session status ${response.status}`)
+    }
+
+    rentCollectionAuthState.configured = Boolean(body.configured)
+    rentCollectionAuthState.authenticated = Boolean(body.authenticated)
+    rentCollectionAuthState.user = body.user || null
+    rentCollectionAuthState.loginUrl =
+      body.login_url || `/auth/login?next=${encodeURIComponent(RENT_COLLECTION_ROUTE)}`
+    rentCollectionAuthState.logoutUrl = body.logout_url || "/auth/logout"
+    rentCollectionAuthState.requiredRoles = Array.isArray(body.required_roles)
+      ? body.required_roles
+      : []
+    rentCollectionAuthState.status = body.authenticated ? "authenticated" : "anonymous"
+  } catch (error) {
+    rentCollectionAuthState.status = "error"
+    rentCollectionAuthState.configured = false
+    rentCollectionAuthState.authenticated = false
+    rentCollectionAuthState.user = null
+    rentCollectionAuthState.error = error?.message || "Could not verify the Keycloak session."
+  }
+}
+
+function updateRentCollectionFilters(form, { shouldRender = true } = {}) {
+  const formData = new FormData(form)
+  rentCollectionState.filters = {
+    month: formData.get("month")?.toString() || getCurrentRentMonth(),
+    manager: formData.get("manager")?.toString() || "all",
+    status: formData.get("status")?.toString() || "all",
+    query: formData.get("query")?.toString() || "",
+  }
+  rentCollectionState.notice = ""
+  rentCollectionState.error = ""
+
+  if (shouldRender) {
+    render()
+  }
+}
+
+function saveRentCollectionPayment(form) {
+  ensureRentCollectionState()
+
+  const formData = new FormData(form)
+  const recordId = formData.get("recordId")?.toString() || ""
+  const record = rentCollectionState.records.find((item) => item.id === recordId)
+  const amount = normalizeRentAmount(formData.get("amount"))
+  const month = formData.get("month")?.toString() || rentCollectionState.filters.month
+  const paidDate = formData.get("paidDate")?.toString() || getTodayIsoDate()
+
+  if (!record || amount <= 0 || !month) {
+    rentCollectionState.error = "Choose an account, month, and payment amount before saving."
+    rentCollectionState.notice = ""
+    render()
+    return
+  }
+
+  record.payments = [
+    ...(record.payments || []),
+    {
+      id: createRentCollectionId("payment"),
+      month,
+      amount,
+      paidDate,
+      method: formData.get("method")?.toString() || "Other",
+      notes: formData.get("notes")?.toString().trim() || "",
+    },
+  ]
+
+  rentCollectionState.activeRecordId = record.id
+  rentCollectionState.filters.month = month
+  rentCollectionState.notice = `Saved ${formatRentCurrency(amount)} payment for ${record.tenant}.`
+  rentCollectionState.error = ""
+  persistRentCollectionRecords()
+  render()
+}
+
+function saveRentCollectionAccount(form) {
+  ensureRentCollectionState()
+
+  const formData = new FormData(form)
+  const property = formData.get("property")?.toString().trim() || ""
+  const unit = formData.get("unit")?.toString().trim() || ""
+  const tenant = formData.get("tenant")?.toString().trim() || ""
+  const monthlyRent = normalizeRentAmount(formData.get("monthlyRent"))
+
+  if (!property || !unit || !tenant || monthlyRent <= 0) {
+    rentCollectionState.error = "Property, unit, tenant, and monthly rent are required."
+    rentCollectionState.notice = ""
+    render()
+    return
+  }
+
+  const record = {
+    id: createRentCollectionId("account"),
+    property,
+    unit,
+    tenant,
+    manager: formData.get("manager")?.toString().trim() || "Shared",
+    portfolio: formData.get("portfolio")?.toString().trim() || "LeCrown",
+    monthlyRent,
+    dueDay: normalizeRentDueDay(formData.get("dueDay")),
+    leaseStatus: "Active",
+    active: true,
+    payments: [],
+  }
+
+  rentCollectionState.records = [...rentCollectionState.records, record]
+  rentCollectionState.activeRecordId = record.id
+  rentCollectionState.notice = `Added rent account for ${record.tenant}.`
+  rentCollectionState.error = ""
+  persistRentCollectionRecords()
+  render()
+}
+
+function deleteRentCollectionPayment(recordId, paymentId) {
+  ensureRentCollectionState()
+
+  if (!recordId || !paymentId) {
+    return
+  }
+
+  const record = rentCollectionState.records.find((item) => item.id === recordId)
+  if (!record) {
+    return
+  }
+
+  if (!window.confirm("Delete this recorded payment?")) {
+    return
+  }
+
+  record.payments = (record.payments || []).filter((payment) => payment.id !== paymentId)
+  rentCollectionState.activeRecordId = record.id
+  rentCollectionState.notice = `Deleted payment from ${record.tenant}.`
+  rentCollectionState.error = ""
+  persistRentCollectionRecords()
+  render()
+}
+
+function exportRentCollectionCsv() {
+  ensureRentCollectionState()
+  const rows = getRentCollectionRows(getActiveRentCollectionRecords(), rentCollectionState.filters.month)
+  const headers = [
+    "Month",
+    "Property",
+    "Unit",
+    "Tenant",
+    "Manager",
+    "Portfolio",
+    "Expected rent",
+    "Paid",
+    "Balance",
+    "Due date",
+    "Status",
+  ]
+  const csvRows = rows.map((row) => [
+    rentCollectionState.filters.month,
+    row.record.property,
+    row.record.unit,
+    row.record.tenant,
+    row.record.manager,
+    row.record.portfolio,
+    row.expected.toFixed(2),
+    row.paid.toFixed(2),
+    row.balance.toFixed(2),
+    row.dueDate,
+    row.statusLabel,
+  ])
+  const csv = [headers, ...csvRows].map((line) => line.map(escapeRentCsvValue).join(",")).join("\n")
+  downloadTextFile(
+    `lecrown-rent-collection-${rentCollectionState.filters.month}.csv`,
+    csv,
+    "text/csv;charset=utf-8",
+  )
+}
+
+function exportRentCollectionJson() {
+  ensureRentCollectionState()
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    records: rentCollectionState.records,
+  }
+  downloadTextFile(
+    `lecrown-rent-collection-backup-${makeRentCollectionFileStamp()}.json`,
+    JSON.stringify(payload, null, 2),
+    "application/json;charset=utf-8",
+  )
+}
+
+async function importRentCollectionJson(file) {
+  try {
+    const payload = JSON.parse(await file.text())
+    const records = normalizeRentCollectionRecords(
+      Array.isArray(payload) ? payload : payload.records,
+    )
+
+    if (!records.length) {
+      throw new Error("No rent accounts were found in that file.")
+    }
+
+    rentCollectionState.records = records
+    rentCollectionState.activeRecordId = records[0].id
+    rentCollectionState.notice = `Imported ${records.length} rent account${records.length === 1 ? "" : "s"}.`
+    rentCollectionState.error = ""
+    persistRentCollectionRecords()
+  } catch (error) {
+    rentCollectionState.error = error?.message || "Could not import that JSON backup."
+    rentCollectionState.notice = ""
+  }
+
+  render()
+}
+
+function ensureRentCollectionState() {
+  if (rentCollectionState.records) {
+    return
+  }
+
+  rentCollectionState.records = loadRentCollectionRecords()
+}
+
+function loadRentCollectionRecords() {
+  try {
+    const raw = window.localStorage.getItem(RENT_COLLECTION_STORAGE_KEY)
+    if (raw) {
+      const payload = JSON.parse(raw)
+      const records = normalizeRentCollectionRecords(
+        Array.isArray(payload) ? payload : payload.records,
+      )
+      if (records.length) {
+        return records
+      }
+    }
+  } catch (error) {
+    rentCollectionState.error = "Could not read saved rent data. Demo rows are loaded instead."
+  }
+
+  return createRentCollectionSeedRecords()
+}
+
+function persistRentCollectionRecords() {
+  try {
+    window.localStorage.setItem(
+      RENT_COLLECTION_STORAGE_KEY,
+      JSON.stringify({
+        version: 1,
+        updatedAt: new Date().toISOString(),
+        records: rentCollectionState.records,
+      }),
+    )
+  } catch (error) {
+    rentCollectionState.error = "Could not save to browser storage. Export a JSON backup before leaving this page."
+  }
+}
+
+function createRentCollectionSeedRecords() {
+  const month = getCurrentRentMonth()
+  const today = getTodayIsoDate()
+
+  return [
+    {
+      id: "demo-account-warehouse-110",
+      property: "Example Warehouse Plaza",
+      unit: "Suite 110",
+      tenant: "Sample Logistics LLC",
+      manager: "Jessica",
+      portfolio: "Jessica-managed",
+      monthlyRent: 4200,
+      dueDay: 1,
+      leaseStatus: "Demo",
+      active: true,
+      payments: [
+        {
+          id: "demo-payment-warehouse-110",
+          month,
+          amount: 4200,
+          paidDate: today,
+          method: "ACH",
+          notes: "Demo paid account",
+        },
+      ],
+    },
+    {
+      id: "demo-account-office-702",
+      property: "Example Corporate Center",
+      unit: "7F-702",
+      tenant: "Demo Office Tenant",
+      manager: "Benjamin",
+      portfolio: "LeCrown",
+      monthlyRent: 1800,
+      dueDay: 1,
+      leaseStatus: "Demo",
+      active: true,
+      payments: [
+        {
+          id: "demo-payment-office-702",
+          month,
+          amount: 900,
+          paidDate: today,
+          method: "Check",
+          notes: "Demo partial payment",
+        },
+      ],
+    },
+    {
+      id: "demo-account-retail-b",
+      property: "Example Retail Strip",
+      unit: "Unit B",
+      tenant: "Sample Market Tenant",
+      manager: "Jessica",
+      portfolio: "Jessica-managed",
+      monthlyRent: 2600,
+      dueDay: 1,
+      leaseStatus: "Demo",
+      active: true,
+      payments: [],
+    },
+    {
+      id: "demo-account-office-315",
+      property: "Example Medical Office",
+      unit: "Suite 315",
+      tenant: "Demo Clinic Group",
+      manager: "Shared",
+      portfolio: "LeCrown",
+      monthlyRent: 3200,
+      dueDay: 10,
+      leaseStatus: "Demo",
+      active: true,
+      payments: [],
+    },
+  ]
+}
+
+function normalizeRentCollectionRecords(records) {
+  if (!Array.isArray(records)) {
+    return []
+  }
+
+  return records
+    .map((record, index) => normalizeRentCollectionRecord(record, index))
+    .filter(Boolean)
+}
+
+function normalizeRentCollectionRecord(record, index) {
+  if (!record || typeof record !== "object") {
+    return null
+  }
+
+  const property = String(record.property || "").trim()
+  const unit = String(record.unit || "").trim()
+  const tenant = String(record.tenant || "").trim()
+  const monthlyRent = normalizeRentAmount(record.monthlyRent ?? record.rent)
+
+  if (!property || !tenant || monthlyRent <= 0) {
+    return null
+  }
+
+  return {
+    id: String(record.id || createRentCollectionId(`account-${index}`)),
+    property,
+    unit: unit || "Main",
+    tenant,
+    manager: String(record.manager || "Shared").trim() || "Shared",
+    portfolio: String(record.portfolio || "LeCrown").trim() || "LeCrown",
+    monthlyRent,
+    dueDay: normalizeRentDueDay(record.dueDay),
+    leaseStatus: String(record.leaseStatus || "Active").trim() || "Active",
+    active: record.active !== false,
+    payments: normalizeRentCollectionPayments(record.payments),
+  }
+}
+
+function normalizeRentCollectionPayments(payments) {
+  if (!Array.isArray(payments)) {
+    return []
+  }
+
+  return payments
+    .map((payment, index) => {
+      const amount = normalizeRentAmount(payment?.amount)
+      const month = String(payment?.month || "").trim()
+
+      if (!amount || !month) {
+        return null
+      }
+
+      return {
+        id: String(payment.id || createRentCollectionId(`payment-${index}`)),
+        month,
+        amount,
+        paidDate: String(payment.paidDate || getTodayIsoDate()),
+        method: String(payment.method || "Other"),
+        notes: String(payment.notes || ""),
+      }
+    })
+    .filter(Boolean)
+}
+
+function getActiveRentCollectionRecords() {
+  ensureRentCollectionState()
+  return rentCollectionState.records.filter((record) => record.active !== false)
+}
+
+function getRentCollectionRows(records, month) {
+  const today = parseRentDate(getTodayIsoDate())
+
+  return records.map((record) => {
+    const expected = normalizeRentAmount(record.monthlyRent)
+    const paid = (record.payments || [])
+      .filter((payment) => payment.month === month)
+      .reduce((total, payment) => total + normalizeRentAmount(payment.amount), 0)
+    const balance = Math.max(expected - paid, 0)
+    const dueDate = getRentDueDate(month, record.dueDay)
+    const dueDateObject = parseRentDate(dueDate)
+    const daysUntilDue = Math.ceil((dueDateObject - today) / 86400000)
+    const status = getRentCollectionStatus({ paid, balance, daysUntilDue })
+
+    return {
+      record,
+      expected,
+      paid,
+      balance,
+      dueDate,
+      daysUntilDue,
+      statusKey: status.key,
+      statusLabel: status.label,
+    }
+  })
+}
+
+function getFilteredRentCollectionRows(rows) {
+  const { manager, status, query } = rentCollectionState.filters
+  const normalizedQuery = query.trim().toLowerCase()
+
+  return rows.filter((row) => {
+    const record = row.record
+    if (manager !== "all" && record.manager !== manager) {
+      return false
+    }
+    if (status !== "all" && row.statusKey !== status) {
+      return false
+    }
+    if (!normalizedQuery) {
+      return true
+    }
+    return [record.property, record.unit, record.tenant, record.manager, record.portfolio]
+      .join(" ")
+      .toLowerCase()
+      .includes(normalizedQuery)
+  })
+}
+
+function getRentCollectionSelectedRow(filteredRows, allRows) {
+  const selected =
+    allRows.find((row) => row.record.id === rentCollectionState.activeRecordId) ||
+    filteredRows.find((row) => row.balance > 0) ||
+    filteredRows[0] ||
+    allRows[0]
+
+  rentCollectionState.activeRecordId = selected?.record.id || ""
+  return selected || null
+}
+
+function getRentCollectionMetrics(rows) {
+  return rows.reduce(
+    (metrics, row) => {
+      metrics.expected += row.expected
+      metrics.collected += row.paid
+      metrics.outstanding += row.balance
+      if (row.statusKey === "paid") {
+        metrics.paidCount += 1
+      }
+      if (row.balance > 0) {
+        metrics.openCount += 1
+      }
+      if (row.statusKey === "late") {
+        metrics.lateCount += 1
+        metrics.lateBalance += row.balance
+      } else if (row.statusKey === "due-soon") {
+        metrics.dueSoonCount += 1
+        metrics.dueSoonBalance += row.balance
+      } else if (row.balance > 0) {
+        metrics.currentBalance += row.balance
+      }
+      return metrics
+    },
+    {
+      expected: 0,
+      collected: 0,
+      outstanding: 0,
+      paidCount: 0,
+      openCount: 0,
+      lateCount: 0,
+      lateBalance: 0,
+      dueSoonCount: 0,
+      dueSoonBalance: 0,
+      currentBalance: 0,
+    },
+  )
+}
+
+function getRentCollectionManagerSummaries(rows) {
+  const summaries = new Map()
+  rows.forEach((row) => {
+    const current = summaries.get(row.record.manager) || {
+      manager: row.record.manager,
+      collected: 0,
+      outstanding: 0,
+    }
+    current.collected += row.paid
+    current.outstanding += row.balance
+    summaries.set(row.record.manager, current)
+  })
+
+  return [...summaries.values()].sort((a, b) => a.manager.localeCompare(b.manager))
+}
+
+function getRentCollectionManagers(records) {
+  return [...new Set(records.map((record) => record.manager).filter(Boolean))].sort((a, b) =>
+    a.localeCompare(b),
+  )
+}
+
+function getRentCollectionStatus({ paid, balance, daysUntilDue }) {
+  if (balance <= 0) {
+    return { key: "paid", label: "Paid" }
+  }
+  if (daysUntilDue < 0) {
+    return { key: "late", label: "Late" }
+  }
+  if (paid > 0) {
+    return { key: "partial", label: "Partial" }
+  }
+  if (daysUntilDue <= 7) {
+    return { key: "due-soon", label: "Due soon" }
+  }
+  return { key: "open", label: "Open" }
+}
+
+function normalizeRentAmount(value) {
+  const number = Number(value)
+  if (!Number.isFinite(number)) {
+    return 0
+  }
+  return Math.max(0, Math.round(number * 100) / 100)
+}
+
+function normalizeRentDueDay(value) {
+  const number = Number.parseInt(value, 10)
+  if (!Number.isFinite(number)) {
+    return 1
+  }
+  return Math.min(28, Math.max(1, number))
+}
+
+function getCurrentRentMonth() {
+  const date = new Date()
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`
+}
+
+function getTodayIsoDate() {
+  const date = new Date()
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-")
+}
+
+function getRentDueDate(month, dueDay) {
+  const cleanMonth = /^\d{4}-\d{2}$/.test(month) ? month : getCurrentRentMonth()
+  return `${cleanMonth}-${String(normalizeRentDueDay(dueDay)).padStart(2, "0")}`
+}
+
+function parseRentDate(value) {
+  const [year, month, day] = String(value || getTodayIsoDate())
+    .split("-")
+    .map((part) => Number.parseInt(part, 10))
+  return new Date(year || 1970, (month || 1) - 1, day || 1, 12, 0, 0)
+}
+
+function formatRentCurrency(value) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(normalizeRentAmount(value))
+}
+
+function formatRentMonth(value) {
+  if (!/^\d{4}-\d{2}$/.test(String(value))) {
+    return "Selected month"
+  }
+  const [year, month] = value.split("-").map((part) => Number.parseInt(part, 10))
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(year, month - 1, 1, 12, 0, 0))
+}
+
+function formatRentDueDate(value) {
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+  }).format(parseRentDate(value))
+}
+
+function formatRentCountLabel(count, singular) {
+  return count === 1 ? singular : `${singular}s`
+}
+
+function createRentCollectionId(prefix) {
+  return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+}
+
+function makeRentCollectionFileStamp() {
+  return new Date().toISOString().slice(0, 10)
+}
+
+function escapeRentCsvValue(value) {
+  const text = String(value ?? "")
+  if (/[",\n]/.test(text)) {
+    return `"${text.replaceAll('"', '""')}"`
+  }
+  return text
+}
+
+function downloadTextFile(filename, text, type) {
+  const blob = new Blob([text], { type })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.download = filename
+  document.body.append(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
 function hrefFor(path, lang = state.lang, hash = "") {
   const [pathname, inlineHash] = path.split("#")
   const query = lang === DEFAULT_LANG ? "" : `?lang=${lang}`
@@ -2467,6 +3700,10 @@ function buildTitle(path) {
   if (path === PROPERTY_EVALUATION_ROUTE) {
     const title = state.data.propertyEvaluation?.seoTitle || "Site Suitability Screen"
     return `${title}${state.data.site.seo.titleSuffix}`
+  }
+
+  if (path === RENT_COLLECTION_ROUTE) {
+    return `Rent Collection${state.data.site.seo.titleSuffix}`
   }
 
   const page = state.data.site.navigation.find((item) => item.to === path)

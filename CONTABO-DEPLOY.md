@@ -148,3 +148,25 @@ The server reads these values from environment variables:
 - `GRIDSCOPE_EXTERNAL_API_HEADER_NAME`
 
 The current handoff file keeps the LeCrown-side values in `.env.gridscope.local`. When that file exists on the server, the documented `docker compose --env-file .env.gridscope.local ...` flow injects those values into the container without baking them into the image.
+
+## Keycloak runtime settings
+
+The rent collection desk at `/rent-collection` is blocked unless Keycloak is configured and the visitor has an active server-side session.
+
+Set these values in `.env.local`, the same server-side env injection path used for GridScope, or in the fortress deployment environment if image promotion is used:
+
+- `KEYCLOAK_BASE_URL` (container default: `https://auth.pericopeai.com`)
+- `KEYCLOAK_REALM` (container default: `lecrown-portal`)
+- `KEYCLOAK_CLIENT_ID` (container default: `lecrown-portal-web`)
+- `KEYCLOAK_CLIENT_SECRET` if the Keycloak client is confidential
+- `KEYCLOAK_PUBLIC_ORIGIN=https://lecrownproperties.com`
+- `KEYCLOAK_REDIRECT_URI=https://lecrownproperties.com/auth/callback` if the default inferred callback should be overridden
+- `KEYCLOAK_ALLOWED_ROLES` as a comma-separated allowlist, for example `lecrown-rent-admin,lecrown-manager`
+
+The Keycloak client must allow:
+
+- Redirect URI: `https://lecrownproperties.com/auth/callback`
+- Web origin: `https://lecrownproperties.com`
+- Flow: standard authorization code with PKCE
+
+For local testing, add `http://127.0.0.1:4173/auth/callback` to the client redirect URI list and serve the site with `python3 server.py 4173`.

@@ -12,6 +12,22 @@ JSON-driven marketing site for `LeCrown Properties` with a same-origin server-si
 - `data/`: English and Chinese content files
 - `assets/`: logo and pattern assets
 
+## Internal rent collection
+
+The internal rent collection desk is available at `/rent-collection`. The route is not linked from the public navigation and is blocked until Keycloak login is configured.
+
+Runtime Keycloak settings are read from environment variables or local ignored env files:
+
+- `KEYCLOAK_BASE_URL`: Keycloak origin; container default is `https://auth.pericopeai.com`
+- `KEYCLOAK_REALM`: realm name; container default is `lecrown-portal`
+- `KEYCLOAK_CLIENT_ID`: OIDC client id; container default is `lecrown-portal-web`
+- `KEYCLOAK_CLIENT_SECRET`: optional, for confidential clients
+- `KEYCLOAK_REDIRECT_URI`: optional override; defaults to `{site origin}/auth/callback`
+- `KEYCLOAK_PUBLIC_ORIGIN`: optional public site origin override, for example `https://lecrownproperties.com`
+- `KEYCLOAK_ALLOWED_ROLES`: optional comma-separated realm/client roles allowed into the rent desk
+
+The Keycloak client must allow `https://lecrownproperties.com/auth/callback` as a valid redirect URI and `https://lecrownproperties.com/*` as a web origin. Local development can use `http://127.0.0.1:4173/auth/callback`.
+
 ## Local Preview
 
 Serve the app over HTTP with SPA fallback:

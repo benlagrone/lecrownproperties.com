@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
+from http import cookies
 import json
 import mimetypes
 import os
 import posixpath
 import re
+import secrets
 import threading
 import time
 from dataclasses import dataclass
@@ -17,7 +20,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, quote, unquote, urlencode, urlsplit
 from urllib.request import Request, urlopen
 from uuid import uuid4
 
@@ -30,7 +33,16 @@ EVALUATE_PATH = "/api/gridscope/evaluate"
 MARKETS_PATH = "/api/gridscope/markets"
 EVALUATION_REQUEST_PATH = "/api/property-evaluation-requests"
 LEASE_INQUIRY_PATH = "/api/lease-inquiries"
+RENT_COLLECTION_ROUTE = "/rent-collection"
+AUTH_SESSION_PATH = "/api/auth/session"
+AUTH_LOGIN_PATH = "/auth/login"
+AUTH_CALLBACK_PATH = "/auth/callback"
+AUTH_LOGOUT_PATH = "/auth/logout"
+AUTH_SESSION_COOKIE = "lecrown_session"
 DEFAULT_TIMEOUT_MS = 15_000
+DEFAULT_KEYCLOAK_TIMEOUT_MS = 10_000
+DEFAULT_KEYCLOAK_SESSION_SECONDS = 8 * 60 * 60
+DEFAULT_AUTH_STATE_SECONDS = 10 * 60
 DEFAULT_CACHE_TTL_SECONDS = 300
 DEFAULT_MAX_BODY_BYTES = 64 * 1024
 DEFAULT_MAX_RESPONSE_BYTES = 2 * 1024 * 1024
@@ -92,11 +104,43 @@ def env_int(name: str, default: int) -> int:
     return parsed if parsed > 0 else default
 
 
+def env_bool(name: str, default: bool = False) -> bool:
+    raw_value = os.getenv(name, "").strip().lower()
+    if not raw_value:
+        return default
+    return raw_value in {"1", "true", "yes", "on"}
+
+
 def normalize_auth_mode(raw_value: str) -> str:
     value = raw_value.strip().lower()
     if value in {"bearer", "authorization", "auth"}:
         return "bearer"
     return "header"
+
+
+def split_csv(value: str) -> tuple[str, ...]:
+    return tuple(item.strip() for item in value.split(",") if item.strip())
+
+
+def base64_urlsafe(raw_value: bytes) -> str:
+    return base64.urlsafe_b64encode(raw_value).decode("ascii").rstrip("=")
+
+
+def sanitize_next_path(raw_value: str | None, default: str = RENT_COLLECTION_ROUTE) -> str:
+    if not raw_value:
+        return default
+
+    parsed = urlsplit(raw_value)
+    if parsed.scheme or parsed.netloc:
+        return default
+
+    path = parsed.path if parsed.path.startswith("/") else f"/{parsed.path}"
+    if path in {"", "/auth/login", "/auth/callback"} or path.startswith("/api/"):
+        return default
+
+    query = f"?{parsed.query}" if parsed.query else ""
+    fragment = f"#{parsed.fragment}" if parsed.fragment else ""
+    return f"{path}{query}{fragment}"
 
 
 def extract_error_message(raw_body: bytes) -> str | None:
@@ -366,6 +410,141 @@ class GridScopeConfig:
         return {self.header_name: self.api_key}
 
 
+@dataclass(frozen=True)
+class KeycloakConfig:
+    base_url: str
+    realm: str
+    client_id: str
+    client_secret: str
+    redirect_uri: str
+    allowed_roles: tuple[str, ...]
+    scope: str
+    timeout_ms: int
+    cookie_secure: str
+
+    @property
+    def configured(self) -> bool:
+        return bool(self.base_url and self.realm and self.client_id)
+
+    @property
+    def realm_url(self) -> str:
+        quoted_realm = quote(self.realm, safe="")
+        return f"{self.base_url}/realms/{quoted_realm}"
+
+    @property
+    def auth_url(self) -> str:
+        return f"{self.realm_url}/protocol/openid-connect/auth"
+
+    @property
+    def token_url(self) -> str:
+        return f"{self.realm_url}/protocol/openid-connect/token"
+
+    @property
+    def logout_url(self) -> str:
+        return f"{self.realm_url}/protocol/openid-connect/logout"
+
+    @classmethod
+    def from_env(cls) -> "KeycloakConfig":
+        return cls(
+            base_url=os.getenv("KEYCLOAK_BASE_URL", "").strip().rstrip("/"),
+            realm=os.getenv("KEYCLOAK_REALM", "").strip(),
+            client_id=os.getenv("KEYCLOAK_CLIENT_ID", "").strip(),
+            client_secret=os.getenv("KEYCLOAK_CLIENT_SECRET", "").strip(),
+            redirect_uri=os.getenv("KEYCLOAK_REDIRECT_URI", "").strip(),
+            allowed_roles=split_csv(os.getenv("KEYCLOAK_ALLOWED_ROLES", "")),
+            scope=os.getenv("KEYCLOAK_AUTH_SCOPE", "openid profile email").strip()
+            or "openid profile email",
+            timeout_ms=env_int("KEYCLOAK_TIMEOUT_MS", DEFAULT_KEYCLOAK_TIMEOUT_MS),
+            cookie_secure=os.getenv("KEYCLOAK_SESSION_COOKIE_SECURE", "auto").strip().lower()
+            or "auto",
+        )
+
+
+@dataclass(frozen=True)
+class PendingAuthState:
+    code_verifier: str
+    next_path: str
+    expires_at: float
+
+
+class AuthStateStore:
+    def __init__(self) -> None:
+        self._states: dict[str, PendingAuthState] = {}
+        self._lock = threading.Lock()
+
+    def create(self, next_path: str) -> tuple[str, str]:
+        state = base64_urlsafe(secrets.token_bytes(32))
+        code_verifier = base64_urlsafe(secrets.token_bytes(48))
+        pending = PendingAuthState(
+            code_verifier=code_verifier,
+            next_path=next_path,
+            expires_at=time.monotonic() + DEFAULT_AUTH_STATE_SECONDS,
+        )
+
+        with self._lock:
+            self._prune_locked()
+            self._states[state] = pending
+
+        return state, code_verifier
+
+    def consume(self, state: str) -> PendingAuthState | None:
+        with self._lock:
+            self._prune_locked()
+            return self._states.pop(state, None)
+
+    def _prune_locked(self) -> None:
+        now = time.monotonic()
+        expired_keys = [key for key, pending in self._states.items() if pending.expires_at <= now]
+        for key in expired_keys:
+            self._states.pop(key, None)
+
+
+@dataclass(frozen=True)
+class AuthSession:
+    user: dict[str, Any]
+    id_token: str
+    expires_at: float
+
+
+class SessionStore:
+    def __init__(self) -> None:
+        self._sessions: dict[str, AuthSession] = {}
+        self._lock = threading.Lock()
+
+    def create(self, user: dict[str, Any], id_token: str, ttl_seconds: int) -> str:
+        session_id = base64_urlsafe(secrets.token_bytes(32))
+        session = AuthSession(
+            user=user,
+            id_token=id_token,
+            expires_at=time.time() + max(60, ttl_seconds),
+        )
+        with self._lock:
+            self._prune_locked()
+            self._sessions[session_id] = session
+        return session_id
+
+    def get(self, session_id: str) -> AuthSession | None:
+        if not session_id:
+            return None
+
+        with self._lock:
+            self._prune_locked()
+            return self._sessions.get(session_id)
+
+    def delete(self, session_id: str) -> AuthSession | None:
+        if not session_id:
+            return None
+
+        with self._lock:
+            return self._sessions.pop(session_id, None)
+
+    def _prune_locked(self) -> None:
+        now = time.time()
+        expired_keys = [key for key, session in self._sessions.items() if session.expires_at <= now]
+        for key in expired_keys:
+            self._sessions.pop(key, None)
+
+
 @dataclass
 class CacheEntry:
     body: bytes
@@ -440,6 +619,9 @@ class LeaseInquiryStore:
 @dataclass
 class AppState:
     gridscope: GridScopeConfig
+    keycloak: KeycloakConfig
+    auth_states: AuthStateStore
+    sessions: SessionStore
     cache: ResponseCache
     evaluation_requests: PropertyEvaluationRequestStore
     lease_inquiries: LeaseInquiryStore
@@ -462,6 +644,16 @@ class AppRequestHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self) -> None:  # noqa: N802
         path = urlsplit(self.path).path
+        if path == AUTH_SESSION_PATH:
+            self.send_response(204)
+            self.send_common_headers()
+            self.send_header("Allow", "OPTIONS, GET")
+            self.send_header("Access-Control-Allow-Methods", "OPTIONS, GET")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+            return
+
         if path in {EVALUATE_PATH, MARKETS_PATH, EVALUATION_REQUEST_PATH, LEASE_INQUIRY_PATH}:
             self.send_response(204)
             self.send_common_headers()
@@ -500,12 +692,29 @@ class AppRequestHandler(BaseHTTPRequestHandler):
                 {
                     "status": "ok",
                     "gridscope_configured": self.app_state.gridscope.configured,
+                    "keycloak_configured": self.app_state.keycloak.configured,
                     "evaluation_request_intake": True,
                     "lease_inquiry_intake": True,
                 },
                 include_body=include_body,
                 extra_headers={"Cache-Control": "no-store"},
             )
+            return
+
+        if path == AUTH_SESSION_PATH:
+            self.handle_auth_session(include_body=include_body)
+            return
+
+        if path == AUTH_LOGIN_PATH:
+            self.handle_auth_login()
+            return
+
+        if path == AUTH_CALLBACK_PATH:
+            self.handle_auth_callback()
+            return
+
+        if path == AUTH_LOGOUT_PATH:
+            self.handle_auth_logout()
             return
 
         if path == MARKETS_PATH:
@@ -552,12 +761,240 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             )
             return
 
+        if path == RENT_COLLECTION_ROUTE and self.app_state.keycloak.configured:
+            session = self.get_current_session()
+            if session is None:
+                self.redirect_to_login(include_body=include_body)
+                return
+
         static_path = resolve_static_path(path)
         if static_path is None:
             self.send_error_json(404, "not_found", "Route not found.", include_body=include_body)
             return
 
         self.serve_static_file(static_path, include_body=include_body)
+
+    def handle_auth_session(self, *, include_body: bool) -> None:
+        config = self.app_state.keycloak
+        session = self.get_current_session()
+        next_path = sanitize_next_path(parse_qs(urlsplit(self.path).query).get("next", [""])[0])
+
+        self.send_json(
+            200,
+            {
+                "configured": config.configured,
+                "authenticated": session is not None,
+                "user": session.user if session else None,
+                "login_url": f"{AUTH_LOGIN_PATH}?next={quote(next_path, safe='')}",
+                "logout_url": f"{AUTH_LOGOUT_PATH}?next={quote('/', safe='')}",
+                "required_roles": list(config.allowed_roles),
+            },
+            include_body=include_body,
+            extra_headers={"Cache-Control": "no-store"},
+        )
+
+    def handle_auth_login(self) -> None:
+        config = self.app_state.keycloak
+        if not config.configured:
+            self.send_error_json(
+                503,
+                "keycloak_unavailable",
+                "Keycloak login is not configured for this deployment.",
+                extra_headers={"Cache-Control": "no-store"},
+            )
+            return
+
+        query = parse_qs(urlsplit(self.path).query)
+        next_path = sanitize_next_path(query.get("next", [""])[0])
+        state, code_verifier = self.app_state.auth_states.create(next_path)
+        code_challenge = base64_urlsafe(hashlib.sha256(code_verifier.encode("ascii")).digest())
+        redirect_uri = self.build_auth_redirect_uri()
+        params = {
+            "client_id": config.client_id,
+            "redirect_uri": redirect_uri,
+            "response_type": "code",
+            "scope": config.scope,
+            "state": state,
+            "code_challenge": code_challenge,
+            "code_challenge_method": "S256",
+        }
+        self.send_redirect(f"{config.auth_url}?{urlencode(params)}")
+
+    def handle_auth_callback(self) -> None:
+        config = self.app_state.keycloak
+        if not config.configured:
+            self.send_error_json(
+                503,
+                "keycloak_unavailable",
+                "Keycloak login is not configured for this deployment.",
+                extra_headers={"Cache-Control": "no-store"},
+            )
+            return
+
+        query = parse_qs(urlsplit(self.path).query)
+        state = query.get("state", [""])[0]
+        code = query.get("code", [""])[0]
+        auth_error = query.get("error", [""])[0]
+        pending = self.app_state.auth_states.consume(state)
+
+        if auth_error:
+            message = query.get("error_description", [auth_error])[0]
+            self.send_error_json(
+                401,
+                "keycloak_login_failed",
+                clean_string(message, 240) or "Keycloak login failed.",
+                extra_headers={"Cache-Control": "no-store"},
+            )
+            return
+
+        if pending is None or not code:
+            self.send_error_json(
+                400,
+                "invalid_auth_state",
+                "The Keycloak login response could not be verified.",
+                extra_headers={"Cache-Control": "no-store"},
+            )
+            return
+
+        status, token_payload = exchange_keycloak_code(
+            config,
+            code=code,
+            code_verifier=pending.code_verifier,
+            redirect_uri=self.build_auth_redirect_uri(),
+        )
+        if status != 200:
+            self.send_json(status, token_payload, extra_headers={"Cache-Control": "no-store"})
+            return
+
+        claims = decode_keycloak_claims(token_payload)
+        user = build_keycloak_user(claims, config.client_id)
+        if config.allowed_roles and not set(user["roles"]).intersection(config.allowed_roles):
+            self.send_error_json(
+                403,
+                "keycloak_forbidden",
+                "This Keycloak account is not assigned to the LeCrown rent collection role.",
+                extra_headers={"Cache-Control": "no-store"},
+            )
+            return
+
+        ttl_seconds = get_keycloak_session_ttl(token_payload, claims)
+        id_token = token_payload.get("id_token")
+        session_id = self.app_state.sessions.create(
+            user=user,
+            id_token=id_token if isinstance(id_token, str) else "",
+            ttl_seconds=ttl_seconds,
+        )
+        self.set_session_cookie(session_id, ttl_seconds)
+        self.send_redirect(pending.next_path)
+
+    def handle_auth_logout(self) -> None:
+        query = parse_qs(urlsplit(self.path).query)
+        next_path = sanitize_next_path(query.get("next", ["/"])[0], default="/")
+        session_id = self.get_cookie_value(AUTH_SESSION_COOKIE)
+        session = self.app_state.sessions.delete(session_id)
+        self.clear_session_cookie()
+
+        config = self.app_state.keycloak
+        if config.configured and session and session.id_token:
+            params = {
+                "client_id": config.client_id,
+                "post_logout_redirect_uri": f"{self.public_origin()}{next_path}",
+                "id_token_hint": session.id_token,
+            }
+            self.send_redirect(f"{config.logout_url}?{urlencode(params)}")
+            return
+
+        self.send_redirect(next_path)
+
+    def redirect_to_login(self, *, include_body: bool = True) -> None:
+        next_path = sanitize_next_path(self.path, default=RENT_COLLECTION_ROUTE)
+        self.send_redirect(
+            f"{AUTH_LOGIN_PATH}?next={quote(next_path, safe='')}",
+            include_body=include_body,
+        )
+
+    def get_current_session(self) -> AuthSession | None:
+        return self.app_state.sessions.get(self.get_cookie_value(AUTH_SESSION_COOKIE))
+
+    def get_cookie_value(self, name: str) -> str:
+        raw_cookie = self.headers.get("Cookie", "")
+        if not raw_cookie:
+            return ""
+
+        parsed = cookies.SimpleCookie()
+        try:
+            parsed.load(raw_cookie)
+        except cookies.CookieError:
+            return ""
+
+        morsel = parsed.get(name)
+        return morsel.value if morsel else ""
+
+    def public_origin(self) -> str:
+        configured_origin = os.getenv("KEYCLOAK_PUBLIC_ORIGIN", "").strip().rstrip("/")
+        if configured_origin:
+            return configured_origin
+
+        proto = self.headers.get("X-Forwarded-Proto", "").split(",", 1)[0].strip()
+        if not proto:
+            proto = "https" if self.is_secure_request() else "http"
+        host = self.headers.get("Host", "").strip() or f"127.0.0.1:{self.server.server_port}"
+        return f"{proto}://{host}"
+
+    def build_auth_redirect_uri(self) -> str:
+        configured_uri = self.app_state.keycloak.redirect_uri
+        if configured_uri:
+            return configured_uri
+        return f"{self.public_origin()}{AUTH_CALLBACK_PATH}"
+
+    def is_secure_request(self) -> bool:
+        proto = self.headers.get("X-Forwarded-Proto", "").split(",", 1)[0].strip().lower()
+        if proto == "https":
+            return True
+        if proto == "http":
+            return False
+        return env_bool("KEYCLOAK_ASSUME_HTTPS", False)
+
+    def should_send_secure_cookie(self) -> bool:
+        mode = self.app_state.keycloak.cookie_secure
+        if mode in {"1", "true", "yes", "on"}:
+            return True
+        if mode in {"0", "false", "no", "off"}:
+            return False
+        return self.is_secure_request()
+
+    def set_session_cookie(self, session_id: str, ttl_seconds: int) -> None:
+        cookie = cookies.SimpleCookie()
+        cookie[AUTH_SESSION_COOKIE] = session_id
+        cookie[AUTH_SESSION_COOKIE]["path"] = "/"
+        cookie[AUTH_SESSION_COOKIE]["httponly"] = True
+        cookie[AUTH_SESSION_COOKIE]["samesite"] = "Lax"
+        cookie[AUTH_SESSION_COOKIE]["max-age"] = str(max(60, ttl_seconds))
+        if self.should_send_secure_cookie():
+            cookie[AUTH_SESSION_COOKIE]["secure"] = True
+        self._pending_cookie_headers = [cookie.output(header="").strip()]
+
+    def clear_session_cookie(self) -> None:
+        cookie = cookies.SimpleCookie()
+        cookie[AUTH_SESSION_COOKIE] = ""
+        cookie[AUTH_SESSION_COOKIE]["path"] = "/"
+        cookie[AUTH_SESSION_COOKIE]["httponly"] = True
+        cookie[AUTH_SESSION_COOKIE]["samesite"] = "Lax"
+        cookie[AUTH_SESSION_COOKIE]["max-age"] = "0"
+        if self.should_send_secure_cookie():
+            cookie[AUTH_SESSION_COOKIE]["secure"] = True
+        self._pending_cookie_headers = [cookie.output(header="").strip()]
+
+    def send_redirect(self, location: str, *, include_body: bool = True) -> None:
+        body = b""
+        self.send_response(302)
+        self.send_common_headers()
+        self.send_header("Location", location)
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        if include_body:
+            self.wfile.write(body)
 
     def handle_gridscope_markets(self, *, include_body: bool) -> None:
         config = self.app_state.gridscope
@@ -880,6 +1317,9 @@ class AppRequestHandler(BaseHTTPRequestHandler):
         self.send_header("X-Frame-Options", "SAMEORIGIN")
         self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
         self.send_header("X-XSS-Protection", "1; mode=block")
+        for cookie_header in getattr(self, "_pending_cookie_headers", []):
+            self.send_header("Set-Cookie", cookie_header)
+        self._pending_cookie_headers = []
 
 
 def resolve_static_path(request_path: str) -> Path | None:
@@ -921,6 +1361,149 @@ def static_cache_control(file_path: Path) -> str:
     if top_level == "data":
         return "public, max-age=300"
     return "no-cache"
+
+
+def exchange_keycloak_code(
+    config: KeycloakConfig,
+    *,
+    code: str,
+    code_verifier: str,
+    redirect_uri: str,
+) -> tuple[int, dict[str, Any]]:
+    form = {
+        "grant_type": "authorization_code",
+        "client_id": config.client_id,
+        "code": code,
+        "code_verifier": code_verifier,
+        "redirect_uri": redirect_uri,
+    }
+    if config.client_secret:
+        form["client_secret"] = config.client_secret
+
+    request = Request(
+        config.token_url,
+        data=urlencode(form).encode("utf-8"),
+        method="POST",
+        headers={
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+    )
+
+    try:
+        with urlopen(request, timeout=config.timeout_ms / 1000) as response:
+            raw_body = response.read(DEFAULT_MAX_RESPONSE_BYTES + 1)
+            if len(raw_body) > DEFAULT_MAX_RESPONSE_BYTES:
+                return (
+                    502,
+                    {
+                        "error": "keycloak_response_too_large",
+                        "message": "Keycloak returned a response above the configured size limit.",
+                    },
+                )
+
+            payload = json.loads(raw_body.decode("utf-8"))
+            if not isinstance(payload, dict):
+                raise ValueError("Token response was not an object.")
+            return 200, payload
+    except HTTPError as error:
+        raw_body = error.read(DEFAULT_MAX_RESPONSE_BYTES + 1)
+        message = extract_error_message(raw_body)
+        status = 401 if error.code in {400, 401, 403} else 502
+        return (
+            status,
+            {
+                "error": "keycloak_token_exchange_failed",
+                "message": message or "Keycloak did not accept the login callback.",
+            },
+        )
+    except (TimeoutError, URLError):
+        return (
+            504,
+            {
+                "error": "keycloak_unreachable",
+                "message": "Keycloak did not respond before the timeout.",
+            },
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        return (
+            502,
+            {
+                "error": "invalid_keycloak_response",
+                "message": "Keycloak returned an unexpected token response.",
+            },
+        )
+
+
+def decode_keycloak_claims(token_payload: dict[str, Any]) -> dict[str, Any]:
+    for token_key in ("id_token", "access_token"):
+        token = token_payload.get(token_key)
+        if not isinstance(token, str):
+            continue
+        parts = token.split(".")
+        if len(parts) < 2:
+            continue
+        padded = parts[1] + ("=" * ((4 - len(parts[1]) % 4) % 4))
+        try:
+            claims = json.loads(base64.urlsafe_b64decode(padded).decode("utf-8"))
+        except (ValueError, UnicodeDecodeError, json.JSONDecodeError):
+            continue
+        if isinstance(claims, dict):
+            return claims
+    return {}
+
+
+def build_keycloak_user(claims: dict[str, Any], client_id: str) -> dict[str, Any]:
+    roles = sorted(extract_keycloak_roles(claims, client_id))
+    preferred_username = clean_string(claims.get("preferred_username"), 160)
+    name = clean_string(claims.get("name"), 160) or preferred_username or "Keycloak user"
+    email = clean_string(claims.get("email"), 240)
+    subject = clean_string(claims.get("sub"), 160)
+
+    return {
+        "subject": subject,
+        "name": name,
+        "email": email,
+        "preferred_username": preferred_username,
+        "roles": roles,
+    }
+
+
+def extract_keycloak_roles(claims: dict[str, Any], client_id: str) -> set[str]:
+    roles: set[str] = set()
+
+    realm_access = claims.get("realm_access")
+    if isinstance(realm_access, dict):
+        realm_roles = realm_access.get("roles")
+        if isinstance(realm_roles, list):
+            roles.update(str(role) for role in realm_roles if role)
+
+    resource_access = claims.get("resource_access")
+    if isinstance(resource_access, dict):
+        for resource_key in (client_id,):
+            client_access = resource_access.get(resource_key)
+            if not isinstance(client_access, dict):
+                continue
+            client_roles = client_access.get("roles")
+            if isinstance(client_roles, list):
+                roles.update(str(role) for role in client_roles if role)
+
+    return roles
+
+
+def get_keycloak_session_ttl(token_payload: dict[str, Any], claims: dict[str, Any]) -> int:
+    ttl = DEFAULT_KEYCLOAK_SESSION_SECONDS
+    expires_in = token_payload.get("expires_in")
+    if isinstance(expires_in, int) and expires_in > 0:
+        ttl = min(ttl, expires_in)
+
+    exp = claims.get("exp")
+    if isinstance(exp, (int, float)):
+        claim_ttl = int(exp - time.time())
+        if claim_ttl > 0:
+            ttl = min(ttl, claim_ttl)
+
+    return max(60, ttl)
 
 
 def fetch_gridscope_evaluation(
@@ -1336,6 +1919,9 @@ def build_server(host: str, port: int) -> ThreadingHTTPServer:
     server = ThreadingHTTPServer((host, port), AppRequestHandler)
     server.app_state = AppState(  # type: ignore[attr-defined]
         gridscope=GridScopeConfig.from_env(),
+        keycloak=KeycloakConfig.from_env(),
+        auth_states=AuthStateStore(),
+        sessions=SessionStore(),
         cache=ResponseCache(),
         evaluation_requests=PropertyEvaluationRequestStore.from_env(),
         lease_inquiries=LeaseInquiryStore.from_env(),
@@ -1344,6 +1930,7 @@ def build_server(host: str, port: int) -> ThreadingHTTPServer:
 
 
 def main() -> None:
+    parse_env_file(ROOT / ".env.local")
     parse_env_file(ROOT / ".env.gridscope.local")
 
     parser = argparse.ArgumentParser(
@@ -1359,6 +1946,10 @@ def main() -> None:
         print("GridScope proxy enabled at /api/gridscope/evaluate and /api/gridscope/markets")
     else:
         print("GridScope proxy disabled until server-side env is configured")
+    if httpd.app_state.keycloak.configured:  # type: ignore[attr-defined]
+        print("Keycloak login enabled for /rent-collection")
+    else:
+        print("Keycloak login disabled until KEYCLOAK_* env is configured")
     httpd.serve_forever()
 
 
