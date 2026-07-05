@@ -4,7 +4,7 @@ Date: July 5, 2026
 
 Prepared by: LeCrown Properties
 
-Proposal price: $1,800
+Proposal price: $1,825
 
 ## Proposal Summary
 
@@ -149,7 +149,7 @@ Unless added in writing, this proposal excludes:
 
 ## Commercial Terms
 
-The fixed proposal price is $1,800 for labor to lay out, stage, assemble,
+The fixed proposal price is $1,825 for labor to lay out, stage, assemble,
 anchor, inspect, and clean up after eight temporary warehouse tents using the
 recommended three-worker plan. Materials, weather-delay return trips, missing
 parts, concrete drilling, and ballast are excluded unless separately approved.
@@ -159,7 +159,7 @@ parts, concrete drilling, and ballast are excluded unless separately approved.
 | Labor for eight tent assemblies | Included |
 | Anchoring or ballast materials | Excluded unless separately approved |
 | Optional second-day or weather-delay return | Excluded unless separately approved |
-| Total proposal price | $1,800 |
+| Total proposal price | $1,825 |
 
 ## Acceptance Criteria
 
