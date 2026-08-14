@@ -1,0 +1,105 @@
+{
+  "heading": {
+    "title": "LeCrown Properties featured listings",
+    "text": "Explore homes for sale and rent, then watch Jessica's video tour for a closer look."
+  },
+  "filters": {
+    "label": "Filter featured listings",
+    "options": [
+      { "label": "All", "value": "all" },
+      { "label": "For sale", "value": "sale" },
+      { "label": "For rent", "value": "rent" }
+    ]
+  },
+  "labels": {
+    "beds": "beds",
+    "baths": "baths",
+    "squareFeet": "SF",
+    "watchVideo": "Watch video",
+    "viewHar": "View on HAR"
+  },
+  "disclaimer": "Availability and pricing can change. Confirm current terms and showing access with Jessica.",
+  "listings": [
+    {
+      "mls": "61859197", "kind": "sale", "status": "For sale",
+      "address": "7131 Harmony Cove", "price": "$323,000",
+      "beds": "4", "baths": "3", "squareFeet": "2,312",
+      "videoUrl": "https://www.youtube.com/watch?v=_1O-vHyfwjU",
+      "thumbnail": "https://i.ytimg.com/vi/_1O-vHyfwjU/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 7131 Harmony Cove",
+      "harUrl": "https://www.har.com/homedetail/7131-harmony-cv-houston-tx-77036/9671979"
+    },
+    {
+      "mls": "50977388", "kind": "rent", "status": "For rent",
+      "address": "26806 Nightingale Songs Drive", "price": "$2,000/mo",
+      "beds": "3", "baths": "2", "squareFeet": "1,522",
+      "videoUrl": "https://www.youtube.com/watch?v=BiggfMnCWpI",
+      "thumbnail": "https://i.ytimg.com/vi/BiggfMnCWpI/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 26806 Nightingale Songs Drive",
+      "harUrl": "https://www.har.com/homedetail/26806-nightingale-songs-dr-katy-tx-77493/17228975"
+    },
+    {
+      "mls": "75699179", "kind": "rent", "status": "For rent",
+      "address": "32931 Franklin Brooks Drive", "price": "$3,300/mo",
+      "beds": "4", "baths": "3.5", "squareFeet": "3,141",
+      "videoUrl": "https://www.youtube.com/watch?v=g94LX-VHAL4",
+      "thumbnail": "https://i.ytimg.com/vi/g94LX-VHAL4/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 32931 Franklin Brooks Drive",
+      "harUrl": "https://www.har.com/homedetail/32931-franklin-brooks-dr-brookshire-tx-77423/14929937"
+    },
+    {
+      "mls": "32065058", "kind": "sale", "status": "For sale",
+      "address": "9603 Fulvetta Briar Court", "price": "$257,000",
+      "beds": "4", "baths": "2", "squareFeet": "1,847",
+      "videoUrl": "https://www.youtube.com/watch?v=Q5o5adppTz4",
+      "thumbnail": "https://i.ytimg.com/vi/Q5o5adppTz4/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 9603 Fulvetta Briar Court for sale",
+      "harUrl": "https://www.har.com/homedetail/9603-fulvetta-briar-ct-baytown-tx-77521/16689243"
+    },
+    {
+      "mls": "95020808", "kind": "sale", "status": "For sale",
+      "address": "12706 Braewood Glen Lane", "price": "$319,000",
+      "beds": "4", "baths": "3", "squareFeet": "2,184",
+      "videoUrl": "https://www.youtube.com/watch?v=npdUf5MT_I4",
+      "thumbnail": "https://i.ytimg.com/vi/npdUf5MT_I4/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 12706 Braewood Glen Lane",
+      "harUrl": "https://www.har.com/homedetail/12706-braewood-glen-ln-houston-tx-77072/3401765"
+    },
+    {
+      "mls": "67661152", "kind": "rent", "status": "For rent",
+      "address": "9603 Fulvetta Briar Court", "price": "$2,300/mo",
+      "beds": "4", "baths": "2", "squareFeet": "1,847",
+      "videoUrl": "https://www.youtube.com/watch?v=KAk_53e0bCQ",
+      "thumbnail": "https://i.ytimg.com/vi/KAk_53e0bCQ/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 9603 Fulvetta Briar Court for rent",
+      "harUrl": "https://www.har.com/homedetail/9603-fulvetta-briar-ct-baytown-tx-77521/16689243"
+    },
+    {
+      "mls": "81785521", "kind": "rent", "status": "For rent",
+      "address": "7950 Longridge Drive", "price": "$3,000/mo",
+      "beds": "6", "baths": "5", "squareFeet": "",
+      "videoUrl": "https://www.youtube.com/watch?v=tDYxIJtvJJ8",
+      "thumbnail": "https://i.ytimg.com/vi/tDYxIJtvJJ8/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 7950 Longridge Drive",
+      "harUrl": "https://www.har.com/homedetail/7950-longridge-dr-houston-tx-77055/3224170"
+    },
+    {
+      "mls": "80399115", "kind": "sale", "status": "For sale",
+      "address": "633 Cape Capri Drive", "price": "$398,000",
+      "beds": "4", "baths": "4", "squareFeet": "2,730",
+      "videoUrl": "https://www.youtube.com/watch?v=hXwXRfy8vfo",
+      "thumbnail": "https://i.ytimg.com/vi/hXwXRfy8vfo/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 633 Cape Capri Drive",
+      "harUrl": "https://www.har.com/homedetail/633-cape-capri-dr-katy-tx-77493/16192598"
+    },
+    {
+      "mls": "61605842", "kind": "sale", "status": "For sale",
+      "address": "1920 Augusta Drive, Unit 7", "price": "$168,000",
+      "beds": "2", "baths": "2.5", "squareFeet": "1,029",
+      "videoUrl": "https://www.youtube.com/watch?v=E1nuUEIQt60",
+      "thumbnail": "https://i.ytimg.com/vi/E1nuUEIQt60/hqdefault.jpg",
+      "thumbnailAlt": "Video tour thumbnail for 1920 Augusta Drive Unit 7",
+      "harUrl": "https://www.har.com/homedetail/1920-augusta-dr-7-houston-tx-77057/3479525"
+    }
+  ]
+}
