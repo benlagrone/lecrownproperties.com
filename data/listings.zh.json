@@ -8,11 +8,11 @@
   "page": {
     "hero": {
       "eyebrow": "当前房源",
-      "title": "Jessica 的租赁房源统一放在一个页面。",
-      "summary": "Suite 700 短租办公室、2223 Dorrington 医疗办公楼，以及隔壁 2227 Dorrington 商业地块统一展示在这里，主菜单不再放多个单独房源链接。",
+      "title": "Jessica 的房源统一放在一个页面。",
+      "summary": "浏览 Jessica 的大休斯敦地区精选住宅与中文视频，同时查看 LeCrown 当前的办公、医疗和商业地块机会。",
       "primaryCta": {
         "label": "查看房源",
-        "to": "/listings#current-listings"
+        "to": "/listings#featured-listings"
       },
       "secondaryCta": {
         "label": "联系 Jessica",
@@ -22,29 +22,29 @@
         "src": "/assets/dorrington/2223-exterior.jpg",
         "alt": "休斯敦 2223 Dorrington Street 医疗办公楼外观",
         "kicker": "LeCrown 房源",
-        "title": "当前租赁机会统一入口",
-        "text": "所有当前办公室、医疗办公和土地租赁信息都从这个页面开始。"
+        "title": "住宅与商业机会统一入口",
+        "text": "先观看 Jessica 的房源视频，再查看办公、医疗和土地房源详情。"
       },
       "brief": {
         "eyebrow": "页面结构",
-        "title": "一个菜单入口，多个房源详情。",
-        "text": "详情页仍然保留，用于展示图片、地图和房间级信息，但主导航现在只指向这个统一房源页面。",
+        "title": "一个目录，多种查看方式。",
+        "text": "观看房源视频、打开对应 HAR 记录，或继续查看 LeCrown 的商业房源详情页。",
         "points": [
-          "Suite 700 独立办公室与 co-work 工位",
-          "2223 Dorrington 医疗办公楼",
-          "2227 Dorrington 相邻商业地块"
+          "九个住宅房源视频",
+          "每套房源对应的 HAR 链接",
+          "带图片和地图的商业房源详情页"
         ]
       },
       "metrics": [
-        { "value": "Suite 700", "label": "短租办公室" },
-        { "value": "2223", "label": "医疗办公楼" },
-        { "value": "2227", "label": "相邻商业地块" }
+        { "value": "9 个视频", "label": "住宅房源介绍" },
+        { "value": "出售", "label": "住宅与公寓" },
+        { "value": "出租", "label": "大休斯敦地区租赁" }
       ]
     },
     "summary": [
-      { "value": "$250+", "label": "Suite 700 工位与房间选项" },
-      { "value": "5,464 SF", "label": "2223 Dorrington 办公楼" },
-      { "value": "0.30 AC", "label": "2227 Dorrington 地块" }
+      { "value": "9", "label": "已确认的 YouTube 视频" },
+      { "value": "5", "label": "出售房源视频" },
+      { "value": "4", "label": "出租房源视频" }
     ],
     "gridHeading": {
       "eyebrow": "房源目录",

@@ -57,6 +57,7 @@ const DATASETS = [
   "services",
   "properties",
   "listings",
+  "featured-listings",
   "short-term-lease",
   "medical-center-listings",
   "property-evaluation",
@@ -1013,6 +1014,7 @@ function renderRentCollectionPaymentHistory(selectedRow) {
 function renderListingsPage() {
   const { listings } = state.data
   const { contact, page } = listings
+  const featuredListings = state.data.featuredListings
 
   return `
     ${renderHero(page.hero, { hrefFor })}
@@ -1022,6 +1024,8 @@ function renderListingsPage() {
         ${page.summary.map(renderMetricCard).join("")}
       </div>
     </section>
+
+    ${renderFeaturedListings(featuredListings)}
 
     <section class="section-block" id="current-listings" data-reveal>
       ${renderSectionHeading(page.gridHeading)}
@@ -1054,6 +1058,118 @@ function renderListingsPage() {
         </ul>
       </div>
     </section>
+  `
+}
+
+function renderFeaturedListings(content) {
+  const [featured, ...listings] = content.listings
+
+  return `
+    <section class="section-block featured-listings" id="featured-listings">
+      <div class="featured-listings-header">
+        <div class="section-heading align-left">
+          <h2>${escapeHtml(content.heading.title)}</h2>
+          <p>${escapeHtml(content.heading.text)}</p>
+        </div>
+        <div class="listing-video-filters" role="group" aria-label="${escapeHtml(content.filters.label)}">
+          ${content.filters.options
+            .map(
+              (option, index) => `
+                <button
+                  type="button"
+                  class="listing-video-filter${index === 0 ? " is-active" : ""}"
+                  data-listing-filter="${escapeHtml(option.value)}"
+                  aria-pressed="${index === 0 ? "true" : "false"}"
+                >${escapeHtml(option.label)}</button>
+              `,
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <div class="featured-listing-stage" data-listing-kind="${escapeHtml(featured.kind)}">
+        ${renderFeaturedListing(featured, content.labels)}
+      </div>
+
+      <div class="listing-video-rail">
+        ${listings.map((listing) => renderListingVideoRow(listing, content.labels)).join("")}
+      </div>
+
+      <p class="featured-listings-note">${escapeHtml(content.disclaimer)}</p>
+    </section>
+  `
+}
+
+function renderFeaturedListing(listing, labels) {
+  return `
+    <article class="featured-listing-card">
+      ${renderListingVideoMedia(listing, labels)}
+      <div class="featured-listing-copy">
+        <span class="listing-video-status">${escapeHtml(listing.status)}</span>
+        <h3>${escapeHtml(listing.address)}</h3>
+        <strong class="listing-video-price">${escapeHtml(listing.price)}</strong>
+        ${renderListingVideoFacts(listing, labels)}
+        ${renderListingVideoActions(listing, labels)}
+      </div>
+    </article>
+  `
+}
+
+function renderListingVideoRow(listing, labels) {
+  return `
+    <article class="listing-video-row" data-listing-kind="${escapeHtml(listing.kind)}">
+      ${renderListingVideoMedia(listing, labels)}
+      <div class="listing-video-copy">
+        <div>
+          <span class="listing-video-status">${escapeHtml(listing.status)} · MLS ${escapeHtml(listing.mls)}</span>
+          <h3>${escapeHtml(listing.address)}</h3>
+          <strong class="listing-video-price">${escapeHtml(listing.price)}</strong>
+        </div>
+        ${renderListingVideoFacts(listing, labels)}
+        ${renderListingVideoActions(listing, labels)}
+      </div>
+    </article>
+  `
+}
+
+function renderListingVideoMedia(listing, labels) {
+  return `
+    <a
+      class="listing-video-media"
+      href="${escapeHtml(listing.videoUrl)}"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="${escapeHtml(`${labels.watchVideo}: ${listing.address}`)}"
+    >
+      <img src="${escapeHtml(listing.thumbnail)}" alt="${escapeHtml(listing.thumbnailAlt)}" loading="lazy" decoding="async" />
+      <span class="listing-video-play" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="img"><path d="M8.5 6.6v10.8L17 12z" /></svg>
+      </span>
+    </a>
+  `
+}
+
+function renderListingVideoFacts(listing, labels) {
+  const facts = [
+    `${listing.beds} ${labels.beds}`,
+    `${listing.baths} ${labels.baths}`,
+    listing.squareFeet ? `${listing.squareFeet} ${labels.squareFeet}` : null,
+  ].filter(Boolean)
+
+  return `<div class="listing-video-facts">${facts.map((fact) => `<span>${escapeHtml(fact)}</span>`).join("")}</div>`
+}
+
+function renderListingVideoActions(listing, labels) {
+  return `
+    <div class="listing-video-actions">
+      <a class="button button-primary" href="${escapeHtml(listing.videoUrl)}" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 6.6v10.8L17 12z" /></svg>
+        ${escapeHtml(labels.watchVideo)}
+      </a>
+      <a class="button button-secondary" href="${escapeHtml(listing.harUrl)}" target="_blank" rel="noopener noreferrer">
+        ${escapeHtml(labels.viewHar)}
+      </a>
+    </div>
   `
 }
 
@@ -2867,6 +2983,12 @@ function handleClick(event) {
     return
   }
 
+  const listingFilterButton = event.target.closest("[data-listing-filter]")
+  if (listingFilterButton) {
+    applyListingVideoFilter(listingFilterButton.dataset.listingFilter || "all")
+    return
+  }
+
   const resetRequestButton = event.target.closest("[data-preview-request-reset]")
   if (resetRequestButton) {
     resetPropertyEvaluationInquiry({ preserveUnlock: true })
@@ -2888,6 +3010,18 @@ function handleClick(event) {
   state.navOpen = false
   history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`)
   render()
+}
+
+function applyListingVideoFilter(filter) {
+  document.querySelectorAll("[data-listing-filter]").forEach((button) => {
+    const isActive = button.dataset.listingFilter === filter
+    button.classList.toggle("is-active", isActive)
+    button.setAttribute("aria-pressed", String(isActive))
+  })
+
+  document.querySelectorAll("[data-listing-kind]").forEach((listing) => {
+    listing.hidden = filter !== "all" && listing.dataset.listingKind !== filter
+  })
 }
 
 function handleKeydown(event) {

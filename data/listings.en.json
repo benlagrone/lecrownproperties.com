@@ -8,11 +8,11 @@
   "page": {
     "hero": {
       "eyebrow": "Current listings",
-      "title": "Jessica's lease listings in one place.",
-      "summary": "Suite 700 short-term offices, the 2223 Dorrington medical office, and the next-door 2227 Dorrington commercial lot are grouped here so the main menu stays clean.",
+      "title": "Jessica's listings in one place.",
+      "summary": "Browse Jessica's featured Houston-area homes with video tours, plus LeCrown's current office, medical, and commercial land opportunities.",
       "primaryCta": {
         "label": "View listings",
-        "to": "/listings#current-listings"
+        "to": "/listings#featured-listings"
       },
       "secondaryCta": {
         "label": "Ask Jessica",
@@ -22,29 +22,29 @@
         "src": "/assets/dorrington/2223-exterior.jpg",
         "alt": "Exterior of 2223 Dorrington Street medical office in Houston",
         "kicker": "LeCrown listings",
-        "title": "One directory for active lease opportunities",
-        "text": "Use this page as the starting point for every current office, medical, and land listing."
+        "title": "Homes and commercial opportunities",
+        "text": "Start with Jessica's video tours, then explore LeCrown's office, medical, and land listing details."
       },
       "brief": {
         "eyebrow": "How this page works",
-        "title": "One menu link, multiple listing details.",
-        "text": "The detail pages remain available for photos, maps, and room-level information, but the main navigation now points to this single listing directory.",
+        "title": "One directory, every way to explore.",
+        "text": "Watch a property video, open the current HAR record, or continue into LeCrown's detailed commercial listing pages.",
         "points": [
-          "Suite 700 private offices and co-work desks",
-          "2223 Dorrington medical office",
-          "2227 Dorrington adjacent commercial lot"
+          "Nine residential listing videos",
+          "Direct links to the matching HAR records",
+          "Commercial listing pages with photos and maps"
         ]
       },
       "metrics": [
-        { "value": "Suite 700", "label": "Short-term office rooms" },
-        { "value": "2223", "label": "Medical office building" },
-        { "value": "2227", "label": "Adjacent commercial lot" }
+        { "value": "9 videos", "label": "Residential tours" },
+        { "value": "For sale", "label": "Homes and condo" },
+        { "value": "For rent", "label": "Houston-area rentals" }
       ]
     },
     "summary": [
-      { "value": "$250+", "label": "Suite 700 desk and room options" },
-      { "value": "5,464 SF", "label": "2223 Dorrington office" },
-      { "value": "0.30 AC", "label": "2227 Dorrington lot" }
+      { "value": "9", "label": "Verified YouTube tours" },
+      { "value": "5", "label": "For-sale videos" },
+      { "value": "4", "label": "Rental videos" }
     ],
     "gridHeading": {
       "eyebrow": "Listing directory",
