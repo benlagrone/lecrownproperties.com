@@ -39,6 +39,9 @@ AUTH_LOGIN_PATH = "/auth/login"
 AUTH_CALLBACK_PATH = "/auth/callback"
 AUTH_LOGOUT_PATH = "/auth/logout"
 AUTH_SESSION_COOKIE = "lecrown_session"
+TIKTOK_CALLBACK_PATH = "/v1/tiktok/auth/callback"
+TIKTOK_LOCAL_CALLBACK_URL = "http://localhost:8082/v1/tiktok/auth/callback"
+TIKTOK_VERIFICATION_FILE = "tiktokU33YCqX0nJEIPFFOokkltPQnYdXtwT4p.txt"
 DEFAULT_TIMEOUT_MS = 15_000
 DEFAULT_KEYCLOAK_TIMEOUT_MS = 10_000
 DEFAULT_KEYCLOAK_SESSION_SECONDS = 8 * 60 * 60
@@ -717,6 +720,20 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             self.handle_auth_logout()
             return
 
+        if path == TIKTOK_CALLBACK_PATH:
+            self.handle_tiktok_callback(include_body=include_body)
+            return
+
+        if path == f"/{TIKTOK_VERIFICATION_FILE}":
+            self.send_response_bytes(
+                200,
+                (ROOT / "assets" / TIKTOK_VERIFICATION_FILE).read_bytes(),
+                content_type="text/plain; charset=utf-8",
+                include_body=include_body,
+                extra_headers={"Cache-Control": "no-store"},
+            )
+            return
+
         if path == MARKETS_PATH:
             self.handle_gridscope_markets(include_body=include_body)
             return
@@ -905,6 +922,19 @@ class AppRequestHandler(BaseHTTPRequestHandler):
             return
 
         self.send_redirect(next_path)
+
+    def handle_tiktok_callback(self, *, include_body: bool) -> None:
+        """Relay TikTok's public HTTPS callback to the local MediaStudio bridge.
+
+        The public site never handles OAuth tokens.  It preserves TikTok's query
+        string in a no-store browser redirect to MediaStudio on the operator's
+        own machine, where the server-side OAuth state is stored.
+        """
+        query = urlsplit(self.path).query
+        location = TIKTOK_LOCAL_CALLBACK_URL
+        if query:
+            location = f"{location}?{query}"
+        self.send_redirect(location, include_body=include_body)
 
     def redirect_to_login(self, *, include_body: bool = True) -> None:
         next_path = sanitize_next_path(self.path, default=RENT_COLLECTION_ROUTE)

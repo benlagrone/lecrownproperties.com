@@ -40,6 +40,10 @@ fi
 curl -fsSI "http://127.0.0.1:${HOST_PORT}/" >/dev/null
 curl -fsSI "http://127.0.0.1:${HOST_PORT}/contact?lang=zh" >/dev/null
 curl -fsS "http://127.0.0.1:${HOST_PORT}/health" >/dev/null
+curl -fsS "http://127.0.0.1:${HOST_PORT}/tiktokU33YCqX0nJEIPFFOokkltPQnYdXtwT4p.txt" | grep -qx 'tiktok-developers-site-verification=U33YCqX0nJEIPFFOokkltPQnYdXtwT4p'
+callback_headers="$(curl -fsSI "http://127.0.0.1:${HOST_PORT}/v1/tiktok/auth/callback?code=smoke&state=test" | tr -d '\r')"
+grep -qx 'HTTP/1.1 302 Found' <<<"$callback_headers"
+grep -qx 'Location: http://localhost:8082/v1/tiktok/auth/callback?code=smoke&state=test' <<<"$callback_headers"
 curl -fsS "http://127.0.0.1:${HOST_PORT}/data/site.en.json" >/dev/null
 curl -fsS "http://127.0.0.1:${HOST_PORT}/data/site.zh.json" >/dev/null
 curl -fsSI "http://127.0.0.1:${HOST_PORT}/short-term-office-lease" >/dev/null

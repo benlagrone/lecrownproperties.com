@@ -83,6 +83,15 @@ This project is ready to run as a containerized site and proxy on Contabo.
 
 For full server steps, see [CONTABO-DEPLOY.md](./CONTABO-DEPLOY.md).
 
+### TikTok OAuth callback
+
+TikTok Login Kit redirects to `https://lecrownproperties.com/v1/tiktok/auth/callback`.
+That public route is a no-store browser relay only: it sends TikTok's response to
+`http://localhost:8082/v1/tiktok/auth/callback`, where the operator's local
+MediaStudio bridge completes server-side OAuth. It does not expose MediaStudio,
+TikTok tokens, or rendered media on the public site. The root verification file
+is served only to prove ownership of `https://lecrownproperties.com/` to TikTok.
+
 ## GitHub Actions
 
 The repository includes a GitHub Actions workflow at `.github/workflows/deploy.yml`.
